@@ -77,7 +77,7 @@ Two stages: **build the index**, then **build the site on top of it**.
 
 Scan the database source for its logging APIs and turn each call into a structured record. For Postgres the logging APIs are `ereport()`, `ereport_domain()`, `elog()` (backend); `pg_log_error/warning/info/debug/...` and `pg_fatal()` (frontend tools); and `write_stderr()` (early startup). Each extracted record captures the message text, severity level, SQLSTATE error code, detail/hint/context sub-messages, and — critically — the **`path:line`** provenance.
 
-The mechanism is deliberately simple and language-appropriate: pattern-match the call sites (Semgrep over the Postgres C source — see `snippets/semgrep-rules.yml`), then parse each call's arguments to pull the literal message out of `gettext`/string-concatenation wrappers. `snippets/sample-log-sites.jsonl` shows the target shape of a record.
+The mechanism is deliberately simple and language-appropriate: pattern-match the call sites (Semgrep over the Postgres C source — see `../snippets/semgrep-rules.yml`), then parse each call's arguments to pull the literal message out of `gettext`/string-concatenation wrappers. `../snippets/sample-log-sites.jsonl` shows the target shape of a record.
 
 > **Provenance is what makes the index authoritative.** Scraping raw error strings is easy; tying each one to its exact source line, error code, and severity is what turns a list of strings into a precise, verifiable reference.
 
@@ -109,7 +109,7 @@ logging API, the largest groups are:
 By severity, `ERROR` dominates (~9,000+), followed by `LOG`, `WARNING`, `FATAL`, and the `DEBUG*`
 levels.
 
-One record in the target shape (see `snippets/sample-log-sites.jsonl`):
+One record in the target shape (see `../snippets/sample-log-sites.jsonl`):
 
 ```json
 {
@@ -125,7 +125,27 @@ One record in the target shape (see `snippets/sample-log-sites.jsonl`):
 
 That single record is enough to auto-generate a reference page: the message, its severity, its error code, and exactly where in Postgres it lives.
 
-## 7. Open questions
+## 7. Repository layout
+
+The system splits along the two stages above — a Rust core that builds and
+serves the index, and a Bun site that presents it.
+
+```
+crates/
+  logref-core/   library — the LogSite model + the in-memory Index (extraction
+                 and coverage build on these types)
+  logref-scan/   binary  — the `scan` CLI: resolve log lines against an index
+site/            the Bun website — Search and the generated Reference pages
+notes/design.md  this document
+snippets/        representative artifacts (extraction rules, sample records)
+```
+
+The Rust workspace owns everything that touches source and produces the
+inventory; `site/` owns everything a reader sees. The JSON record shape in §6 is
+the contract between them — `logref-core` emits it, `site/src/search.ts`
+consumes it.
+
+## 8. Open questions
 
 - **Enrichment.** How the reference layer aggregates and ranks external references (StackOverflow, git commits, blogs, bug tracker, mailing list) per message.
 - **Format-string ↔ rendered-text matching.** How a user's pasted, fully-rendered log line resolves back to the `%s`-parameterized format string in the index.
@@ -133,4 +153,4 @@ That single record is enough to auto-generate a reference page: the message, its
 
 ---
 
-*See `snippets/` for representative artifacts: the Semgrep rules that define "what is a log site" and sample records in the target shape.*
+*See `../snippets/` for representative artifacts: the Semgrep rules that define "what is a log site" and sample records in the target shape.*

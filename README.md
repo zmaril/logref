@@ -1,29 +1,74 @@
 # LogRef
 
-A searchable reference for database log and error messages — StackOverflow, but for log lines.
-Every message is tied back to the exact source line that emits it, and enriched with community
-references around it.
+A searchable reference for database log and error messages — StackOverflow, but
+for log lines. Every message is tied back to the exact source line that emits
+it, with its severity and error code, and enriched with community references
+around it.
 
-This directory is the design spec for the system: what LogRef is and how it works.
+A database's log surface is finite: every message it can print comes from a
+specific call site in its source. LogRef mines those call sites into a
+structured index, then serves search and one reference page per message. The
+full rationale is in [notes/design.md](notes/design.md).
 
-## Contents
+## Layout
 
-- **[DESIGN.md](DESIGN.md)** — the design doc. Problem, idea, the three product surfaces
-  (Search / Reference / Scan), how it works (extract → validate → enrich → serve), what the
-  extracted index looks like, and open questions. **Start here.**
-- **snippets/**
-  - [`semgrep-rules.yml`](snippets/semgrep-rules.yml) — the rules that define "what counts as a Postgres log site" (`ereport`, `elog`, `pg_log_*`, `pg_fatal`, `write_stderr`). The operational definition of LogRef's raw material.
-  - [`sample-log-sites.txt`](snippets/sample-log-sites.txt) — human-readable sample of extracted log sites (`path:line api LEVEL message`).
-  - [`sample-log-sites.jsonl`](snippets/sample-log-sites.jsonl) — the structured records that back a reference page, one per line — the target output shape.
+- **`crates/logref-core`** — the core library: the `LogSite` model and the
+  in-memory `Index`. Extraction and coverage build on these types.
+- **`crates/logref-scan`** — the `scan` CLI: resolve log lines against an index.
+- **`site/`** — the [Bun](https://bun.sh) website: Search and the generated
+  Reference pages.
+- **`snippets/`** — representative artifacts (extraction rules, sample records).
 
-## The 30-second version
+## Getting started
 
-1. **Extract** every log call site from a database's source (Postgres: on the order of 14,000
-   sites) → structured records with message text, severity, SQLSTATE, and `file:line` provenance.
-2. **Validate** by running an instrumented build and seeing which sites actually fire → coverage /
-   priority.
-3. **Enrich & serve** one reference page per message + search, with aggregated links (StackOverflow,
-   git commits, blogs, bug tracker, mailing list).
+Build and test the Rust workspace ([rustup](https://rustup.rs) toolchain):
 
-The provenance (message ⇄ exact source line + error code + severity) is what makes the reference
-authoritative.
+```sh
+cargo test
+```
+
+The site uses [Bun](https://bun.sh); it has no third-party dependencies yet, so
+there is nothing to install:
+
+```sh
+cd site && bun test && bun run build
+```
+
+`scripts/dev.sh` stands both up in one go.
+
+## Usage
+
+Resolve log lines against a log-site index with the `scan` CLI:
+
+```sh
+# how many sites the index holds
+cargo run -p logref-scan -- stats --index snippets/sample-log-sites.jsonl
+
+# resolve a log line to the source site it came from
+cargo run -p logref-scan -- scan \
+  --index snippets/sample-log-sites.jsonl \
+  --query "could not open parent table"
+```
+
+```
+could not open parent table
+  postgres/contrib/amcheck/verify_common.c:127 ereport ERROR  — could not open parent table of index "%s"
+```
+
+Pass several `--query` flags, or omit them to read log lines from stdin.
+
+## Docs
+
+- [notes/design.md](notes/design.md) — what LogRef is and how it works.
+- [snippets/](snippets/) — the extraction rules and sample records that define
+  the index.
+
+## Contributing
+
+Issues and pull requests welcome. Commit and PR titles follow
+[conventional commits](https://www.conventionalcommits.org); CI runs the Rust
+and site checks plus [Straitjacket](https://github.com/zmaril/Straitjacket).
+
+## License
+
+[MIT](LICENSE).

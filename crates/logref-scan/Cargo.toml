@@ -1,0 +1,17 @@
+[package]
+name = "logref-scan"
+description = "LogRef scan CLI: resolve database log lines against the extracted log-site index."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "logref-scan"
+path = "src/main.rs"
+
+[dependencies]
+logref-core = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+clap = { workspace = true }

@@ -1,0 +1,10 @@
+# Rust build artifacts
+/target
+
+# Node/Bun installs and site build output
+node_modules/
+site/dist/
+
+# vale downloads style packages here via `vale sync`; only styles/config is tracked
+styles/*
+!styles/config
