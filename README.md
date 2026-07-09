@@ -67,7 +67,7 @@ Pass several `--query` flags, or omit them to read log lines from stdin.
 
 Issues and pull requests welcome. Commit and PR titles follow
 [conventional commits](https://www.conventionalcommits.org); CI runs the Rust
-and site checks plus [straitjacket](https://github.com/zmaril/Straitjacket).
+and site checks plus [Straitjacket](https://github.com/zmaril/Straitjacket).
 
 ## License
 

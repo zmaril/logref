@@ -14,5 +14,5 @@ to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `site/` — a Bun website skeleton with a client-side search over the index.
 - Design doc, extraction rules, and sample records under `notes/` and
   `snippets/`.
-- CI (Rust + site), conventional-commit, straitjacket, codespell, and vale
+- CI (Rust + site), conventional-commit, Straitjacket, codespell, and vale
   workflows; fleet enrollment via `.housekeeping.toml`.
