@@ -1,0 +1,12 @@
+postgres/contrib/amcheck/verify_common.c:44 ereport NOTICE cannot verify unlogged index "%s" during recovery, skipping
+postgres/contrib/amcheck/verify_common.c:127 ereport ERROR could not open parent table of index "%s"
+postgres/contrib/amcheck/verify_common.c:164 ereport ERROR expected index as targets for verification
+postgres/contrib/amcheck/verify_common.c:170 ereport ERROR expected "%s" index as targets for verification
+postgres/contrib/amcheck/verify_common.c:177 ereport ERROR cannot access temporary tables of other sessions
+postgres/contrib/amcheck/verify_common.c:184 ereport ERROR cannot check index "%s"
+postgres/contrib/amcheck/verify_gin.c:112 elog ERROR number of items mismatch in GIN entry tuple, %d in tuple header, %d decoded
+postgres/contrib/amcheck/verify_gin.c:161 elog DEBUG3 processing posting tree at blk %u
+postgres/contrib/amcheck/verify_gin.c:191 elog DEBUG1 page blk: %u, type leaf
+postgres/contrib/amcheck/verify_gin.c:196 ereport ERROR index "%s": internal pages traversal encountered leaf page unexpectedly on block %u
+postgres/contrib/amcheck/verify_gin.c:214 elog DEBUG3 blk %u: parent %u highkey (%u, %u), %s
+postgres/contrib/amcheck/verify_gin.c:221 elog DEBUG3 blk %u: root leaf, %s

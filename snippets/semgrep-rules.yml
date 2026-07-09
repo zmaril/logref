@@ -1,0 +1,59 @@
+rules:
+  - id: postgres-ereport
+    languages: [c]
+    severity: INFO
+    message: Postgres backend log site via ereport()
+    pattern: ereport($LEVEL, ...)
+
+  - id: postgres-ereport-domain
+    languages: [c]
+    severity: INFO
+    message: Postgres backend log site via ereport_domain()
+    pattern: ereport_domain($LEVEL, $DOMAIN, ...)
+
+  - id: postgres-elog
+    languages: [c]
+    severity: INFO
+    message: Postgres backend log site via elog()
+    pattern: elog($LEVEL, $FMT, ...)
+
+  - id: postgres-write-stderr
+    languages: [c]
+    severity: INFO
+    message: Postgres early-startup log site via write_stderr()
+    pattern: write_stderr($FMT, ...)
+
+  - id: postgres-pg-log-primary
+    languages: [c]
+    severity: INFO
+    message: Postgres frontend primary log site
+    pattern-either:
+      - pattern: pg_log_error($FMT, ...)
+      - pattern: pg_log_warning($FMT, ...)
+      - pattern: pg_log_info($FMT, ...)
+      - pattern: pg_log_debug($FMT, ...)
+      - pattern: pg_fatal($FMT, ...)
+      - pattern: pg_log_error_internal($FMT, ...)
+      - pattern: pg_fatal_internal($FMT, ...)
+
+  - id: postgres-pg-log-aux
+    languages: [c]
+    severity: INFO
+    message: Postgres frontend auxiliary log site
+    pattern-either:
+      - pattern: pg_log_error_detail($FMT, ...)
+      - pattern: pg_log_error_hint($FMT, ...)
+      - pattern: pg_log_warning_detail($FMT, ...)
+      - pattern: pg_log_warning_hint($FMT, ...)
+      - pattern: pg_log_info_detail($FMT, ...)
+      - pattern: pg_log_info_hint($FMT, ...)
+      - pattern: pg_log_debug_detail($FMT, ...)
+      - pattern: pg_log_debug_hint($FMT, ...)
+
+  - id: postgres-pg-log-generic
+    languages: [c]
+    severity: INFO
+    message: Postgres frontend log site via pg_log_generic()
+    pattern-either:
+      - pattern: pg_log_generic($LEVEL, $PART, $FMT, ...)
+      - pattern: pg_log_generic_v($LEVEL, $PART, $FMT, ...)
