@@ -349,7 +349,7 @@ impl Scanner {
                 })
             })
             .collect();
-        hits.sort_by(|a, b| b.literal_len.cmp(&a.literal_len));
+        hits.sort_by_key(|h| std::cmp::Reverse(h.literal_len));
         hits
     }
 }
