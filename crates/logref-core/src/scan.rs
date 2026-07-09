@@ -58,6 +58,21 @@ pub struct Lowered {
     pub spec_count: usize,
 }
 
+/// Consume a field-width-style token starting at `chars[i]`: a single `*`
+/// (argument-supplied width) or a run of decimal digits. Returns the index
+/// just past it, or `i` unchanged when neither is present. Shared by the field
+/// width and precision parsers, which accept the same token.
+fn consume_width(chars: &[char], mut i: usize) -> usize {
+    if i < chars.len() && chars[i] == '*' {
+        i += 1;
+    } else {
+        while i < chars.len() && chars[i].is_ascii_digit() {
+            i += 1;
+        }
+    }
+    i
+}
+
 /// Consume a `printf`-style conversion spec that begins at `chars[start]`
 /// (which must be `%`, and not the start of `%%`). Returns the conversion
 /// character and the index just past the whole spec.
@@ -77,23 +92,11 @@ fn parse_spec(chars: &[char], start: usize) -> Result<(char, usize), LowerError>
         i += 1;
     }
     // Field width: a run of digits or a single '*' (argument-supplied width).
-    if i < chars.len() && chars[i] == '*' {
-        i += 1;
-    } else {
-        while i < chars.len() && chars[i].is_ascii_digit() {
-            i += 1;
-        }
-    }
+    i = consume_width(chars, i);
     // Precision: '.' then digits or '*'.
     if i < chars.len() && chars[i] == '.' {
         i += 1;
-        if i < chars.len() && chars[i] == '*' {
-            i += 1;
-        } else {
-            while i < chars.len() && chars[i].is_ascii_digit() {
-                i += 1;
-            }
-        }
+        i = consume_width(chars, i);
     }
     // Length modifier: hh, ll (two-char) then h, l, L, q, j, z, t (one-char).
     if i + 1 < chars.len() && (chars[i] == 'h' || chars[i] == 'l') && chars[i + 1] == chars[i] {
