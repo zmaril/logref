@@ -131,6 +131,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "logref-extract"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "logref-core",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "logref-scan"
 version = "0.1.0"
 dependencies = [
