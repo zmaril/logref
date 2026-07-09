@@ -362,13 +362,10 @@ pub fn literal_text(expr: &str) -> Option<String> {
                 "dgettext" | "dngettext" | "ngettext" => {
                     // dgettext(domain, msgid[, ...]) / ngettext(msgid, ...):
                     // the first *string-literal* argument is the message.
-                    match split_top_level_args(&inner)
+                    let a = split_top_level_args(&inner)
                         .into_iter()
-                        .find(|a| a.trim_start().starts_with('"'))
-                    {
-                        Some(a) => Some(a.trim().to_string()),
-                        None => return None,
-                    }
+                        .find(|a| a.trim_start().starts_with('"'))?;
+                    Some(a.trim().to_string())
                 }
                 _ => None,
             },
