@@ -1,0 +1,20 @@
+[workspace]
+resolver = "2"
+members = ["crates/logref-core", "crates/logref-scan"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/zmaril/logref"
+
+[workspace.dependencies]
+logref-core = { path = "crates/logref-core" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+
+[profile.release]
+lto = "thin"
+strip = true

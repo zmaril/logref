@@ -1,0 +1,11 @@
+[package]
+name = "logref-core"
+description = "Core model for LogRef: the structured inventory of a database's log/error call sites."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
