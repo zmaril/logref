@@ -23,7 +23,7 @@ Emitted whenever a checkpoint starts (visible when `log_checkpoints` is on, the 
 
 ## Is this a problem?
 
-Nothing to fix — this is routine bookkeeping. Watch it only for tuning: if the reason is frequently `wal` (rather than `time`), checkpoints are being forced by WAL volume and raising `max_wal_size` can space them out. Very frequent checkpoints increase write amplification, so the interval between `starting` lines is a useful health signal. Pair this with the matching `checkpoint complete` line for timing.
+Nothing to fix — this is routine bookkeeping. Watch it only for tuning: if the reason is frequently `wal` (rather than `time`), checkpoints are being forced by WAL volume and raising `max_wal_size` can space them out. Frequent checkpoints increase write amplification, so the interval between `starting` lines is a useful health signal. Pair this with the matching `checkpoint complete` line for timing.
 
 ## Example
 

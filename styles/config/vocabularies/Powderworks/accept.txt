@@ -13,7 +13,7 @@ SQLSTATE
 jsonlog
 initdb
 autovacuum
-WAL
+(?:WAL|wal)
 Postgres
 PostgreSQL
 ereport
@@ -25,4 +25,4 @@ bigint
 PgBouncer
 SCRAM
 upsert
-LSN
+(?:LSN|lsn)
