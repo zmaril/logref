@@ -65,7 +65,7 @@ against the extracted catalog by `(basename, line)`.
 
 - `postgres/src/backend/utils/adt/jsonb.c:1137` [ERROR/ERRCODE_INVALID_PARAMETER_VALUE] — argument list must have even number of elements
 - `postgres/src/backend/catalog/pg_proc.c:402` [ERROR/ERRCODE_DUPLICATE_FUNCTION] — function "%s" already exists with same argument types
-- `postgres/src/backend/parser/parse_agg.c:1572` [ERROR/ERRCODE_GROUPING_ERROR] — column "%s.%s" must appear in the GROUP BY clause or be used in an ...
+- `postgres/src/backend/parser/parse_agg.c:1572` [ERROR/ERRCODE_GROUPING_ERROR] — column "%s.%s" must appear in the GROUP BY clause or be used in an aggregate function
 - `postgres/src/backend/utils/adt/datetime.c:3349` [ERROR/ERRCODE_INVALID_PARAMETER_VALUE] — time zone "%s" not recognized
 - `postgres/src/backend/commands/portalcmds.c:198` [ERROR/ERRCODE_UNDEFINED_CURSOR] — cursor "%s" does not exist
 - `postgres/src/backend/utils/adt/int8.c:936` [ERROR/ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE] — bigint out of range
