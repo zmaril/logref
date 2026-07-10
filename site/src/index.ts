@@ -1,38 +1,40 @@
-// Entry point for the LogRef site. Wires the search box on the landing page to
-// the in-browser index. The inventory is a static JSON asset emitted by the
-// build; until it exists we ship a tiny inline sample so the page is live.
+// Entry point for the LogRef site landing page. Wires the search box to the
+// reference index — the {slug, message, level, sqlstate} list emitted by
+// build.ts and inlined here as JSON, so search runs from pure static files with
+// no fetch. Filtering reuses the shared substring matcher in search.ts, and each
+// result links to its generated message page.
 
-import { type LogSite, location, messageText, search } from "./search.ts";
+import messages from "./generated/messages.json";
+import { entryRow } from "./render.ts";
+import { type MessageEntry, searchMessages } from "./search.ts";
 
-const SAMPLE: LogSite[] = [
-  {
-    api: "ereport",
-    kind: "backend",
-    level: "ERROR",
-    message: { text: 'could not open parent table of index "%s"' },
-    sqlstates: ["ERRCODE_UNDEFINED_TABLE"],
-    path: "postgres/contrib/amcheck/verify_common.c",
-    line: 127,
-  },
-];
+const all = messages as MessageEntry[];
 
-function render(results: LogSite[]): string {
-  if (results.length === 0) return "<p>No matching log site.</p>";
-  return results
-    .map(
-      (site) =>
-        `<li><code>${location(site)}</code> — ${messageText(site) ?? ""}</li>`,
-    )
-    .join("");
+function renderList(list: MessageEntry[]): string {
+  if (list.length === 0) return '<p class="empty">No matching message.</p>';
+  return `<ul class="entries">${list.map(entryRow).join("")}</ul>`;
 }
 
 function mount(): void {
   const input = document.querySelector<HTMLInputElement>("#q");
   const out = document.querySelector<HTMLElement>("#results");
+  const count = document.querySelector<HTMLElement>("#count");
   if (!input || !out) return;
-  input.addEventListener("input", () => {
-    out.innerHTML = `<ul>${render(search(SAMPLE, input.value))}</ul>`;
-  });
+
+  const update = () => {
+    const q = input.value.trim();
+    const hits = q === "" ? all : searchMessages(all, q);
+    out.innerHTML = renderList(hits);
+    if (count) {
+      count.textContent =
+        q === ""
+          ? `${all.length} messages`
+          : `${hits.length} of ${all.length} messages`;
+    }
+  };
+
+  input.addEventListener("input", update);
+  update();
 }
 
 if (typeof document !== "undefined") {
