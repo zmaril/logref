@@ -1,7 +1,14 @@
 /* LogRef reference site. One stylesheet for the search landing and the message
    pages. Neutral, readable, works in light and dark. */
 
+/* This is the single design-token definition file: the palette below is the
+   canonical source every other rule references via var(--token). Color literals
+   are unavoidable and correct here, so the `color` rule is allowed file-wide. */
+/* straitjacket-allow-file:color */
+
 :root {
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas,
+    monospace;
   --bg: #fbfbfa;
   --surface: #ffffff;
   --border: #e4e4e0;
@@ -53,8 +60,7 @@ code,
 pre,
 .msg,
 .sqlstate {
-  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas,
-    monospace;
+  font-family: var(--font-mono);
 }
 
 a {
