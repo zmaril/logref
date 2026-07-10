@@ -1,0 +1,63 @@
+---
+message: "sorry, too many clients already"
+slug: sorry-too-many-clients-already
+passthrough: false
+api: [ereport]
+level: [FATAL]
+sqlstate:
+  - symbol: ERRCODE_TOO_MANY_CONNECTIONS
+    code: "53300"
+call_sites:
+  - "postgres/src/backend/storage/ipc/procarray.c:482"
+  - "postgres/src/backend/storage/lmgr/proc.c:458"
+  - "postgres/src/backend/tcop/backend_startup.c:341"
+reproduced: false
+---
+
+# `sorry, too many clients already`
+
+**Severity:** FATAL · SQLSTATE `53300` (ERRCODE_TOO_MANY_CONNECTIONS)
+
+## What it means
+
+The server has reached `max_connections` and cannot accept another backend. Each connection reserves a slot (and a small block of shared memory); when all slots are taken, new connections are rejected with this `FATAL` until one frees up. Some slots are reserved for superusers and replication, so ordinary connections can be refused while a few reserved ones remain.
+
+## When it happens
+
+Connection demand exceeds `max_connections` — a burst of traffic, a connection leak in the application, or many short-lived connections opened without pooling. It also appears when idle-in-transaction sessions pile up and never release their slots.
+
+## How to fix
+
+First find what is holding connections: `SELECT count(*), state FROM pg_stat_activity GROUP BY state` — a large `idle` or `idle in transaction` count points at a leak or a missing pooler. The durable fix is a connection pooler (PgBouncer, or your framework's pool) so the app multiplexes over a small set of backends. Raising `max_connections` helps short-term but each connection costs memory, so pooling scales better. Terminate stuck sessions with `pg_terminate_backend(pid)` if needed.
+
+## Example
+
+*Illustrative* — opening more connections than `max_connections` allows.
+
+```sql
+-- with max_connections = 100, the 101st non-reserved connection:
+psql -h db -U app
+```
+
+Produces:
+
+```text
+FATAL:  sorry, too many clients already
+```
+
+## Source
+
+This message text is emitted from 3 call sites:
+
+- [`postgres/src/backend/storage/ipc/procarray.c:482`](https://github.com/postgres/postgres/blob/master/src/backend/storage/ipc/procarray.c#L482) — FATAL
+- [`postgres/src/backend/storage/lmgr/proc.c:458`](https://github.com/postgres/postgres/blob/master/src/backend/storage/lmgr/proc.c#L458) — FATAL
+- [`postgres/src/backend/tcop/backend_startup.c:341`](https://github.com/postgres/postgres/blob/master/src/backend/tcop/backend_startup.c#L341) — FATAL
+
+## SQLSTATE
+
+- `53300` — **ERRCODE_TOO_MANY_CONNECTIONS**. Class 53 (Insufficient Resources).
+
+## Related
+
+- [connection received: host, port](./connection-received-host-port.md)
+- [permission denied for database](./permission-denied-for-database.md)
