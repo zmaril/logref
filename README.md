@@ -1,3 +1,5 @@
+<!-- housekeeper:description A searchable reference for database log/error messages — every message tied back to the source line that emits it. -->
+<!-- housekeeper:topics database, developer-tools, logging, observability, postgres, rust -->
 # LogRef
 
 A searchable reference for database log and error messages — StackOverflow, but
