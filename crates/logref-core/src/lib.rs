@@ -40,6 +40,12 @@ impl Message {
 }
 
 /// One extracted log/error call site.
+///
+/// The required fields (`api`, `kind`, `message`, `sqlstates`, `path`, `line`)
+/// are the core contract described in `notes/design.md`. The remaining fields
+/// are optional provenance/structure captured by the extractor (see
+/// `crates/logref-extract`); they default when absent so older, thinner records
+/// still parse.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LogSite {
     /// The logging API used, e.g. `ereport`, `elog`, `pg_log_error`.
@@ -50,13 +56,40 @@ pub struct LogSite {
     pub level: Option<String>,
     #[serde(default)]
     pub message: Message,
+    /// `errdetail(...)` sub-messages (backend `ereport` sites).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub details: Vec<Message>,
+    /// `errhint(...)` sub-messages.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub hints: Vec<Message>,
+    /// `errcontext(...)` sub-messages.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub contexts: Vec<Message>,
     /// Error-code identifiers (e.g. Postgres `SQLSTATE` macros).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub sqlstates: Vec<String>,
+    /// Which sub-message this site is, when known: `primary`/`detail`/`hint`/…
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub part: Option<String>,
     /// Source path relative to the checkout root.
     pub path: String,
     /// 1-based line number of the call.
     pub line: u32,
+    /// 1-based column of the call, when known.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub column: Option<u32>,
+    /// 1-based line of the end of the call, when known.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub end_line: Option<u32>,
+    /// 1-based column of the end of the call, when known.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub end_column: Option<u32>,
+    /// The verbatim source text of the matched call.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub call: Option<String>,
+    /// The Semgrep rule id that matched this site.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub semgrep_rule: Option<String>,
 }
 
 impl LogSite {

@@ -1,0 +1,22 @@
+[package]
+name = "logref-extract"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Semgrep-based extractor that mines Postgres log/error call sites into the logref inventory."
+
+[[bin]]
+name = "logref-extract"
+path = "src/main.rs"
+
+[lib]
+name = "logref_extract"
+path = "src/lib.rs"
+
+[dependencies]
+logref-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+clap = { workspace = true }

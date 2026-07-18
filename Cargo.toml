@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/logref-core", "crates/logref-scan"]
+members = ["crates/logref-core", "crates/logref-extract", "crates/logref-scan"]
 
 [workspace.package]
 version = "0.1.0"
