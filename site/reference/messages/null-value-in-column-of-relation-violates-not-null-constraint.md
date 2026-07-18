@@ -14,8 +14,6 @@ reproduced: false
 
 # `null value in column "%s" of relation "%s" violates not-null constraint`
 
-**Severity:** ERROR · SQLSTATE `23502` (ERRCODE_NOT_NULL_VIOLATION)
-
 ## What it means
 
 A row left a `NOT NULL` column empty. The placeholders name the column and the table. A `NOT NULL` constraint says every row must carry a value there, and this write did not provide one.
@@ -42,14 +40,6 @@ Produces:
 ```text
 ERROR:  null value in column "label" of relation "t" violates not-null constraint
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/executor/execMain.c:2275`](https://github.com/postgres/postgres/blob/master/src/backend/executor/execMain.c#L2275).
-
-## SQLSTATE
-
-- `23502` — **ERRCODE_NOT_NULL_VIOLATION**. Class 23 (Integrity Constraint Violation).
 
 ## Related
 

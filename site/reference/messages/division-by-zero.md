@@ -36,8 +36,6 @@ reproduced: true
 
 # `division by zero`
 
-**Severity:** ERROR · SQLSTATE `22012` (ERRCODE_DIVISION_BY_ZERO)
-
 ## What it means
 
 An arithmetic operation tried to divide by zero. Division and the modulo (remainder) operator are undefined when the divisor is zero, so Postgres raises an error instead of returning infinity or a null.
@@ -63,38 +61,6 @@ Produces:
 ```text
 ERROR:  division by zero
 ```
-
-## Source
-
-This message text is emitted from 23 call sites:
-
-- [`postgres/src/backend/utils/adt/cash.c:160`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/cash.c#L160) — ERROR
-- [`postgres/src/backend/utils/adt/cash.c:729`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/cash.c#L729) — ERROR
-- [`postgres/src/backend/utils/adt/float.c:121`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/float.c#L121) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:870`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L870) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:986`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L986) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1066`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1066) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1128`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1128) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1166`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1166) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1194`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1194) — ERROR
-- [`postgres/src/backend/utils/adt/int8.c:519`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int8.c#L519) — ERROR
-- [`postgres/src/backend/utils/adt/int8.c:579`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int8.c#L579) — ERROR
-- [`postgres/src/backend/utils/adt/int8.c:979`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int8.c#L979) — ERROR
-- [`postgres/src/backend/utils/adt/int8.c:1059`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int8.c#L1059) — ERROR
-- [`postgres/src/backend/utils/adt/int8.c:1121`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int8.c#L1121) — ERROR
-- [`postgres/src/backend/utils/adt/int8.c:1201`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int8.c#L1201) — ERROR
-- [`postgres/src/backend/utils/adt/numeric.c:3282`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/numeric.c#L3282) — ERROR
-- [`postgres/src/backend/utils/adt/numeric.c:3300`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/numeric.c#L3300) — ERROR
-- [`postgres/src/backend/utils/adt/numeric.c:8945`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/numeric.c#L8945) — ERROR
-- [`postgres/src/backend/utils/adt/numeric.c:9469`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/numeric.c#L9469) — ERROR
-- [`postgres/src/backend/utils/adt/numeric.c:9585`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/numeric.c#L9585) — ERROR
-- [`postgres/src/backend/utils/adt/numeric.c:11096`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/numeric.c#L11096) — ERROR
-- [`postgres/src/backend/utils/adt/timestamp.c:3771`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/timestamp.c#L3771) — ERROR
-- [`postgres/src/bin/pgbench/pgbench.c:2402`](https://github.com/postgres/postgres/blob/master/src/bin/pgbench/pgbench.c#L2402) — ERROR
-
-## SQLSTATE
-
-- `22012` — **ERRCODE_DIVISION_BY_ZERO**. Class 22 (Data Exception).
 
 ## Related
 

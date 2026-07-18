@@ -12,8 +12,6 @@ reproduced: false
 
 # `empty string is not a valid password, clearing password`
 
-**Severity:** NOTICE
-
 ## What it means
 
 A role was given an empty-string password, so Postgres discarded it and left the role with no password set. An empty password can never satisfy password authentication, so keeping it would be misleading; the server clears it and issues this `NOTICE`.
@@ -39,13 +37,6 @@ Produces:
 ```text
 NOTICE:  empty string is not a valid password, clearing password
 ```
-
-## Source
-
-This message text is emitted from 2 call sites:
-
-- [`postgres/src/backend/commands/user.c:445`](https://github.com/postgres/postgres/blob/master/src/backend/commands/user.c#L445) — NOTICE
-- [`postgres/src/backend/commands/user.c:930`](https://github.com/postgres/postgres/blob/master/src/backend/commands/user.c#L930) — NOTICE
 
 ## Related
 

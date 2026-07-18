@@ -14,8 +14,6 @@ reproduced: false
 
 # `permission denied for database "%s"`
 
-**Severity:** FATAL · SQLSTATE `42501` (ERRCODE_INSUFFICIENT_PRIVILEGE)
-
 ## What it means
 
 A role tried to connect to (or act on) a database it lacks the `CONNECT` privilege for. This is a `FATAL` because it happens during connection startup — the session never opens. The placeholder names the database.
@@ -43,14 +41,6 @@ Produces:
 ```text
 FATAL:  permission denied for database "app"
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/utils/init/postinit.c:390`](https://github.com/postgres/postgres/blob/master/src/backend/utils/init/postinit.c#L390).
-
-## SQLSTATE
-
-- `42501` — **ERRCODE_INSUFFICIENT_PRIVILEGE**. Class 42 (Syntax Error or Access Rule Violation).
 
 ## Related
 

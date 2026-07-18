@@ -20,8 +20,6 @@ reproduced: false
 
 # `column "%s" does not exist`
 
-**Severity:** ERROR · SQLSTATE `42703` (ERRCODE_UNDEFINED_COLUMN)
-
 ## What it means
 
 A statement referenced a column name that is not present on any table in scope. The placeholder is the name as written. The table resolved fine — the column did not.
@@ -48,22 +46,6 @@ Produces:
 ```text
 ERROR:  column "nope" does not exist
 ```
-
-## Source
-
-This message text is emitted from 7 call sites:
-
-- [`postgres/src/backend/commands/copy.c:1126`](https://github.com/postgres/postgres/blob/master/src/backend/commands/copy.c#L1126) — ERROR
-- [`postgres/src/backend/commands/indexcmds.c:1980`](https://github.com/postgres/postgres/blob/master/src/backend/commands/indexcmds.c#L1980) — ERROR
-- [`postgres/src/backend/commands/statscmds.c:275`](https://github.com/postgres/postgres/blob/master/src/backend/commands/statscmds.c#L275) — ERROR
-- [`postgres/src/backend/commands/tablecmds.c:2669`](https://github.com/postgres/postgres/blob/master/src/backend/commands/tablecmds.c#L2669) — ERROR
-- [`postgres/src/backend/commands/tablecmds.c:3188`](https://github.com/postgres/postgres/blob/master/src/backend/commands/tablecmds.c#L3188) — ERROR
-- [`postgres/src/backend/commands/tablecmds.c:4030`](https://github.com/postgres/postgres/blob/master/src/backend/commands/tablecmds.c#L4030) — ERROR
-- [`postgres/src/backend/utils/adt/tsvector_op.c:2829`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/tsvector_op.c#L2829) — ERROR
-
-## SQLSTATE
-
-- `42703` — **ERRCODE_UNDEFINED_COLUMN**. Class 42 (Syntax Error or Access Rule Violation).
 
 ## Related
 

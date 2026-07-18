@@ -4,9 +4,59 @@
 // rendered by markdown.ts; everything else here is derived from the frontmatter
 // facts so the same truth drives both the card and the index.
 
-import { renderInline, renderMarkdown } from "./markdown.ts";
+import { escapeHtml, renderInline, renderMarkdown } from "./markdown.ts";
 import type { MessageDoc } from "./frontmatter.ts";
 import type { MessageEntry } from "./search.ts";
+
+/** Postgres SQLSTATE error classes (first two chars of a code → class name),
+ * per the standard errcodes appendix. Drives the `## SQLSTATE` section's class
+ * label. The pilot needs only a handful of these, but the full table is cheap
+ * and keeps the generator correct as the catalog grows to all 8,988 messages. */
+const SQLSTATE_CLASSES: Record<string, string> = {
+  "00": "Successful Completion",
+  "01": "Warning",
+  "02": "No Data",
+  "03": "SQL Statement Not Yet Complete",
+  "08": "Connection Exception",
+  "09": "Triggered Action Exception",
+  "0A": "Feature Not Supported",
+  "0B": "Invalid Transaction Initiation",
+  "0F": "Locator Exception",
+  "0L": "Invalid Grantor",
+  "0P": "Invalid Role Specification",
+  "0Z": "Diagnostics Exception",
+  "20": "Case Not Found",
+  "21": "Cardinality Violation",
+  "22": "Data Exception",
+  "23": "Integrity Constraint Violation",
+  "24": "Invalid Cursor State",
+  "25": "Invalid Transaction State",
+  "26": "Invalid SQL Statement Name",
+  "27": "Triggered Data Change Violation",
+  "28": "Invalid Authorization Specification",
+  "2B": "Dependent Privilege Descriptors Still Exist",
+  "2D": "Invalid Transaction Termination",
+  "2F": "SQL Routine Exception",
+  "34": "Invalid Cursor Name",
+  "38": "External Routine Exception",
+  "39": "External Routine Invocation Exception",
+  "3B": "Savepoint Exception",
+  "3D": "Invalid Catalog Name",
+  "3F": "Invalid Schema Name",
+  "40": "Transaction Rollback",
+  "42": "Syntax Error or Access Rule Violation",
+  "44": "WITH CHECK OPTION Violation",
+  "53": "Insufficient Resources",
+  "54": "Program Limit Exceeded",
+  "55": "Object Not In Prerequisite State",
+  "57": "Operator Intervention",
+  "58": "System Error",
+  "72": "Snapshot Failure",
+  F0: "Configuration File Error",
+  HV: "Foreign Data Wrapper Error",
+  P0: "PL/pgSQL Error",
+  XX: "Internal Error",
+};
 
 /** Severity tiers drive badge colour: hard failures, warnings, everything else. */
 function severityTier(level: string): "error" | "warn" | "info" {
@@ -73,13 +123,8 @@ function factsCard(doc: MessageDoc): string {
         : "");
   rows.push(fact("Severity", severity));
 
-  if (doc.sqlstate.length > 0) {
-    const codes = doc.sqlstate
-      .map((s) => `<code>${escapeAttr(s.code)}</code> ${escapeAttr(s.symbol)}`)
-      .join("<br />");
-    rows.push(fact("SQLSTATE", codes));
-  }
-
+  // SQLSTATE is rendered once, in its own `## SQLSTATE` section (with the error
+  // class), not here — keeping each derived fact to a single surface.
   rows.push(fact("Logging API", doc.api.map((a) => `<code>${escapeAttr(a)}</code>`).join(" ")));
   rows.push(fact("Call sites", `${doc.callSites.length}`));
   rows.push(
@@ -103,11 +148,71 @@ function rewriteRefHref(href: string): string {
   return href.replace(/\.md(#|$)/, ".html$1");
 }
 
-/** A full message page (facts card + rendered markdown body). */
+/** The GitHub source URL for a `<path>:<line>` call site: drop the checkout-root
+ * `postgres/` prefix and turn `:<line>` into a `#L<line>` anchor. */
+function githubUrl(site: string): string {
+  const m = site.match(/^(.*):(\d+)$/);
+  if (!m) return "#";
+  const path = m[1]!.replace(/^postgres\//, "");
+  return `https://github.com/postgres/postgres/blob/master/${path}#L${m[2]}`;
+}
+
+/** A call site rendered as a GitHub-linked code span (label keeps `path:line`). */
+function siteLink(site: string): string {
+  return `<a href="${escapeAttr(githubUrl(site))}"><code>${escapeHtml(site)}</code></a>`;
+}
+
+/** The `## Source` section, rendered from `call_sites` frontmatter. This is the
+ * single surface for the call-site list; the body no longer restates it. */
+export function sourceSection(doc: MessageDoc): string {
+  const sites = doc.callSites;
+  if (sites.length === 0) return "";
+  if (sites.length === 1) {
+    return `<h2>Source</h2>\n<p>Emitted from ${siteLink(sites[0]!)}.</p>`;
+  }
+  const items = sites.map((s) => `<li>${siteLink(s)}</li>`).join("");
+  return `<h2>Source</h2>\n<p>This message text is emitted from ${sites.length} call sites:</p>\n<ul>${items}</ul>`;
+}
+
+/** The `## SQLSTATE` section, rendered from `sqlstate` frontmatter (code +
+ * symbol + error class). Empty when the message carries no SQLSTATE. */
+export function sqlstateSection(doc: MessageDoc): string {
+  if (doc.sqlstate.length === 0) return "";
+  const items = doc.sqlstate
+    .map((s) => {
+      if (s.code === "") {
+        return `<li><strong>${escapeHtml(s.symbol)}</strong> — code assigned in <code>errcodes.txt</code> (outside the pilot's code map).</li>`;
+      }
+      const prefix = s.code.slice(0, 2).toUpperCase();
+      const cls = SQLSTATE_CLASSES[prefix];
+      const classText = cls ? ` Class ${prefix} (${cls}).` : "";
+      return `<li><code>${escapeHtml(s.code)}</code> — <strong>${escapeHtml(s.symbol)}</strong>.${classText}</li>`;
+    })
+    .join("");
+  return `<h2>SQLSTATE</h2>\n<ul>${items}</ul>`;
+}
+
+/** Split the body at the `## Related` heading so the generated Source/SQLSTATE
+ * sections can be inserted just before it, preserving the template's order. */
+function splitAtRelated(body: string): { before: string; related: string } {
+  const idx = body.search(/^## Related\s*$/m);
+  if (idx === -1) return { before: body, related: "" };
+  return { before: body.slice(0, idx), related: body.slice(idx) };
+}
+
+/** A full message page: facts card, prose body, then the Source + SQLSTATE
+ * sections rendered once from frontmatter, then the `Related` list. */
 export function messagePage(doc: MessageDoc): string {
+  const { before, related } = splitAtRelated(doc.body);
+  const parts = [
+    renderMarkdown(before, rewriteRefHref),
+    sourceSection(doc),
+    sqlstateSection(doc),
+    related ? renderMarkdown(related, rewriteRefHref) : "",
+  ].filter((part) => part !== "");
   const content = `      <article class="message">
 ${factsCard(doc)}
-${renderMarkdown(doc.body, rewriteRefHref)}
+${parts.join("\n")}
       </article>`;
   return layout({
     title: `${doc.message} — LogRef`,

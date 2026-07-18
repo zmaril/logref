@@ -16,8 +16,6 @@ reproduced: false
 
 # `invalid regular expression: %s`
 
-**Severity:** ERROR · SQLSTATE `2201B` (ERRCODE_INVALID_REGULAR_EXPRESSION)
-
 ## What it means
 
 A regular expression could not be compiled. The placeholder carries the underlying reason from the regex engine — `quantifier operand invalid`, `parentheses () not balanced`, `invalid character range`, and so on. The pattern is syntactically broken, so no matching can be attempted.
@@ -43,18 +41,6 @@ Produces:
 ```text
 ERROR:  invalid regular expression: parentheses () not balanced
 ```
-
-## Source
-
-This message text is emitted from 3 call sites:
-
-- [`postgres/contrib/pg_trgm/trgm_regexp.c:749`](https://github.com/postgres/postgres/blob/master/contrib/pg_trgm/trgm_regexp.c#L749) — ERROR
-- [`postgres/src/backend/tsearch/spell.c:750`](https://github.com/postgres/postgres/blob/master/src/backend/tsearch/spell.c#L750) — ERROR
-- [`postgres/src/backend/utils/adt/regexp.c:221`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/regexp.c#L221) — ERROR
-
-## SQLSTATE
-
-- `2201B` — **ERRCODE_INVALID_REGULAR_EXPRESSION**. Class 22 (Data Exception).
 
 ## Related
 

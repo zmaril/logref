@@ -16,8 +16,6 @@ reproduced: false
 
 # `sorry, too many clients already`
 
-**Severity:** FATAL · SQLSTATE `53300` (ERRCODE_TOO_MANY_CONNECTIONS)
-
 ## What it means
 
 The server has reached `max_connections` and cannot accept another backend. Each connection reserves a slot (and a small block of shared memory); when all slots are taken, new connections are rejected with this `FATAL` until one frees up. Some slots are reserved for superusers and replication, so ordinary connections can be refused while a few reserved ones remain.
@@ -44,18 +42,6 @@ Produces:
 ```text
 FATAL:  sorry, too many clients already
 ```
-
-## Source
-
-This message text is emitted from 3 call sites:
-
-- [`postgres/src/backend/storage/ipc/procarray.c:482`](https://github.com/postgres/postgres/blob/master/src/backend/storage/ipc/procarray.c#L482) — FATAL
-- [`postgres/src/backend/storage/lmgr/proc.c:458`](https://github.com/postgres/postgres/blob/master/src/backend/storage/lmgr/proc.c#L458) — FATAL
-- [`postgres/src/backend/tcop/backend_startup.c:341`](https://github.com/postgres/postgres/blob/master/src/backend/tcop/backend_startup.c#L341) — FATAL
-
-## SQLSTATE
-
-- `53300` — **ERRCODE_TOO_MANY_CONNECTIONS**. Class 53 (Insufficient Resources).
 
 ## Related
 

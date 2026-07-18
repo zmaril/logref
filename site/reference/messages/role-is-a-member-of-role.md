@@ -13,8 +13,6 @@ reproduced: true
 
 # `role "%s" is a member of role "%s"`
 
-**Severity:** ERROR · SQLSTATE ERRCODE_INVALID_GRANT_OPERATION
-
 ## What it means
 
 A role-membership grant would have created a cycle. Postgres role membership forms an inheritance graph, and cycles are disallowed — role A cannot be granted membership in role B if B is already (directly or indirectly) a member of A. The placeholders name the two roles on the cycle.
@@ -41,14 +39,6 @@ Produces:
 ```text
 ERROR:  role "groupb" is a member of role "groupa"
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/commands/user.c:1758`](https://github.com/postgres/postgres/blob/master/src/backend/commands/user.c#L1758).
-
-## SQLSTATE
-
-- **ERRCODE_INVALID_GRANT_OPERATION** — code assigned in `errcodes.txt` (outside the pilot's code map).
 
 ## Related
 

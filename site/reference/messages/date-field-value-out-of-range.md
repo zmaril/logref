@@ -16,8 +16,6 @@ reproduced: false
 
 # `date field value out of range: %d-%02d-%02d`
 
-**Severity:** ERROR · SQLSTATE `22008` (ERRCODE_DATETIME_FIELD_OVERFLOW)
-
 ## What it means
 
 A date was assembled from year, month, and day fields that do not form a real calendar date. The placeholders echo back the numbers that were supplied, so a rendered line looks like `date field value out of range: 2020-13-01`. Unlike a parse error, the individual fields were read fine — they just describe a day that does not exist.
@@ -43,18 +41,6 @@ Produces:
 ```text
 ERROR:  date field value out of range: 2020-13-01
 ```
-
-## Source
-
-This message text is emitted from 3 call sites:
-
-- [`postgres/src/backend/utils/adt/date.c:259`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/date.c#L259) — ERROR
-- [`postgres/src/backend/utils/adt/date.c:269`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/date.c#L269) — ERROR
-- [`postgres/src/backend/utils/adt/timestamp.c:594`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/timestamp.c#L594) — ERROR
-
-## SQLSTATE
-
-- `22008` — **ERRCODE_DATETIME_FIELD_OVERFLOW**. Class 22 (Data Exception).
 
 ## Related
 

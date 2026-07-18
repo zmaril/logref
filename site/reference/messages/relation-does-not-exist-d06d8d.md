@@ -18,8 +18,6 @@ reproduced: false
 
 # `relation "%s" does not exist`
 
-**Severity:** ERROR (some call sites choose the severity at runtime) · SQLSTATE `42P01` (ERRCODE_UNDEFINED_TABLE)
-
 ## What it means
 
 A query referred to a table, view, materialized view, sequence, or index that the server could not find. In Postgres all of these are "relations," which is why the wording is generic. The placeholder is the name as written in the statement.
@@ -45,19 +43,6 @@ Produces:
 ```text
 ERROR:  relation "nonexistent_table" does not exist
 ```
-
-## Source
-
-This message text is emitted from 4 call sites:
-
-- [`postgres/src/backend/catalog/namespace.c:637`](https://github.com/postgres/postgres/blob/master/src/backend/catalog/namespace.c#L637) — severity chosen at runtime
-- [`postgres/src/backend/parser/parse_relation.c:1482`](https://github.com/postgres/postgres/blob/master/src/backend/parser/parse_relation.c#L1482) — ERROR
-- [`postgres/src/backend/parser/parse_relation.c:1490`](https://github.com/postgres/postgres/blob/master/src/backend/parser/parse_relation.c#L1490) — ERROR
-- [`postgres/src/pl/plpgsql/src/pl_comp.c:1695`](https://github.com/postgres/postgres/blob/master/src/pl/plpgsql/src/pl_comp.c#L1695) — ERROR
-
-## SQLSTATE
-
-- `42P01` — **ERRCODE_UNDEFINED_TABLE**. Class 42 (Syntax Error or Access Rule Violation).
 
 ## Related
 

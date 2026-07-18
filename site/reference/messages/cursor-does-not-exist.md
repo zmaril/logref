@@ -23,8 +23,6 @@ reproduced: true
 
 # `cursor "%s" does not exist`
 
-**Severity:** ERROR · SQLSTATE `34000` (ERRCODE_INVALID_CURSOR_NAME), `34000` (ERRCODE_UNDEFINED_CURSOR)
-
 ## What it means
 
 A `FETCH`, `MOVE`, `CLOSE`, or `WHERE CURRENT OF` referred to a cursor name that is not open in the current session. The placeholder is the name used. Cursors are session- and often transaction-scoped, so a name that was valid a moment ago can be gone.
@@ -50,24 +48,6 @@ Produces:
 ```text
 ERROR:  cursor "nonexistent_cursor" does not exist
 ```
-
-## Source
-
-This message text is emitted from 8 call sites:
-
-- [`postgres/contrib/dblink/dblink.c:665`](https://github.com/postgres/postgres/blob/master/contrib/dblink/dblink.c#L665) — ERROR
-- [`postgres/src/backend/commands/portalcmds.c:198`](https://github.com/postgres/postgres/blob/master/src/backend/commands/portalcmds.c#L198) — ERROR
-- [`postgres/src/backend/commands/portalcmds.c:251`](https://github.com/postgres/postgres/blob/master/src/backend/commands/portalcmds.c#L251) — ERROR
-- [`postgres/src/backend/executor/execCurrent.c:68`](https://github.com/postgres/postgres/blob/master/src/backend/executor/execCurrent.c#L68) — ERROR
-- [`postgres/src/backend/utils/adt/xml.c:2978`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/xml.c#L2978) — ERROR
-- [`postgres/src/backend/utils/adt/xml.c:3148`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/xml.c#L3148) — ERROR
-- [`postgres/src/pl/plpgsql/src/pl_exec.c:4950`](https://github.com/postgres/postgres/blob/master/src/pl/plpgsql/src/pl_exec.c#L4950) — ERROR
-- [`postgres/src/pl/plpgsql/src/pl_exec.c:5038`](https://github.com/postgres/postgres/blob/master/src/pl/plpgsql/src/pl_exec.c#L5038) — ERROR
-
-## SQLSTATE
-
-- `34000` — **ERRCODE_INVALID_CURSOR_NAME**. Class 34 (Invalid Cursor Name).
-- `34000` — **ERRCODE_UNDEFINED_CURSOR**. Class 34 (Invalid Cursor Name).
 
 ## Related
 

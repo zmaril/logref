@@ -20,8 +20,6 @@ reproduced: true
 
 # `relation "%s" already exists`
 
-**Severity:** ERROR · SQLSTATE `42P07` (ERRCODE_DUPLICATE_TABLE)
-
 ## What it means
 
 A `CREATE` tried to make a relation (table, index, view, sequence, materialized view) under a name already taken in that schema. Names must be unique per schema across all relation kinds, so a table and an index cannot share a name.
@@ -48,22 +46,6 @@ Produces:
 ```text
 ERROR:  relation "child_amount_idx" already exists
 ```
-
-## Source
-
-This message text is emitted from 7 call sites:
-
-- [`postgres/src/backend/catalog/heap.c:1195`](https://github.com/postgres/postgres/blob/master/src/backend/catalog/heap.c#L1195) — ERROR
-- [`postgres/src/backend/catalog/index.c:904`](https://github.com/postgres/postgres/blob/master/src/backend/catalog/index.c#L904) — ERROR
-- [`postgres/src/backend/commands/createas.c:406`](https://github.com/postgres/postgres/blob/master/src/backend/commands/createas.c#L406) — ERROR
-- [`postgres/src/backend/commands/tablecmds.c:4396`](https://github.com/postgres/postgres/blob/master/src/backend/commands/tablecmds.c#L4396) — ERROR
-- [`postgres/src/backend/commands/tablecmds.c:23244`](https://github.com/postgres/postgres/blob/master/src/backend/commands/tablecmds.c#L23244) — ERROR
-- [`postgres/src/backend/commands/tablecmds.c:23842`](https://github.com/postgres/postgres/blob/master/src/backend/commands/tablecmds.c#L23842) — ERROR
-- [`postgres/src/backend/commands/tablecmds.c:24272`](https://github.com/postgres/postgres/blob/master/src/backend/commands/tablecmds.c#L24272) — ERROR
-
-## SQLSTATE
-
-- `42P07` — **ERRCODE_DUPLICATE_TABLE**. Class 42 (Syntax Error or Access Rule Violation).
 
 ## Related
 
