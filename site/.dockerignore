@@ -1,0 +1,6 @@
+# Keep the build context small and reproducible: the bundle is regenerated
+# inside the image, and installed deps are re-fetched there.
+node_modules/
+dist/
+.source/
+src/generated/

@@ -29,4 +29,5 @@ built site locally, serve `dist/` with any static file server, for example
 
 ## Deploy
 
-The bundle is deployed to Cloudflare Pages. See [DEPLOY.md](./DEPLOY.md).
+The bundle is deployed to Fly.io — built and served from a container (Bun build,
+nginx serve). See [DEPLOY.md](./DEPLOY.md).
