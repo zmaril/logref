@@ -1,0 +1,6 @@
+database "orders" does not exist
+could not open file "pg_wal/000000010000000000000001": No such file or directory
+7 of 512 tuples
+relation "users" already exists
+disk is 90% full
+this line matches no specific site and only the bare catch-all
