@@ -1,0 +1,62 @@
+-- Parser / scanner / grammar errors  ->  src/backend/parser/**, scan.l, gram.y
+-- Every statement here is deliberately malformed. Each fires a parse-time
+-- ereport before planning; the driver runs with ON_ERROR_STOP off so all of
+-- them execute in one session.
+
+SELECT;
+SELECT 1 +;
+SELECT * FROM;
+SELECT * FROM WHERE 1=1;
+SELECT 1 FROM t1 t2 t3;
+SELECT 1 AS;
+SELECT 1 1;
+SELECT (1;
+SELECT 1);
+SELECT 'unterminated;
+SELECT "unterminated;
+SELECT $$ unterminated dollar;
+SELECT 1 FROM repro.parent ORDER BY;
+SELECT 1 FROM repro.parent GROUP;
+SELECT 1 FROM repro.parent HAVING;
+SELECT * FROM repro.parent LIMIT;
+SELECT * FROM repro.parent OFFSET;
+INSERT INTO;
+INSERT INTO repro.parent VALUES;
+UPDATE repro.parent SET;
+DELETE FROM;
+CREATE TABLE;
+CREATE TABLE bad ();
+CREATE TABLE bad (id);
+CREATE TABLE bad (id int,);
+DROP TABLE;
+ALTER TABLE;
+ALTER TABLE repro.parent;
+SELECT * FROM repro.parent WHERE id IN;
+SELECT * FROM repro.parent WHERE id BETWEEN 1;
+SELECT CASE WHEN 1 THEN;
+SELECT CAST(1 AS);
+SELECT 1 UNION;
+SELECT 1 EXCEPT;
+WITH x AS SELECT 1;
+SELECT * FROM (SELECT 1);
+VALUES;
+SELECT 0x;
+SELECT 1e;
+SELECT .;
+SELECT @;
+SELECT 1 ++ 2 using nonexistent;
+GRANT ON repro.parent TO lowpriv;
+COPY repro.parent;
+BEGIN TRANSACTION ISOLATION LEVEL nonsense;
+SET;
+RESET;
+SHOW;
+EXPLAIN;
+PREPARE;
+EXECUTE;
+DECLARE;
+FETCH;
+SELECT 1 FILTER;
+SELECT count(*) OVER ();
+SELECT 1 AS "";
+CREATE FUNCTION () RETURNS int AS 'SELECT 1' LANGUAGE sql;

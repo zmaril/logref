@@ -1,0 +1,7 @@
+{"api":"ereport","kind":"backend","level":"ERROR","message":{"text":"database \"%s\" does not exist"},"sqlstates":["ERRCODE_UNDEFINED_DATABASE"],"path":"src/backend/commands/dbcommands.c","line":100}
+{"api":"ereport","kind":"backend","level":"ERROR","message":{"text":"could not open file \"%s\": %m"},"sqlstates":["ERRCODE_IO_ERROR"],"path":"src/backend/storage/file/fd.c","line":200}
+{"api":"elog","kind":"backend","level":"DEBUG1","message":{"text":"%d of %d tuples"},"path":"src/backend/access/heap/vacuumlazy.c","line":300}
+{"api":"ereport","kind":"backend","level":"ERROR","message":{"text":"relation \"%s\" already exists"},"sqlstates":["ERRCODE_DUPLICATE_TABLE"],"path":"src/backend/catalog/heap.c","line":400}
+{"api":"pg_log_warning","kind":"frontend","level":"WARNING","message":{"text":"disk is %d%% full"},"path":"src/bin/pg_basebackup/pg_basebackup.c","line":500}
+{"api":"elog","kind":"backend","level":"LOG","message":{"text":"%s"},"path":"src/backend/utils/error/elog.c","line":600}
+{"api":"elog","kind":"backend","level":"DEBUG5","message":{"expr":"errmsg(buf)"},"path":"src/backend/computed/only.c","line":700}
