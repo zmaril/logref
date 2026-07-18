@@ -10,3 +10,8 @@ conventional-commits = "required"
 # The reproducer harness entry point lives beside its scenarios under
 # reproducers/, not scripts/ — a deliberate keeper.
 allow = ["reproducers/run.sh"]
+
+[allow-auto-merge]
+# Auto-merge is enabled on the repo so a green PR can land without a babysitter.
+# The check asserts GitHub's allow_auto_merge matches this declaration.
+enabled = true
