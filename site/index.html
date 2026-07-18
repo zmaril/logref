@@ -9,6 +9,10 @@
     <main>
       <h1>LogRef</h1>
       <p>Search database log and error messages by what you actually saw.</p>
+      <!-- biome-ignore lint/a11y/noAutofocus: the search box is the whole page —
+           a visitor arrives here to paste a log line and nothing else. The rule
+           guards against autofocus stealing focus from surrounding content;
+           there is no surrounding content to steal it from. -->
       <input id="q" type="search" placeholder="paste a log line…" autofocus />
       <section id="results"></section>
     </main>

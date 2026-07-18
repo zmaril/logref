@@ -63,5 +63,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      # biome check is both the linter and the formatter check in one pass.
+      # Spelled out rather than `bun run lint` so the command names biome
+      # directly — housekeeping's ci-exists only resolves package.json scripts
+      # from the repo root, and this package lives in site/.
+      - run: bunx biome check
       - run: bun test
       - run: bun run build
