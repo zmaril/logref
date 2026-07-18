@@ -1,0 +1,60 @@
+-- Invalid input syntax for a type  ->  src/backend/utils/adt/**
+-- The type input functions (int4in, numeric_in, boolin, uuid_in, ...) are the
+-- single largest reachable cluster of ERROR sites. Each cast below hands a
+-- malformed literal to one type's input function.
+
+SELECT 'abc'::int2;
+SELECT 'abc'::int4;
+SELECT 'abc'::int8;
+SELECT '99999999999999999999'::int4;
+SELECT '3.14'::int4;
+SELECT ''::int4;
+SELECT '  '::int4;
+SELECT '1 2'::int4;
+SELECT 'zzz'::numeric;
+SELECT '1.2.3'::numeric;
+SELECT 'NaNx'::numeric;
+SELECT 'abc'::float4;
+SELECT 'abc'::float8;
+SELECT 'truthy'::boolean;
+SELECT '2'::boolean;
+SELECT 'notauuid'::uuid;
+SELECT '12345'::uuid;
+SELECT 'xyz'::bytea;
+SELECT '\x0g'::bytea;
+SELECT 'notjson'::json;
+SELECT '{bad'::json;
+SELECT 'notjson'::jsonb;
+SELECT '{"a":}'::jsonb;
+SELECT 'a'::"char"::int4;
+SELECT 'nope'::point;
+SELECT 'nope'::line;
+SELECT 'nope'::lseg;
+SELECT 'nope'::box;
+SELECT 'nope'::path;
+SELECT 'nope'::polygon;
+SELECT 'nope'::circle;
+SELECT 'nope'::inet;
+SELECT '999.1.1.1'::inet;
+SELECT 'nope'::cidr;
+SELECT 'nope'::macaddr;
+SELECT 'nope'::macaddr8;
+SELECT 'nope'::money::numeric;
+SELECT 'nope'::bit(4);
+SELECT '102'::bit(2);
+SELECT 'nope'::tsvector @@ 'x';
+SELECT 'nope &'::tsquery;
+SELECT 'nope'::xml;
+SELECT '<unclosed>'::xml;
+SELECT 'nope'::interval;
+SELECT 'nope'::int4range;
+SELECT '[a,b)'::int4range;
+SELECT 'nope'::pg_lsn;
+SELECT 'nope'::regclass;
+SELECT 'nope'::"char";
+SELECT '{1,2'::int[];
+SELECT '{{1},{2,3}}'::int[];
+SELECT 'nope'::oid;
+SELECT '999999999999'::oid;
+SELECT 'nope'::regproc;
+SELECT 'nope'::regtype;

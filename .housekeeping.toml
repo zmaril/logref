@@ -5,3 +5,8 @@ fleet = "zmaril/powderworks"
 website = "off"
 # Adopted on enrollment; the fleet default is "recommended".
 conventional-commits = "required"
+
+[scripts]
+# The reproducer harness entry point lives beside its scenarios under
+# reproducers/, not scripts/ — a deliberate keeper.
+allow = ["reproducers/run.sh"]
