@@ -15,8 +15,6 @@ reproduced: true
 
 # `time zone "%s" not recognized`
 
-**Severity:** ERROR · SQLSTATE `22023` (ERRCODE_INVALID_PARAMETER_VALUE)
-
 ## What it means
 
 A time-zone name did not match anything in Postgres's zone database. The placeholder is the name that was supplied. Postgres accepts IANA zone names (`America/New_York`), fixed offsets, and a set of abbreviations — anything else is rejected.
@@ -42,17 +40,6 @@ Produces:
 ```text
 ERROR:  time zone "Nowhere/Nowhere" not recognized
 ```
-
-## Source
-
-This message text is emitted from 2 call sites:
-
-- [`postgres/src/backend/utils/adt/datetime.c:3349`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/datetime.c#L3349) — ERROR
-- [`postgres/src/backend/utils/adt/timestamp.c:524`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/timestamp.c#L524) — ERROR
-
-## SQLSTATE
-
-- `22023` — **ERRCODE_INVALID_PARAMETER_VALUE**. Class 22 (Data Exception).
 
 ## Related
 

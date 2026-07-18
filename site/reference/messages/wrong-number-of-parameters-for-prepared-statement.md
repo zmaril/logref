@@ -14,8 +14,6 @@ reproduced: true
 
 # `wrong number of parameters for prepared statement "%s"`
 
-**Severity:** ERROR · SQLSTATE `42601` (ERRCODE_SYNTAX_ERROR)
-
 ## What it means
 
 An `EXECUTE` supplied a different number of arguments than the prepared statement declares. A prepared statement fixes its parameter count when it is created; every execution must pass exactly that many. The placeholder names the statement.
@@ -42,14 +40,6 @@ Produces:
 ```text
 ERROR:  wrong number of parameters for prepared statement "p1"
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/commands/prepare.c:295`](https://github.com/postgres/postgres/blob/master/src/backend/commands/prepare.c#L295).
-
-## SQLSTATE
-
-- `42601` — **ERRCODE_SYNTAX_ERROR**. Class 42 (Syntax Error or Access Rule Violation).
 
 ## Related
 

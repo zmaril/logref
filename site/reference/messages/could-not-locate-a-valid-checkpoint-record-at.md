@@ -11,8 +11,6 @@ reproduced: false
 
 # `could not locate a valid checkpoint record at %X/%08X`
 
-**Severity:** FATAL
-
 ## What it means
 
 During startup recovery Postgres could not find a usable checkpoint record at the expected WAL location, so it cannot determine where to begin replaying WAL. Without a valid checkpoint the server has no safe starting point and refuses to come up. The placeholder is the WAL LSN it looked at. This is a `FATAL` with no SQLSTATE — it is an operational failure, not a SQL-level one.
@@ -38,10 +36,6 @@ Produces:
 ```text
 FATAL:  could not locate a valid checkpoint record at 0/16D8A20
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/access/transam/xlogrecovery.c:739`](https://github.com/postgres/postgres/blob/master/src/backend/access/transam/xlogrecovery.c#L739).
 
 ## Related
 

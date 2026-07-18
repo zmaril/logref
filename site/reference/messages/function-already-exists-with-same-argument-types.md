@@ -14,8 +14,6 @@ reproduced: true
 
 # `function "%s" already exists with same argument types`
 
-**Severity:** ERROR · SQLSTATE `42723` (ERRCODE_DUPLICATE_FUNCTION)
-
 ## What it means
 
 A `CREATE FUNCTION` collided with an existing function of the same name and the same argument type list. Postgres identifies functions by name plus argument types (overloading), so this specific signature is already defined.
@@ -42,14 +40,6 @@ Produces:
 ```text
 ERROR:  function "addone" already exists with same argument types
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/catalog/pg_proc.c:402`](https://github.com/postgres/postgres/blob/master/src/backend/catalog/pg_proc.c#L402).
-
-## SQLSTATE
-
-- `42723` — **ERRCODE_DUPLICATE_FUNCTION**. Class 42 (Syntax Error or Access Rule Violation).
 
 ## Related
 

@@ -41,7 +41,12 @@ a `msg-<hash>` slug, and **390** texts (across 183 colliding bases) take a
 
 ## Page template
 
-Every page is frontmatter + a fixed set of body sections:
+Every page is frontmatter + a fixed set of **prose** body sections. The derived
+facts — **severity**, **Source**, and **SQLSTATE** — are **NOT written into the
+body**: the frontmatter is their single source of truth, and the site generator
+(`site/src/render.ts`) renders each of them exactly once at build time. Writing
+them into the body too would duplicate the same fact on the rendered page, so
+don't.
 
 ```markdown
 ---
@@ -61,18 +66,25 @@ reproduced: <true|false>        # in the reproducer coverage set (real example)
 
 # `<message text>`
 
-**Severity:** <levels> · SQLSTATE `<code>` (<symbol>)
-
 ## What it means      — plain-language explanation of the condition
 ## When it happens     — what triggers it
 ## How to fix          — ERROR/FATAL/PANIC only; concrete, actionable steps
    (or)
 ## Is this a problem?   — LOG/INFO/DEBUG/NOTICE/WARNING; "usually not, but watch…"
 ## Example             — real trigger if reproduced, else marked illustrative
-## Source              — GitHub links to each call site
-## SQLSTATE            — code, symbolic name, and error-class meaning
 ## Related             — sibling messages (same file or SQLSTATE class)
 ```
+
+The body carries **only** those prose sections (and `Example`/`Related`). The
+generator renders, from the frontmatter:
+
+- the **severity** — once, as a badge in the facts card at the top of the page
+  (`varies by call site` for passthrough); it does **not** repeat the SQLSTATE
+  code, so the code has a single home in the SQLSTATE section below;
+- a **Source** section — from `call_sites`, each linked to GitHub, inserted just
+  before `## Related`;
+- a **SQLSTATE** section — from `sqlstate` (code, symbolic name, and error-class
+  meaning), also before `## Related`, and omitted when there is no SQLSTATE.
 
 The `How to fix` vs `Is this a problem?` heading is chosen by severity: hard
 failures (`ERROR`/`FATAL`/`PANIC`) get a fix; informational levels get
@@ -85,7 +97,7 @@ problem-triage guidance instead.
 | `message`, `api`, `level`, `sqlstate` symbol, `call_sites` | **Catalog** (extracted, verbatim) |
 | `sqlstate` code + class name | **Catalog symbol → `errcodes.txt` lookup** (deterministic) |
 | `reproduced` flag + real `Example` | **Reproducer coverage set** (`reproducers/`) |
-| GitHub `Source` links | **Computed** from `path:line` (drop the checkout-root `postgres/` prefix) |
+| GitHub `Source` links, `SQLSTATE` section, severity badge | **Rendered by the generator** from the frontmatter at build time — Source links are computed from `call_sites` `path:line` (drop the checkout-root `postgres/` prefix); the SQLSTATE class is looked up from the code. Never written into the body. |
 | `What it means`, `When it happens`, `How to fix`, illustrative `Example`, `Related` | **LLM-authored**, grounded in the catalog facts + real Postgres knowledge — never invents SQLSTATEs, locations, or fixes |
 
 The rule for the prose: the structured facts are ground truth and are never

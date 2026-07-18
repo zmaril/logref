@@ -20,8 +20,6 @@ reproduced: true
 
 # `smallint out of range`
 
-**Severity:** ERROR · SQLSTATE `22003` (ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE)
-
 ## What it means
 
 A value did not fit in the `smallint` (`int2`) type. Postgres stores `smallint` as a signed 16-bit integer, so the only values it can hold run from -32768 to 32767. Any conversion, cast, or arithmetic result outside that window is rejected rather than silently wrapped around.
@@ -47,22 +45,6 @@ Produces:
 ```text
 ERROR:  smallint out of range
 ```
-
-## Source
-
-This message text is emitted from 7 call sites:
-
-- [`postgres/contrib/btree_gist/btree_int2.c:106`](https://github.com/postgres/postgres/blob/master/contrib/btree_gist/btree_int2.c#L106) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:920`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L920) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:942`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L942) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:956`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L956) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:970`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L970) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1002`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1002) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1241`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1241) — ERROR
-
-## SQLSTATE
-
-- `22003` — **ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE**. Class 22 (Data Exception).
 
 ## Related
 

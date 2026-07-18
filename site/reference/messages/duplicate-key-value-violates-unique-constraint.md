@@ -14,8 +14,6 @@ reproduced: false
 
 # `duplicate key value violates unique constraint "%s"`
 
-**Severity:** ERROR · SQLSTATE `23505` (ERRCODE_UNIQUE_VIOLATION)
-
 ## What it means
 
 A row would have created a second copy of a value that a unique constraint or unique index requires to be distinct. The placeholder names the constraint; the error detail (a separate line) prints the conflicting key value. This is the single most common write error in production Postgres.
@@ -44,14 +42,6 @@ Produces:
 ERROR:  duplicate key value violates unique constraint "t_email_key"
 DETAIL:  Key (email)=(a@example.com) already exists.
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/access/nbtree/nbtinsert.c:669`](https://github.com/postgres/postgres/blob/master/src/backend/access/nbtree/nbtinsert.c#L669).
-
-## SQLSTATE
-
-- `23505` — **ERRCODE_UNIQUE_VIOLATION**. Class 23 (Integrity Constraint Violation).
 
 ## Related
 

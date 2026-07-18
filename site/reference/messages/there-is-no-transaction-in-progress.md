@@ -16,8 +16,6 @@ reproduced: true
 
 # `there is no transaction in progress`
 
-**Severity:** WARNING · SQLSTATE `25P01` (ERRCODE_NO_ACTIVE_SQL_TRANSACTION)
-
 ## What it means
 
 A transaction-control command ran with no open transaction to act on. `COMMIT`, `ROLLBACK`, and friends only make sense inside an explicit transaction block; issued on their own they have nothing to finish. This is a `WARNING`, not an error — the statement is a harmless no-op and the session continues.
@@ -43,18 +41,6 @@ Produces:
 ```text
 WARNING:  there is no transaction in progress
 ```
-
-## Source
-
-This message text is emitted from 3 call sites:
-
-- [`postgres/src/backend/access/transam/xact.c:4127`](https://github.com/postgres/postgres/blob/master/src/backend/access/transam/xact.c#L4127) — WARNING
-- [`postgres/src/backend/access/transam/xact.c:4206`](https://github.com/postgres/postgres/blob/master/src/backend/access/transam/xact.c#L4206) — WARNING
-- [`postgres/src/backend/access/transam/xact.c:4329`](https://github.com/postgres/postgres/blob/master/src/backend/access/transam/xact.c#L4329) — WARNING
-
-## SQLSTATE
-
-- `25P01` — **ERRCODE_NO_ACTIVE_SQL_TRANSACTION**. Class 25 (Invalid Transaction State).
 
 ## Related
 

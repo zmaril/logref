@@ -16,6 +16,15 @@ export interface LogSite {
   line: number;
 }
 
+/** One entry in the reference index: a distinct message text and its facts.
+ * Emitted at build time by build.ts, one per generated page. */
+export interface MessageEntry {
+  slug: string;
+  message: string;
+  level: string[];
+  sqlstate: string[];
+}
+
 /** Best human-readable form of a site's message. */
 export function messageText(site: LogSite): string | undefined {
   return site.message.text ?? site.message.expr;
@@ -26,11 +35,22 @@ export function location(site: LogSite): string {
   return `${site.path}:${site.line}`;
 }
 
+/** Case-insensitive substring test; an empty/blank needle never matches. */
+export function matches(haystack: string | undefined, needle: string): boolean {
+  const q = needle.toLowerCase().trim();
+  if (q === "") return false;
+  return haystack?.toLowerCase().includes(q) ?? false;
+}
+
 /** Case-insensitive substring search over each site's message text. */
 export function search(index: readonly LogSite[], query: string): LogSite[] {
-  const needle = query.toLowerCase().trim();
-  if (needle === "") return [];
-  return index.filter((site) =>
-    messageText(site)?.toLowerCase().includes(needle),
-  );
+  return index.filter((site) => matches(messageText(site), query));
+}
+
+/** Substring search over the reference index by message text. */
+export function searchMessages(
+  index: readonly MessageEntry[],
+  query: string,
+): MessageEntry[] {
+  return index.filter((entry) => matches(entry.message, query));
 }

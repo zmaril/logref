@@ -1,0 +1,23 @@
+# Fly.io configuration for the LogRef reference site.
+#
+# The site is a static bundle built and served by the Dockerfile in this
+# directory (Bun build -> nginx). Deploy from `site/` with `fly deploy`; see
+# DEPLOY.md for the first-time setup and the FLY_API_TOKEN CI flow.
+#
+# NOTE: `app` must be globally unique across all of Fly. If "logref" is taken,
+# pick another name here (or pass `fly deploy --app <name>`) and the site will
+# be served from https://<name>.fly.dev.
+app = "logref"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  # Scale to zero when idle — a static site costs nothing while unvisited and
+  # cold-starts on the next request.
+  min_machines_running = 0

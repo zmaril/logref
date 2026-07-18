@@ -15,8 +15,6 @@ reproduced: true
 
 # `argument list must have even number of elements`
 
-**Severity:** ERROR · SQLSTATE `22023` (ERRCODE_INVALID_PARAMETER_VALUE)
-
 ## What it means
 
 A JSON object builder was given an odd number of arguments. Functions like `json_build_object`/`jsonb_build_object` and `json_object` consume arguments in key/value pairs, so the count must be even — every key needs a value.
@@ -42,17 +40,6 @@ Produces:
 ```text
 ERROR:  argument list must have even number of elements
 ```
-
-## Source
-
-This message text is emitted from 2 call sites:
-
-- [`postgres/src/backend/utils/adt/json.c:1203`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/json.c#L1203) — ERROR
-- [`postgres/src/backend/utils/adt/jsonb.c:1137`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/jsonb.c#L1137) — ERROR
-
-## SQLSTATE
-
-- `22023` — **ERRCODE_INVALID_PARAMETER_VALUE**. Class 22 (Data Exception).
 
 ## Related
 

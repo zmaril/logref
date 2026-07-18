@@ -39,8 +39,6 @@ reproduced: false
 
 # `integer out of range`
 
-**Severity:** ERROR · SQLSTATE `22003` (ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE)
-
 ## What it means
 
 A value did not fit in the `integer` (`int4`) type — a signed 32-bit integer holding -2147483648 to 2147483647. The value overflowed that range and Postgres refused to truncate it.
@@ -66,41 +64,6 @@ Produces:
 ```text
 ERROR:  integer out of range
 ```
-
-## Source
-
-This message text is emitted from 26 call sites:
-
-- [`postgres/contrib/btree_gist/btree_int4.c:104`](https://github.com/postgres/postgres/blob/master/contrib/btree_gist/btree_int4.c#L104) — ERROR
-- [`postgres/src/backend/utils/adt/array_userfuncs.c:166`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/array_userfuncs.c#L166) — ERROR
-- [`postgres/src/backend/utils/adt/array_userfuncs.c:248`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/array_userfuncs.c#L248) — ERROR
-- [`postgres/src/backend/utils/adt/bytea.c:175`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/bytea.c#L175) — ERROR
-- [`postgres/src/backend/utils/adt/float.c:4325`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/float.c#L4325) — ERROR
-- [`postgres/src/backend/utils/adt/float.c:4365`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/float.c#L4365) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:805`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L805) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:827`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L827) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:841`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L841) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:855`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L855) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:886`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L886) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:907`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L907) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1024`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1024) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1038`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1038) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1052`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1052) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1085`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1085) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1099`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1099) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1113`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1113) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1144`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1144) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1227`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1227) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1291`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1291) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1359`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1359) — ERROR
-- [`postgres/src/backend/utils/adt/int.c:1365`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/int.c#L1365) — ERROR
-- [`postgres/src/backend/utils/adt/numeric.c:2025`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/numeric.c#L2025) — ERROR
-- [`postgres/src/backend/utils/adt/varbit.c:1193`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/varbit.c#L1193) — ERROR
-- [`postgres/src/backend/utils/adt/varlena.c:873`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/varlena.c#L873) — ERROR
-
-## SQLSTATE
-
-- `22003` — **ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE**. Class 22 (Data Exception).
 
 ## Related
 

@@ -18,8 +18,6 @@ reproduced: false
 
 # `invalid input syntax for type %s: "%s"`
 
-**Severity:** ERROR · SQLSTATE `22P02` (ERRCODE_INVALID_TEXT_REPRESENTATION), `22023` (ERRCODE_INVALID_PARAMETER_VALUE)
-
 ## What it means
 
 A type's input function was handed text it could not parse. The first placeholder is the target type name and the second is the offending literal — so a rendered line reads like `invalid input syntax for type numeric: "12x"`. The value's characters do not form a legal member of that type.
@@ -45,19 +43,6 @@ Produces:
 ```text
 ERROR:  invalid input syntax for type numeric: "zzz"
 ```
-
-## Source
-
-This message text is emitted from 3 call sites:
-
-- [`postgres/src/backend/utils/adt/numeric.c:8020`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/numeric.c#L8020) — ERROR
-- [`postgres/src/backend/utils/adt/timestamp.c:506`](https://github.com/postgres/postgres/blob/master/src/backend/utils/adt/timestamp.c#L506) — ERROR
-- [`postgres/src/tutorial/complex.c:39`](https://github.com/postgres/postgres/blob/master/src/tutorial/complex.c#L39) — ERROR
-
-## SQLSTATE
-
-- `22P02` — **ERRCODE_INVALID_TEXT_REPRESENTATION**. Class 22 (Data Exception).
-- `22023` — **ERRCODE_INVALID_PARAMETER_VALUE**. Class 22 (Data Exception).
 
 ## Related
 

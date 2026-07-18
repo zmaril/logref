@@ -11,8 +11,6 @@ reproduced: true
 
 # `checkpoint starting:%s`
 
-**Severity:** LOG
-
 ## What it means
 
 A checkpoint has begun. A checkpoint flushes dirty shared-buffer pages to disk and records a WAL position from which crash recovery can start, bounding how much WAL must be replayed after a crash. The placeholder lists the reasons the checkpoint was triggered, such as `time`, `wal`, `immediate`, or `force`. This is a normal, informational `LOG` line.
@@ -38,10 +36,6 @@ Produces:
 ```text
 LOG:  checkpoint starting: immediate force wait
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/access/transam/xlog.c:7180`](https://github.com/postgres/postgres/blob/master/src/backend/access/transam/xlog.c#L7180).
 
 ## Related
 

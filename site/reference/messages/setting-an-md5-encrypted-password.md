@@ -14,8 +14,6 @@ reproduced: false
 
 # `setting an MD5-encrypted password`
 
-**Severity:** WARNING · SQLSTATE `01P01` (ERRCODE_WARNING_DEPRECATED_FEATURE)
-
 ## What it means
 
 A password was stored using the legacy MD5 hashing scheme. Postgres warns because MD5 password authentication is deprecated in favor of `scram-sha-256`, which is stronger. The password was set — this is a heads-up, not a failure.
@@ -42,14 +40,6 @@ Produces:
 ```text
 WARNING:  setting an MD5-encrypted password
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/libpq/crypt.c:244`](https://github.com/postgres/postgres/blob/master/src/backend/libpq/crypt.c#L244).
-
-## SQLSTATE
-
-- `01P01` — **ERRCODE_WARNING_DEPRECATED_FEATURE**. Class 01 (Warning).
 
 ## Related
 

@@ -14,8 +14,6 @@ reproduced: false
 
 # `no pg_hba.conf entry for host "%s", user "%s", database "%s", %s`
 
-**Severity:** FATAL · SQLSTATE `28000` (ERRCODE_INVALID_AUTHORIZATION_SPECIFICATION)
-
 ## What it means
 
 The client-authentication file `pg_hba.conf` has no rule that matches this connection attempt. Postgres checks each incoming connection against ordered host-based rules keyed on source host, requested user, and database; when none matches, the connection is refused before any password is even considered. The placeholders echo the host, user, database, and the negotiated encryption method.
@@ -43,14 +41,6 @@ Produces:
 ```text
 FATAL:  no pg_hba.conf entry for host "10.0.0.5", user "appuser", database "app", no encryption
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/libpq/auth.c:536`](https://github.com/postgres/postgres/blob/master/src/backend/libpq/auth.c#L536).
-
-## SQLSTATE
-
-- `28000` — **ERRCODE_INVALID_AUTHORIZATION_SPECIFICATION**. Class 28 (Invalid Authorization Specification).
 
 ## Related
 

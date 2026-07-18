@@ -14,8 +14,6 @@ reproduced: true
 
 # `column "%s.%s" must appear in the GROUP BY clause or be used in an aggregate function`
 
-**Severity:** ERROR · SQLSTATE `42803` (ERRCODE_GROUPING_ERROR)
-
 ## What it means
 
 A grouped query selected a column that is neither grouped nor aggregated. Once a query has a `GROUP BY` (or any aggregate), every output column must either be one of the grouping keys or be wrapped in an aggregate such as `sum`, `count`, or `max` — otherwise the value is ambiguous across the rows collapsed into each group. The placeholders name the table and column.
@@ -41,14 +39,6 @@ Produces:
 ```text
 ERROR:  column "repro.child.id" must appear in the GROUP BY clause or be used in an aggregate function
 ```
-
-## Source
-
-Emitted from [`postgres/src/backend/parser/parse_agg.c:1572`](https://github.com/postgres/postgres/blob/master/src/backend/parser/parse_agg.c#L1572).
-
-## SQLSTATE
-
-- `42803` — **ERRCODE_GROUPING_ERROR**. Class 42 (Syntax Error or Access Rule Violation).
 
 ## Related
 
