@@ -4,8 +4,8 @@
 // rendered by markdown.ts; everything else here is derived from the frontmatter
 // facts so the same truth drives both the card and the index.
 
-import { escapeHtml, renderInline, renderMarkdown } from "./markdown.ts";
 import type { MessageDoc } from "./frontmatter.ts";
+import { escapeHtml, renderInline, renderMarkdown } from "./markdown.ts";
 import type { MessageEntry } from "./search.ts";
 
 /** Postgres SQLSTATE error classes (first two chars of a code → class name),
@@ -125,7 +125,12 @@ function factsCard(doc: MessageDoc): string {
 
   // SQLSTATE is rendered once, in its own `## SQLSTATE` section (with the error
   // class), not here — keeping each derived fact to a single surface.
-  rows.push(fact("Logging API", doc.api.map((a) => `<code>${escapeAttr(a)}</code>`).join(" ")));
+  rows.push(
+    fact(
+      "Logging API",
+      doc.api.map((a) => `<code>${escapeAttr(a)}</code>`).join(" "),
+    ),
+  );
   rows.push(fact("Call sites", `${doc.callSites.length}`));
   rows.push(
     fact(
