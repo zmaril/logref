@@ -26,7 +26,7 @@ An index tuple was too large to fit. The placeholders are the row size, the maxi
 
 ## When it happens
 
-Indexing a long text/bytea column (or a multi-column key whose combined size is large) with a b-tree, and inserting a row whose indexed value exceeds the per-entry limit. It fires at insert or index-build time on the oversized value.
+Indexing a long text/bytea column (or a multi-column key whose combined size is large) with a b-tree, and inserting a row whose indexed value exceeds the per-entry limit. It fires at insert or index-build time on the offending value.
 
 ## How to fix
 

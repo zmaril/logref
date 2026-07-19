@@ -22,7 +22,7 @@ reproduced: false
 
 ## What it means
 
-A function asked to read or allocate a length that exceeds an allowed maximum. The message covers cases like `pg_read_file`/`pg_read_binary_file` with an oversized length, where the request would exceed the 1 GB per-value limit or another bound.
+A function asked to read or allocate a length that exceeds an allowed maximum. The message covers cases like `pg_read_file`/`pg_read_binary_file` with an excessive length, where the request would exceed the 1 GB per-value limit or another bound.
 
 ## When it happens
 

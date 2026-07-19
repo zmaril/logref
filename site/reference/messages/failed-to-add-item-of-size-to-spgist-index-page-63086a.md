@@ -27,7 +27,7 @@ Internal error. An SP-GiST index build or insert tried to place an item on an in
 
 ## When it happens
 
-Inserting into or building an SP-GiST index where a single index tuple is too big for a page, or a bug in a custom SP-GiST operator class that produces oversized inner/leaf tuples. Ordinary use of the built-in opclasses rarely hits it.
+Inserting into or building an SP-GiST index where a single index tuple is too big for a page, or a bug in a custom SP-GiST operator class that produces inner/leaf tuples too large for a page. Ordinary use of the built-in opclasses rarely hits it.
 
 ## How to fix
 
@@ -35,7 +35,7 @@ If a custom SP-GiST opclass is involved, suspect it — its `choose`/`picksplit`
 
 ## Example
 
-*Illustrative* — an oversized SP-GiST leaf item.
+*Illustrative* — an SP-GiST leaf item too large for a page.
 
 ```text
 ERROR:  failed to add item of size 8160 to SPGiST index page

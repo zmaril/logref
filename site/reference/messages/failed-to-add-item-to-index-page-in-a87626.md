@@ -32,7 +32,7 @@ If the indexed values are unusually large, index a smaller expression (a hash, a
 
 ## Example
 
-*Illustrative* — an oversized GIN entry.
+*Illustrative* — a GIN entry too large for a page.
 
 ```text
 ERROR:  failed to add item to index page in "idx_docs_gin"
