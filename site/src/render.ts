@@ -102,6 +102,10 @@ export function layout(opts: {
     <header class="site-header">
       <a class="brand" href="${root}index.html">LogRef</a>
       <span class="tagline">a reference for Postgres log &amp; error messages</span>
+      <nav class="site-nav">
+        <a href="${root}index.html">Search</a>
+        <a href="${root}scan.html">Scan</a>
+      </nav>
     </header>
     <main>
 ${opts.content}
@@ -235,6 +239,30 @@ export function entryRow(entry: MessageEntry): string {
       ? ` <code class="sqlstate">${escapeAttr(entry.sqlstate.join(" "))}</code>`
       : "";
   return `<li><a href="messages/${escapeAttr(entry.slug)}.html"><span class="msg">${renderInline(entry.message)}</span></a> ${badges}${state}</li>`;
+}
+
+/** The Scan page shell. The client script (scan.ts) fetches patterns.json,
+ * compiles the index, and drives #scan-results — matching runs entirely in the
+ * browser, so the pasted or uploaded log never leaves the machine. */
+export function scanPage(patternCount: number): string {
+  const content = `      <p class="lede">Resolve your own Postgres logs back to their source message. Paste log lines or upload a <code>.log</code>/<code>.txt</code> file — everything runs in your browser, nothing is uploaded.</p>
+      <div class="scan-controls">
+        <textarea id="scan-input" rows="8" placeholder="Paste log lines, e.g.&#10;ERROR:  relation &quot;orders&quot; does not exist&#10;FATAL:  database &quot;shop&quot; does not exist"></textarea>
+        <div class="scan-actions">
+          <label class="file-btn">Upload log file<input id="scan-file" type="file" accept=".log,.txt,text/plain" /></label>
+          <button id="scan-run" type="button">Scan lines</button>
+          <button id="scan-clear" type="button" class="secondary">Clear</button>
+        </div>
+      </div>
+      <p id="scan-status" class="count">Matching against ${patternCount} lowered patterns.</p>
+      <section id="scan-results"></section>`;
+  return layout({
+    title: "Scan your logs — LogRef",
+    bodyClass: "page-scan",
+    content,
+    depth: 0,
+    script: "scan.js",
+  });
 }
 
 /** The search landing page. The client script (index.ts) filters #results. */
