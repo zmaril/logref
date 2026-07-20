@@ -8,5 +8,6 @@ conventional-commits = "required"
 
 [scripts]
 # The reproducer harness entry point lives beside its scenarios under
-# reproducers/, not scripts/ — a deliberate keeper.
-allow = ["reproducers/run.sh"]
+# reproducers/, not scripts/ — a deliberate keeper. The bench build script
+# lives beside the browser-benchmark demo it builds (bench/README points at it).
+allow = ["reproducers/run.sh", "crates/logref-wasm/bench/build.sh"]
