@@ -80,3 +80,49 @@ impl ScannerCore for ScannerImpl {
         }
     }
 }
+
+/// The packed scan path (the throughput experiment — see `src/packed.rs`). Kept
+/// on the hand-written seam because it reaches `logref_core::Scanner`'s
+/// span-valued scan (`scan_line_spans`); `packed.rs` is only the thin
+/// `#[wasm_bindgen]` wrapper that hands the buffer to JS as one `Int32Array`.
+impl ScannerImpl {
+    /// Scan every line and encode ALL hits into ONE flat `Vec<i32>` — the whole
+    /// batch's result as a single contiguous buffer, so it crosses the wasm
+    /// boundary as one bulk copy instead of ~75k `serde_wasm_bindgen`-built JS
+    /// allocations.
+    ///
+    /// Self-describing layout, read back sequentially (the caller already knows
+    /// `lines.len()`, so no top-level count is emitted) — per line, in order:
+    ///
+    /// ```text
+    /// [ numHits, (site, literalLen, numCaps, (capStart, capEnd)*)* ]
+    /// ```
+    ///
+    /// `capStart`/`capEnd` are **byte** offsets into that line; an unmatched
+    /// optional group is `(-1, -1)` (reconstructs to `""`). Log lines are ~ASCII,
+    /// so byte offsets coincide with the JS UTF-16 indices the caller slices with
+    /// — see `packed.rs` for the productionization caveat.
+    pub fn scan_batch_packed_buf(&self, lines: &[String]) -> Vec<i32> {
+        // Rough prealloc: most lines resolve to a hit or two with a capture each.
+        let mut buf: Vec<i32> = Vec::with_capacity(lines.len() * 6);
+        for line in lines {
+            let hits = self.scanner.scan_line_spans(line);
+            buf.push(hits.len() as i32);
+            for h in &hits {
+                buf.push(h.site as i32);
+                buf.push(h.literal_len as i32);
+                buf.push(h.captures.len() as i32);
+                for &(start, end) in &h.captures {
+                    if start == logref_core::NO_SPAN {
+                        buf.push(-1);
+                        buf.push(-1);
+                    } else {
+                        buf.push(start as i32);
+                        buf.push(end as i32);
+                    }
+                }
+            }
+        }
+        buf
+    }
+}

@@ -10,7 +10,10 @@
 use serde::{Deserialize, Serialize};
 
 pub mod scan;
-pub use scan::{lower_format, render_sample, BuildReport, LowerError, Lowered, MatchHit, Scanner};
+pub use scan::{
+    lower_format, render_sample, BuildReport, LowerError, Lowered, MatchHit, MatchHitSpans,
+    Scanner, NO_SPAN,
+};
 
 /// Which logging surface a site belongs to. For Postgres: `ereport`/`elog` are
 /// `Backend`, the `pg_log_*` frontend helpers are `Frontend`, and early-startup

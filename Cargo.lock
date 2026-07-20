@@ -258,6 +258,7 @@ name = "logref-wasm"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "js-sys",
  "logref-core",
  "serde",
  "serde-wasm-bindgen",

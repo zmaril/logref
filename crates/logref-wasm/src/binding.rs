@@ -101,7 +101,11 @@ pub fn lower_format(fmt: String) -> Result<JsValue, JsValue> {
 /// A `RegexSet`-backed log scanner: build once, scan many.
 #[wasm_bindgen]
 pub struct Scanner {
-    inner: crate::core_impl::ScannerImpl,
+    // `pub(crate)` (the generator emits a private field) is the ONE deliberate
+    // deviation from the generated surface: it lets the hand-written packed-scan
+    // experiment in `crate::packed` reach the built scanner without routing a new
+    // op through fluessig. See `src/packed.rs`.
+    pub(crate) inner: crate::core_impl::ScannerImpl,
 }
 
 #[wasm_bindgen]

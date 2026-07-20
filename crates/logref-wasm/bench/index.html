@@ -22,7 +22,9 @@
              margin: 0 0 10px; color: #8b98a9; }
   .num { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .num.wasm { color: #56d364; }
+  .num.packed { color: #d2a8ff; }
   .num.ts { color: #79c0ff; }
+  .grid.three { grid-template-columns: 1fr 1fr 1fr; }
   .unit { font-size: 12px; color: #8b98a9; font-weight: 400; }
   .row { display: flex; justify-content: space-between; font-size: 12.5px;
          padding: 3px 0; border-top: 1px solid #21283680; color: #b9c2cf; margin-top: 2px; }
@@ -38,10 +40,11 @@
 </head>
 <body>
   <h1>logref scanner throughput — batched WASM vs hand-tuned TS</h1>
-  <p class="sub">Same catalog, same rendered log lines, in the browser.
-     <span class="num wasm" style="font-size:14px">Batched WASM</span> builds the fluessig-generated
-     <code>Scanner</code> handle once, then calls <code>scanBatch(lines)</code> — ONE wasm boundary crossing for all N lines.
-     <span class="num ts" style="font-size:14px">Hand-tuned TS</span> is the production <code>ScanIndex</code> (trigram prefilter, per-line <code>scanLine</code>).</p>
+  <p class="sub">Same catalog, same rendered log lines, same trigram algorithm, in the browser.
+     <span class="num packed" style="font-size:14px">Packed WASM</span> calls hand-written <code>scanBatchPacked(lines)</code> — the whole result as ONE flat
+     <code>Int32Array</code> (single bulk copy), reconstructed JS-side by slicing each line by the returned byte spans (that decode cost is charged here).
+     <span class="num wasm" style="font-size:14px">Nested WASM</span> is <code>scanBatch</code> (serde-marshalled <code>MatchHit[][]</code>).
+     <span class="num ts" style="font-size:14px">Hand-tuned TS</span> is the production <code>ScanIndex</code> (per-line <code>scanLine</code>).</p>
   <p id="status">booting…</p>
   <div id="results" style="display:none"></div>
   <div class="meta" id="meta"></div>
@@ -74,6 +77,59 @@ function textsOf(jsonl) {
     .map((l) => { try { return JSON.parse(l).message?.text; } catch { return undefined; } });
 }
 
+// Decode the packed Int32Array back into the SAME nested shape scanBatch
+// returns — one `{ site, literalLen, captures[] }[]` per input line — by slicing
+// each line by the returned byte spans. Layout, read sequentially (we know N):
+//   per line: [ numHits, (site, literalLen, numCaps, (capStart, capEnd)*)* ]
+// An unmatched optional group is (-1,-1) → "". This JS cost is charged to the
+// packed WASM timing, so the comparison against TS (which returns ready-to-use
+// results) is fair.
+function decodePacked(arr, lines) {
+  const out = new Array(lines.length);
+  let p = 0;
+  for (let li = 0; li < lines.length; li++) {
+    const numHits = arr[p++];
+    const hits = new Array(numHits);
+    const line = lines[li];
+    for (let h = 0; h < numHits; h++) {
+      const site = arr[p++];
+      const literalLen = arr[p++];
+      const numCaps = arr[p++];
+      const captures = new Array(numCaps);
+      for (let c = 0; c < numCaps; c++) {
+        const s = arr[p++], e = arr[p++];
+        captures[c] = s < 0 ? "" : line.slice(s, e);
+      }
+      hits[h] = { site, literalLen, captures };
+    }
+    out[li] = hits;
+  }
+  return out;
+}
+
+// Deep-equal the nested scanBatch result against a decoded packed result, so we
+// PROVE the packed path reconstructs the identical {site, literalLen, captures}
+// the nested (RegexSet-proven) path returns before trusting its throughput.
+// Returns { ok, checked, firstDiff }.
+function crossCheck(nested, packed) {
+  if (nested.length !== packed.length)
+    return { ok: false, checked: 0, firstDiff: `line count ${nested.length} vs ${packed.length}` };
+  for (let i = 0; i < nested.length; i++) {
+    const a = nested[i], b = packed[i];
+    if (a.length !== b.length)
+      return { ok: false, checked: i, firstDiff: `line ${i}: hit count ${a.length} vs ${b.length}` };
+    for (let j = 0; j < a.length; j++) {
+      const ha = a[j], hb = b[j];
+      if (ha.site !== hb.site || ha.literalLen !== hb.literalLen || ha.captures.length !== hb.captures.length)
+        return { ok: false, checked: i, firstDiff: `line ${i} hit ${j}: header/site/len differ` };
+      for (let k = 0; k < ha.captures.length; k++)
+        if (ha.captures[k] !== hb.captures[k])
+          return { ok: false, checked: i, firstDiff: `line ${i} hit ${j} cap ${k}: ${JSON.stringify(ha.captures[k])} vs ${JSON.stringify(hb.captures[k])}` };
+    }
+  }
+  return { ok: true, checked: nested.length, firstDiff: null };
+}
+
 function benchmark(jsonl, N) {
   const texts = textsOf(jsonl);
   const patterns = patternsFromTexts(texts);
@@ -92,17 +148,50 @@ function benchmark(jsonl, N) {
   const ts = new ScanIndex(patterns);
   const tsBuildMs = performance.now() - t;
 
+  // ── correctness: packed (decoded) must equal nested, over ALL N lines ──
+  const nestedOnce = wasm.scanBatch(lines);
+  const packedOnce = decodePacked(wasm.scanBatchPacked(lines), lines);
+  const cc = crossCheck(nestedOnce, packedOnce);
+
   // warm-up (not timed).
   wasm.scanBatch(lines.slice(0, 500));
+  wasm.scanBatchPacked(lines.slice(0, 500));
+  wasm.marshalInProbe(lines.slice(0, 500));
   for (let i = 0; i < 500; i++) ts.scanLine(lines[i]);
 
   const REP = 3;
+  // nested WASM scanBatch (the current 66k baseline).
   let wasmBest = Infinity, wasmHits = 0;
   for (let r = 0; r < REP; r++) {
     const t0 = performance.now();
     const batch = wasm.scanBatch(lines);
     const dt = performance.now() - t0;
     if (dt < wasmBest) { wasmBest = dt; wasmHits = batch.reduce((a, h) => a + h.length, 0); }
+  }
+  // packed WASM: scanBatchPacked (marshal-in + compute + Int32Array copy) + JS
+  // reconstruction. Both phases charged to the packed timing; also split them.
+  let packedBest = Infinity, packedCallBest = Infinity, packedDecodeBest = Infinity, packedHits = 0;
+  for (let r = 0; r < REP; r++) {
+    const t0 = performance.now();
+    const buf = wasm.scanBatchPacked(lines);
+    const t1 = performance.now();
+    const decoded = decodePacked(buf, lines);
+    const t2 = performance.now();
+    const total = t2 - t0;
+    if (total < packedBest) {
+      packedBest = total;
+      packedCallBest = t1 - t0;
+      packedDecodeBest = t2 - t1;
+      packedHits = decoded.reduce((a, h) => a + h.length, 0);
+    }
+  }
+  // marshal-IN probe: deserialize the string[] and return only the count.
+  let marshalInBest = Infinity;
+  for (let r = 0; r < REP; r++) {
+    const t0 = performance.now();
+    wasm.marshalInProbe(lines);
+    const dt = performance.now() - t0;
+    if (dt < marshalInBest) marshalInBest = dt;
   }
   let tsBest = Infinity, tsHits = 0;
   for (let r = 0; r < REP; r++) {
@@ -115,24 +204,40 @@ function benchmark(jsonl, N) {
   return {
     N, patterns: patterns.length, distinct: base.length,
     wasmLps: N / (wasmBest / 1000), tsLps: N / (tsBest / 1000),
-    wasmBest, tsBest, wasmBuildMs, tsBuildMs, wasmHits, tsHits,
+    packedLps: N / (packedBest / 1000),
+    wasmBest, tsBest, packedBest, packedCallBest, packedDecodeBest, marshalInBest,
+    wasmBuildMs, tsBuildMs, wasmHits, tsHits, packedHits,
+    crossCheck: cc,
     reps: REP,
   };
 }
 
 function renderScale(title, desc, r) {
-  const ratio = r.wasmLps / r.tsLps;
+  // The headline verdict is the EXPERIMENT: packed WASM vs hand-tuned TS.
+  const ratio = r.packedLps / r.tsLps;
   const win = ratio >= 1
-    ? `<b>Batched WASM wins ${ratio.toFixed(2)}×</b> — ${fmt(r.wasmLps)} vs ${fmt(r.tsLps)} lines/sec.`
-    : `<b>Hand-tuned TS wins ${(1/ratio).toFixed(2)}×</b> — ${fmt(r.tsLps)} vs ${fmt(r.wasmLps)} lines/sec; marshalling still dominates even batched.`;
+    ? `<b>Packed WASM wins ${ratio.toFixed(2)}×</b> — ${fmt(r.packedLps)} vs ${fmt(r.tsLps)} lines/sec (incl. JS reconstruction). Nested scanBatch was ${fmt(r.wasmLps)}.`
+    : `<b>Hand-tuned TS still wins ${(1/ratio).toFixed(2)}×</b> — ${fmt(r.tsLps)} vs packed ${fmt(r.packedLps)} lines/sec. Nested scanBatch: ${fmt(r.wasmLps)}.`;
+  const cc = r.crossCheck.ok
+    ? `packed == nested over all ${fmt(r.crossCheck.checked)} lines ✓`
+    : `CROSS-CHECK FAILED after ${fmt(r.crossCheck.checked)} lines: ${r.crossCheck.firstDiff}`;
   const el = document.createElement("div");
   el.className = "scale";
   el.innerHTML = `
     <h2>${title}</h2>
-    <p class="desc">${desc} · ${fmt(r.patterns)} patterns · N = ${fmt(r.N)} lines · best of ${r.reps}</p>
-    <div class="grid">
+    <p class="desc">${desc} · ${fmt(r.patterns)} patterns · N = ${fmt(r.N)} lines · best of ${r.reps} · <span style="color:${r.crossCheck.ok ? '#56d364' : '#f85149'}">${cc}</span></p>
+    <div class="grid three">
       <div class="card">
-        <h3>Batched WASM · scanBatch</h3>
+        <h3>Packed WASM · scanBatchPacked + JS decode</h3>
+        <div class="num packed">${fmt(r.packedLps)} <span class="unit">lines/sec</span></div>
+        <div class="row"><span>total scan time</span><span>${r.packedBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>· wasm call (in+compute+copy)</span><span>${r.packedCallBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>· of which marshal-in</span><span>${r.marshalInBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>· JS reconstruct</span><span>${r.packedDecodeBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>matches</span><span>${fmt(r.packedHits)}</span></div>
+      </div>
+      <div class="card">
+        <h3>Nested WASM · scanBatch</h3>
         <div class="num wasm">${fmt(r.wasmLps)} <span class="unit">lines/sec</span></div>
         <div class="row"><span>scan time</span><span>${r.wasmBest.toFixed(1)} ms</span></div>
         <div class="row"><span>build (once)</span><span>${r.wasmBuildMs.toFixed(1)} ms</span></div>

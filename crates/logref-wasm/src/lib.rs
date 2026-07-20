@@ -6,6 +6,7 @@
 
 mod binding;
 mod core_impl;
+mod packed;
 
 // Re-export the generated wasm-bindgen surface (the `lowerFormat` free function,
 // the `Lowered` DTO) so `wasm-pack` picks it up from the crate root.

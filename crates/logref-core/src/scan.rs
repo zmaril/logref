@@ -284,6 +284,39 @@ pub struct MatchHit {
     pub captures: Vec<String>,
 }
 
+/// The `(start, end)` fields of an unmatched optional capture group in a
+/// [`MatchHitSpans`] — a group the pattern has but this line did not fill.
+/// Slicing a line by such a span must yield `""` (the same value
+/// [`MatchHit::captures`] carries for an unmatched group); consumers test
+/// `start == NO_SPAN` and substitute `""`.
+pub const NO_SPAN: usize = usize::MAX;
+
+/// The span-valued twin of [`MatchHit`]: instead of owning each captured group
+/// as a `String`, it records the group's `(start, end)` **byte range in the
+/// scanned line**. Slicing `line[start..end]` reproduces the corresponding
+/// [`MatchHit::captures`] entry exactly; an unmatched optional group is
+/// `(NO_SPAN, NO_SPAN)` and slices to `""`.
+///
+/// This is the allocation-free hit shape the packed wasm scan path encodes into
+/// one flat numeric buffer — no per-capture `String`, so nothing has to be
+/// serialized across the wasm boundary; the caller reconstructs the strings by
+/// slicing the input line it already holds.
+#[derive(Debug, Clone)]
+pub struct MatchHitSpans {
+    /// Index into [`Index::sites`] (identical to [`MatchHit::site`]).
+    pub site: usize,
+    /// Literal-char count of the matched pattern (identical to
+    /// [`MatchHit::literal_len`]).
+    pub literal_len: usize,
+    /// Byte `(start, end)` of each capture group in the scanned line, in order.
+    /// An unmatched optional group is `(NO_SPAN, NO_SPAN)`.
+    ///
+    /// NB: these are UTF-8 **byte** offsets. A JS consumer indexing UTF-16 code
+    /// units must convert for lines with non-BMP/non-ASCII text; for ASCII lines
+    /// the two coincide.
+    pub captures: Vec<(usize, usize)>,
+}
+
 /// What happened while building a [`Scanner`] over an index — every site is
 /// accounted for exactly once across these buckets.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -439,13 +472,29 @@ impl Scanner {
     /// prefilter's selectivity (a diagnostic for benchmarking; the smaller
     /// relative to `pattern_count`, the more the prefilter narrows).
     pub fn candidate_count(&self, line: &str) -> usize {
+        self.candidate_indices(line).len()
+    }
+
+    /// Union of candidate pattern indices for `line`: every prefilter bucket that
+    /// shares a trigram with the (lowercased) line, plus the always-check set —
+    /// deduped and ascending. Shared by [`scan_line`], [`scan_line_spans`], and
+    /// [`candidate_count`] so all three prefilter identically. The line is
+    /// lowercased ONCE and each 3-char window is looked up as a borrowed `&str`
+    /// (`HashMap<String>::get` accepts `&str` via `Borrow`), so no per-trigram
+    /// strings are allocated.
+    ///
+    /// [`scan_line`]: Scanner::scan_line
+    /// [`scan_line_spans`]: Scanner::scan_line_spans
+    fn candidate_indices(&self, line: &str) -> Vec<usize> {
         let lower = line.to_lowercase();
+        let mut candidates: Vec<usize> = Vec::new();
+        // Byte offsets of each char boundary, plus the end, so a length-3 char
+        // window is `lower[bounds[k]..bounds[k + 3]]`.
         let bounds: Vec<usize> = lower
             .char_indices()
             .map(|(i, _)| i)
             .chain(std::iter::once(lower.len()))
             .collect();
-        let mut candidates: Vec<usize> = Vec::new();
         if bounds.len() > 3 {
             for k in 0..bounds.len() - 3 {
                 if let Some(bucket) = self.buckets.get(&lower[bounds[k]..bounds[k + 3]]) {
@@ -454,9 +503,11 @@ impl Scanner {
             }
         }
         candidates.extend_from_slice(&self.always_check);
+        // Ascending pattern-index order (then a *stable* literal_len sort by the
+        // caller) reproduces the RegexSet path's ordering exactly.
         candidates.sort_unstable();
         candidates.dedup();
-        candidates.len()
+        candidates
     }
 
     /// Verify candidate pattern `pi` against `line`, producing a [`MatchHit`]
@@ -486,37 +537,59 @@ impl Scanner {
     /// still verifies, so the result is identical to
     /// [`Scanner::scan_line_regexset`] — this is a pure speed optimization.
     pub fn scan_line(&self, line: &str) -> Vec<MatchHit> {
-        // Union candidate pattern indices: prefilter buckets that share a
-        // trigram with the line, plus the always-check set. The line is
-        // lowercased ONCE and each 3-char window is looked up as a borrowed
-        // `&str` slice (HashMap<String>::get accepts `&str` via `Borrow`), so
-        // the hot path allocates no per-trigram strings.
-        let lower = line.to_lowercase();
-        let mut candidates: Vec<usize> = Vec::new();
-        // Byte offsets of each char boundary, plus the end, so a length-3 char
-        // window is `lower[bounds[k]..bounds[k + 3]]`.
-        let bounds: Vec<usize> = lower
-            .char_indices()
-            .map(|(i, _)| i)
-            .chain(std::iter::once(lower.len()))
-            .collect();
-        if bounds.len() > 3 {
-            for k in 0..bounds.len() - 3 {
-                if let Some(bucket) = self.buckets.get(&lower[bounds[k]..bounds[k + 3]]) {
-                    candidates.extend_from_slice(bucket);
-                }
-            }
-        }
-        candidates.extend_from_slice(&self.always_check);
         // Verify in ascending pattern-index order, then a *stable* sort by
         // descending literal_len — this reproduces the RegexSet path's ordering
         // exactly (RegexSet also yields ascending indices, ties preserved).
-        candidates.sort_unstable();
-        candidates.dedup();
-
-        let mut hits: Vec<MatchHit> = candidates
+        let mut hits: Vec<MatchHit> = self
+            .candidate_indices(line)
             .iter()
             .filter_map(|&pi| self.verify(pi, line))
+            .collect();
+        hits.sort_by_key(|h| std::cmp::Reverse(h.literal_len));
+        hits
+    }
+
+    /// Verify candidate pattern `pi` against `line`, producing a
+    /// [`MatchHitSpans`] (capture **byte spans** rather than owned strings) when
+    /// it matches. The span twin of [`Scanner::verify`]: identical site /
+    /// literal_len / group order, but each capture is the group's `(start, end)`
+    /// byte range in `line` (an unmatched optional group is `(NO_SPAN, NO_SPAN)`).
+    fn verify_spans(&self, pi: usize, line: &str) -> Option<MatchHitSpans> {
+        let caps = self.regexes[pi].captures(line)?;
+        let captures = caps
+            .iter()
+            .skip(1)
+            .map(|m| {
+                m.map(|mm| (mm.start(), mm.end()))
+                    .unwrap_or((NO_SPAN, NO_SPAN))
+            })
+            .collect();
+        Some(MatchHitSpans {
+            site: self.site_idx[pi],
+            literal_len: self.literal_len[pi],
+            captures,
+        })
+    }
+
+    /// Resolve one rendered log line exactly like [`scan_line`], but return each
+    /// hit's captures as **byte spans into `line`** ([`MatchHitSpans`]) rather
+    /// than owned `String`s. Same prefilter, same candidates, same specificity
+    /// ordering — so `scan_line_spans(line)[i]` describes the identical match as
+    /// `scan_line(line)[i]`, with `line[start..end] == scan_line(line)[i].captures[k]`
+    /// for every group (`NO_SPAN` ⇒ `""`).
+    ///
+    /// This exists for callers that will reconstruct the capture strings
+    /// themselves (they already hold `line`) and want to avoid allocating and
+    /// marshalling those strings — notably the packed wasm scan path, which
+    /// encodes these spans into one flat numeric buffer instead of a nested list
+    /// of JS objects.
+    ///
+    /// [`scan_line`]: Scanner::scan_line
+    pub fn scan_line_spans(&self, line: &str) -> Vec<MatchHitSpans> {
+        let mut hits: Vec<MatchHitSpans> = self
+            .candidate_indices(line)
+            .iter()
+            .filter_map(|&pi| self.verify_spans(pi, line))
             .collect();
         hits.sort_by_key(|h| std::cmp::Reverse(h.literal_len));
         hits
@@ -769,6 +842,58 @@ mod tests {
                 hits_eq(&tri, &rs),
                 "trigram vs regexset differ on {line:?}:\n  trigram={tri:?}\n  regexset={rs:?}"
             );
+        }
+    }
+
+    #[test]
+    fn scan_line_spans_reconstructs_scan_line() {
+        // Same corpus as the trigram/regexset cross-check: buckets + always-check,
+        // quoted strings, repeated ints, %m, a short-literal, a bare catch-all.
+        let jsonl = concat!(
+            r#"{"api":"ereport","kind":"backend","message":{"text":"database \"%s\" does not exist"},"path":"a.c","line":1}"#,
+            "\n",
+            r#"{"api":"elog","kind":"backend","message":{"text":"%d of %d tuples"},"path":"b.c","line":2}"#,
+            "\n",
+            r#"{"api":"elog","kind":"backend","message":{"text":"could not open file \"%s\": %m"},"path":"c.c","line":3}"#,
+            "\n",
+            r#"{"api":"elog","kind":"backend","message":{"text":"a%db"},"path":"d.c","line":4}"#,
+            "\n",
+            r#"{"api":"elog","kind":"backend","message":{"text":"%s"},"path":"e.c","line":5}"#
+        );
+        let index = Index::from_jsonl(jsonl).unwrap();
+        let (scanner, _) = Scanner::build(&index).unwrap();
+
+        let lines = [
+            r#"database "orders" does not exist"#,
+            "7 of 512 tuples",
+            r#"could not open file "pg_wal/1": No such file or directory"#,
+            "a5b",
+            "totally unrelated line",
+            "",
+        ];
+        for line in lines {
+            let hits = scanner.scan_line(line);
+            let spans = scanner.scan_line_spans(line);
+            assert_eq!(hits.len(), spans.len(), "hit count differs on {line:?}");
+            for (h, s) in hits.iter().zip(&spans) {
+                assert_eq!(h.site, s.site);
+                assert_eq!(h.literal_len, s.literal_len);
+                assert_eq!(h.captures.len(), s.captures.len());
+                // Slicing the line by each span must reproduce the owned capture
+                // string exactly (NO_SPAN ⇒ "").
+                let reconstructed: Vec<String> = s
+                    .captures
+                    .iter()
+                    .map(|&(start, end)| {
+                        if start == NO_SPAN {
+                            String::new()
+                        } else {
+                            line[start..end].to_string()
+                        }
+                    })
+                    .collect();
+                assert_eq!(&reconstructed, &h.captures, "captures differ on {line:?}");
+            }
         }
     }
 }
