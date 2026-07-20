@@ -10,9 +10,7 @@ function doc(overrides: Partial<MessageDoc> = {}): MessageDoc {
     api: ["ereport"],
     level: ["ERROR"],
     levelRuntimeChosen: false,
-    sqlstate: [
-      { symbol: "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE", code: "22003" },
-    ],
+    sqlstate: [{ symbol: "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE", code: "22003" }],
     callSites: [
       "postgres/contrib/btree_gist/btree_int2.c:106",
       "postgres/src/backend/utils/adt/int.c:920",
@@ -56,7 +54,9 @@ test("SQLSTATE section renders code, symbol, and error class", () => {
 
 test("SQLSTATE section handles a symbol without a mapped code", () => {
   const html = sqlstateSection(
-    doc({ sqlstate: [{ symbol: "ERRCODE_INVALID_GRANT_OPERATION", code: "" }] }),
+    doc({
+      sqlstate: [{ symbol: "ERRCODE_INVALID_GRANT_OPERATION", code: "" }],
+    }),
   );
   expect(html).toContain("<strong>ERRCODE_INVALID_GRANT_OPERATION</strong>");
   expect(html).toContain("outside the pilot's code map");
