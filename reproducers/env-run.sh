@@ -34,15 +34,7 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 source "$HERE/lib.sh"
-
-[ -n "${PGBIN:-}" ] && PATH="$PGBIN:$PATH"
-[ -n "${PGLIB:-}" ] && export LD_LIBRARY_PATH="$PGLIB:${LD_LIBRARY_PATH:-}"
-command -v initdb >/dev/null || { log "initdb not on PATH; set PGBIN"; exit 3; }
-
-OUTDIR="${OUTDIR:-$(mktemp -d)}"
-LOG_LEVEL="${LOG_LEVEL:-debug1}"
-CAPS="$OUTDIR/caps"
-mkdir -p "$CAPS"
+driver_env_setup                 # PGBIN/PGLIB path, initdb check, OUTDIR/CAPS
 export PGPORT_NEXT=55990
 
 # collect <tier> <scenario> <datadir> — copy a cluster's jsonlog into caps/,

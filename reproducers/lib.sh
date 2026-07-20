@@ -78,3 +78,17 @@ qpsql() {
 jsonlog_of() {
     find "$1/log" -name '*.json' -print 2>/dev/null | head -1
 }
+
+# driver_env_setup — shared bootstrap for the per-scenario capture drivers
+# (env-run.sh, sql-caps.sh): put PGBIN/PGLIB on the tool path, require initdb,
+# and populate the scratch-root globals every driver writes captures into.
+# Sets globals OUTDIR, LOG_LEVEL, CAPS.
+driver_env_setup() {
+    [ -n "${PGBIN:-}" ] && PATH="$PGBIN:$PATH"
+    [ -n "${PGLIB:-}" ] && export LD_LIBRARY_PATH="$PGLIB:${LD_LIBRARY_PATH:-}"
+    command -v initdb >/dev/null || { log "initdb not on PATH; set PGBIN"; exit 3; }
+    OUTDIR="${OUTDIR:-$(mktemp -d)}"
+    LOG_LEVEL="${LOG_LEVEL:-debug1}"
+    CAPS="$OUTDIR/caps"
+    mkdir -p "$CAPS"
+}
