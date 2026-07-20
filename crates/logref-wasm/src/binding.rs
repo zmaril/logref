@@ -18,6 +18,18 @@ export interface Lowered {
   literalLen: number;
   specCount: number;
 }
+export interface MatchHit {
+  site: number;
+  literalLen: number;
+  captures: string[];
+}
+export interface BuildReport {
+  total: number;
+  noText: number;
+  lowerFailed: number;
+  compileFailed: number;
+  compiled: number;
+}
 "#;
 
 /// A format string lowered to a regex, plus a couple of specificity signals.
@@ -34,9 +46,46 @@ pub struct Lowered {
     pub spec_count: i32,
 }
 
+/// A single resolved match: the catalog site a rendered line traced back to, its
+/// specificity, and the concrete values pulled from the line's variable bits.
+/// Mirrors `logref_core::MatchHit`.
+///
+/// The counts are `i32` (fluessig `int32`), NOT `usize`/`u32` — fluessig's `ty()`
+/// currently maps unsigned scalars to `String`, and `i64` would marshal to a
+/// `BigInt` and break `===` against the TS mirror's `number` fields. `core_impl`
+/// casts the core's `usize` counts to `i32`.
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MatchHit {
+    pub site: i32,
+    pub literal_len: i32,
+    pub captures: Vec<String>,
+}
+
+/// What happened while building a `Scanner` over an index — every site is
+/// accounted for exactly once across these buckets. Mirrors
+/// `logref_core::BuildReport` (counts widened `usize` → `i32`).
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BuildReport {
+    pub total: i32,
+    pub no_text: i32,
+    pub lower_failed: i32,
+    pub compile_failed: i32,
+    pub compiled: i32,
+}
+
 /// The `Scan` contract — implement over the engine in `crate::core_impl`.
 pub trait ScanCore: Sized + Send + Sync + 'static {
     fn lower_format(fmt: String) -> anyhow::Result<Lowered>;
+}
+
+/// The `Scanner` contract — implement over the engine in `crate::core_impl`.
+pub trait ScannerCore: Sized + Send + Sync + 'static {
+    fn build(index_jsonl: String) -> anyhow::Result<Self>;
+    fn scan_line(&self, line: String) -> Vec<MatchHit>;
+    fn scan_batch(&self, lines: Vec<String>) -> Vec<Vec<MatchHit>>;
+    fn report(&self) -> BuildReport;
 }
 
 /// Stateless log-line lowering/resolution helpers.
@@ -47,4 +96,55 @@ pub trait ScanCore: Sized + Send + Sync + 'static {
 pub fn lower_format(fmt: String) -> Result<JsValue, JsValue> {
     let out = <crate::core_impl::ScanImpl as ScanCore>::lower_format(fmt).map_err(err)?;
     Ok(serde_wasm_bindgen::to_value(&out)?)
+}
+
+/// A `RegexSet`-backed log scanner: build once, scan many.
+#[wasm_bindgen]
+pub struct Scanner {
+    inner: crate::core_impl::ScannerImpl,
+}
+
+#[wasm_bindgen]
+impl Scanner {
+    /// Build a scanner over a JSONL index (`Index::from_jsonl` then
+    /// `Scanner::build`): lower every site with a literal message, compile the
+    /// patterns, and build the `RegexSet`. Fallible — a bad index or a pattern
+    /// that overflows the regex budget is rejected (`regex::Error`).
+    #[wasm_bindgen(constructor)]
+    pub fn new(index_jsonl: String) -> Result<Scanner, JsValue> {
+        Ok(Scanner {
+            inner: <crate::core_impl::ScannerImpl as ScannerCore>::build(index_jsonl)
+                .map_err(err)?,
+        })
+    }
+
+    /// Resolve ONE rendered log line to every catalog site whose pattern matches
+    /// it, most-specific (longest literal) first. Empty ⇒ no match; more than one
+    /// ⇒ the line is ambiguous.
+    #[wasm_bindgen(js_name = "scanLine", unchecked_return_type = "MatchHit[]")]
+    pub fn scan_line(&self, line: String) -> JsValue {
+        let out = self.inner.scan_line(line);
+        serde_wasm_bindgen::to_value(&out).unwrap_or(JsValue::NULL)
+    }
+
+    /// Resolve a BATCH of lines in ONE boundary crossing — the honest amortized
+    /// shape for high-volume scanning. Returns one `MatchHit[]` per input line,
+    /// positionally aligned with `lines`.
+    #[wasm_bindgen(js_name = "scanBatch", unchecked_return_type = "MatchHit[][]")]
+    pub fn scan_batch(
+        &self,
+        #[wasm_bindgen(unchecked_param_type = "string[]")] lines: JsValue,
+    ) -> Result<JsValue, JsValue> {
+        let lines: Vec<String> = serde_wasm_bindgen::from_value(lines).map_err(err)?;
+        let out = self.inner.scan_batch(lines);
+        Ok(serde_wasm_bindgen::to_value(&out)?)
+    }
+
+    /// The `BuildReport` tallied while building — how many sites were compiled,
+    /// skipped (no text), or failed to lower/compile.
+    #[wasm_bindgen(js_name = "report", unchecked_return_type = "BuildReport")]
+    pub fn report(&self) -> JsValue {
+        let out = self.inner.report();
+        serde_wasm_bindgen::to_value(&out).unwrap_or(JsValue::NULL)
+    }
 }

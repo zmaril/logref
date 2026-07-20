@@ -44,6 +44,100 @@
           "doc": "Number of conversion specs (capture groups) in the pattern."
         }
       ]
+    },
+    {
+      "name": "MatchHit",
+      "doc": "A single resolved match: the catalog site a rendered line traced back to, its\nspecificity, and the concrete values pulled from the line's variable bits.\nMirrors `logref_core::MatchHit`.\n\nThe counts are `i32` (fluessig `int32`), NOT `usize`/`u32` — fluessig's `ty()`\ncurrently maps unsigned scalars to `String`, and `i64` would marshal to a\n`BigInt` and break `===` against the TS mirror's `number` fields. `core_impl`\ncasts the core's `usize` counts to `i32`.",
+      "fields": [
+        {
+          "name": "site",
+          "type": {
+            "k": "scalar",
+            "name": "int32",
+            "base": "numeric"
+          },
+          "nullable": false,
+          "doc": "Index into the built index's sites (`Index::sites`)."
+        },
+        {
+          "name": "literal_len",
+          "type": {
+            "k": "scalar",
+            "name": "int32",
+            "base": "numeric"
+          },
+          "nullable": false,
+          "doc": "Literal-char count of the matched pattern (higher = more specific)."
+        },
+        {
+          "name": "captures",
+          "type": {
+            "k": "list",
+            "of": {
+              "k": "scalar",
+              "name": "string"
+            }
+          },
+          "nullable": false,
+          "doc": "Captured group values, in order (empty string for an unmatched group)."
+        }
+      ]
+    },
+    {
+      "name": "BuildReport",
+      "doc": "What happened while building a `Scanner` over an index — every site is\naccounted for exactly once across these buckets. Mirrors\n`logref_core::BuildReport` (counts widened `usize` → `i32`).",
+      "fields": [
+        {
+          "name": "total",
+          "type": {
+            "k": "scalar",
+            "name": "int32",
+            "base": "numeric"
+          },
+          "nullable": false,
+          "doc": "Sites in the index."
+        },
+        {
+          "name": "no_text",
+          "type": {
+            "k": "scalar",
+            "name": "int32",
+            "base": "numeric"
+          },
+          "nullable": false,
+          "doc": "Skipped: no literal `message.text` to lower (computed-only / `expr`)."
+        },
+        {
+          "name": "lower_failed",
+          "type": {
+            "k": "scalar",
+            "name": "int32",
+            "base": "numeric"
+          },
+          "nullable": false,
+          "doc": "Had text, but lowering rejected it."
+        },
+        {
+          "name": "compile_failed",
+          "type": {
+            "k": "scalar",
+            "name": "int32",
+            "base": "numeric"
+          },
+          "nullable": false,
+          "doc": "Lowered, but the regex failed to compile."
+        },
+        {
+          "name": "compiled",
+          "type": {
+            "k": "scalar",
+            "name": "int32",
+            "base": "numeric"
+          },
+          "nullable": false,
+          "doc": "Sites that produced a live pattern in the set."
+        }
+      ]
     }
   ]
 }
