@@ -31,10 +31,17 @@ and join each captured line back to the catalog by `file:line`. Every number in
 ```
 base/Dockerfile     builds Postgres from HEAD, non-root, wired for jsonlog
 base/logging.conf   the provenance logging config (appended to postgresql.conf)
-scenarios/*.sql     deliberately-wrong statements, grouped by theme
+scenarios/*.sql     deliberately-wrong statements, grouped by theme (Tiers 1-2)
 run.sh              boots the cluster, runs every scenario, joins, writes the report
-coverage.py         the catalog join + report generator
-coverage-report.md  the committed result
+coverage.py         the catalog join + report generator (Tiers 1-2)
+
+lib.sh              shared cluster-lifecycle helpers (init/start/stop/psql/capture)
+env-run.sh          the Tier 3-4 driver: hostile-environment scenarios
+env/Dockerfile      the parametrized env-variant image (extends base)
+env/entrypoint.sh   the env image's entrypoint (runs one scenario, captures)
+env-coverage.py     the Tier 3-4 delta join + report generator
+coverage-report.md  the committed result (baseline + Tier 3-4 delta)
+reproduced-sites.json  machine-readable list of newly-reproduced sites + slugs
 ```
 
 ## How to run
@@ -60,6 +67,30 @@ Postgres refuses to run as root, so the direct path must run as an unprivileged
 user. The captured jsonlog can be large; it stays in the scratch `WORKDIR` and is
 not committed — only `coverage-report.md` is.
 
+### Tier 3-4 env variants
+
+The env-variant scenarios run through their own driver, which stands up a fresh
+scratch cluster (or a primary/standby pair) per scenario and captures each one's
+jsonlog separately:
+
+```sh
+# unprivileged user; a from-source build's client tools need PGLIB so they load
+# the matching libpq (not a system one).
+PGBIN=<install>/bin PGLIB=<install>/lib \
+CATALOG=/path/to/pg-log-catalog.jsonl \
+BASELINE=/path/to/tier12-capture.json \
+LOG_LEVEL=debug5 reproducers/env-run.sh
+```
+
+`BASELINE` is a Tier 1-2 capture jsonlog; the report then shows the Tier 3-4
+delta over it. `ONLY="corruption replication"` restricts the run to named
+scenarios. The disk-full scenario needs a small full-able filesystem: run the
+driver as root (it mounts a tmpfs itself) or hand it a pre-mounted one via
+`DISKFULL_DIR`.
+
+The same scenarios ship as a parametrized image (`env/Dockerfile`, extends the
+base image) for the container path; `SCENARIO=<name>` picks one.
+
 ## How coverage is computed
 
 `coverage.py` loads the catalog and the captured jsonlog, then matches on
@@ -74,17 +105,18 @@ line; it is not the headline.
 
 From a HEAD build (commit `54cd6fc`) at `log_min_messages = debug5`:
 
-- **243 of 14,806 catalog sites reproduced** (1.64%) by exact `file:line`.
-- By severity: 152 ERROR, 12 LOG, plus DEBUG1–5, WARNING, INFO and sites whose
-  catalog level is a runtime expression.
-- Top files hit include `tablecmds.c`, `float.c`, `int.c`, `numeric.c`,
-  `xlog.c`/`xlogrecovery.c`, `jsonfuncs.c`, and the parser's `parse_*.c`.
+- Tier 1-2 baseline: **245 of 14,806** sites by exact `file:line`.
+- Tier 3-4 env variants add **117 new distinct sites** on top.
+- **Combined: 362 of 14,806 (2.44%).**
 
-Example: the driver runs `SELECT 32768::int2`; the cluster logs
-`int.c:942 "smallint out of range"`, which joins to catalog site
-`postgres/src/backend/utils/adt/int.c:942`
-[`ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE`]. See `coverage-report.md` for the full
-breakdown and more samples.
+Tier 1-2 example: the driver runs `SELECT 32768::int2`; the cluster logs
+`int.c:942 "smallint out of range"`, joining to catalog site
+`postgres/src/backend/utils/adt/int.c:942` [`ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE`].
+
+Tier 4 example: the streaming-standby scenario replays WAL and logs
+`xlogrecovery.c:1699 "redo starts at %X/%08X"` [LOG] and, on promotion,
+`xlogrecovery.c:4451 "received promote request"` — recovery sites a lone cluster
+never reaches. See `coverage-report.md` for the full per-tier breakdown.
 
 ## Reachability tiers
 
@@ -101,13 +133,22 @@ Scenarios target the two tiers reachable from a single stock cluster:
   transaction/session control. This is where most of the 243 come from — the type
   input functions in `utils/adt` alone are ~1,700 catalog sites.
 
-Later tiers are **future env-variant images**, not part of this increment:
+The env-variant tiers (driver `env-run.sh`, image `env/Dockerfile`) reach sites
+no stock cluster can:
 
-- **Tier 3 — configuration & GUC.** Bad `postgresql.conf`/`pg_hba.conf`, failed
-  auth, resource-limit refusals — a cluster booted with hostile config.
-- **Tier 4 — I/O, corruption, OOM, replication.** Disk errors, torn pages,
-  out-of-memory, and primary/standby setups. These need fault injection or a
-  multi-node topology and belong in dedicated images.
+- **Tier 3 — configuration & auth.** A cluster reloaded onto broken
+  `postgresql.conf` values, malformed `pg_hba.conf`/`pg_ident.conf`, rejecting
+  auth (scram mismatch, no entry, required-SSL) — GUC validators, the HBA
+  tokenizer, and the auth FATAL paths.
+- **Tier 4 — corruption, replication, resource, crash.** A scribbled
+  checksummed page; a streaming primary/standby pair with a slot and a
+  promotion; logical publication/subscription (decoding, apply worker, table
+  sync, snapshot builder); statement/lock/idle timeouts and connection-limit
+  refusals; a disk-full write; and an un-clean shutdown that triggers crash
+  recovery on restart.
 
-Growing the number is mostly a matter of adding scenarios and env-variant images
-against these tiers.
+Out of reach in a plain container here (and honestly reported as such):
+out-of-memory (needs a cgroup cap), `contrib/amcheck` corruption reports (not
+installed, and they surface as result rows, not log lines), archiver failures,
+and startup-time config fatals that print to stderr before the logging collector
+starts. Growing the number further is mostly more scenarios against these tiers.

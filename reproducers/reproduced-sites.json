@@ -1,0 +1,1500 @@
+{
+  "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
+  "catalog_total": 14806,
+  "baseline_sites": 245,
+  "new_sites": 117,
+  "combined_total": 362,
+  "sites": [
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 2784,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "updated min recovery point to %X/%08X on timeline %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 3887,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "removing all temporary WAL segments",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 4012,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "attempting to remove WAL segments newer than log file %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 4083,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "recycled write-ahead log file \"%s\"",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 4225,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "removing WAL backup history file \"%s\"",
+      "scenarios": [
+        "tier4__replication_primary"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 5928,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was interrupted; last known up at %s",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 6217,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "initializing for hot standby",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 6380,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "selected new timeline ID: %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 6413,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "archive recovery complete",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 561,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "starting backup recovery with redo LSN %X/%08X, checkpoint LSN %X/%08X, on timeline ID %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 577,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "checkpoint record is at %X/%08X",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": "checkpoint-record-is-at",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 760,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "entering standby mode",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 894,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was not properly shut down; automatic recovery in progress",
+      "scenarios": [
+        "tier4__crash_recovery"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1259,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "backup time %s in file \"%s\"",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1264,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "backup label %s in file \"%s\"",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1281,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "backup timeline %u in file \"%s\"",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1699,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "redo starts at %X/%08X",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1848,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "redo done at %X/%08X system usage: %s",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1854,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "last completed transaction was at log time %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2093,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "end of backup record reached",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2181,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "end of backup reached",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2192,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "completed backup recovery with redo LSN %X/%08X and end LSN %X/%08X",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2223,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "consistent recovery state reached at %X/%08X",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 3165,
+      "level": "emode_for_corrupt_record(emode, xlogreader->EndRecPtr)",
+      "sqlstates": [],
+      "message": "%s",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_standby"
+      ],
+      "slug": "msg-347cd9c5",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 3749,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "switched WAL source from %s to %s after %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 4375,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "could not open file \"%s\": %m",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": "could-not-open-file-420e05",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 4451,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "received promote request",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogutils.c",
+      "line": 822,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "switched to timeline %u valid until %X/%08X",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/backup/basebackup.c",
+      "line": 1298,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "file \"%s\" excluded from backup",
+      "scenarios": [
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/backup/basebackup.c",
+      "line": 1373,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "contents of directory \"%s\" excluded from backup",
+      "scenarios": [
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 1050,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "created replication slot \"%s\" on publisher",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 2829,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "dropped replication slot \"%s\" on publisher",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth-sasl.c",
+      "line": 111,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "processing received SASL response of length %d",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth-sasl.c",
+      "line": 182,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "sending SASL challenge of length %d",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth.c",
+      "line": 313,
+      "level": "elevel",
+      "sqlstates": [
+        "errcode_return"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth.c",
+      "line": 468,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_INVALID_AUTHORIZATION_SPECIFICATION"
+      ],
+      "message": "pg_hba.conf rejects connection for host \"%s\", user \"%s\", database \"%s\", %s",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth.c",
+      "line": 536,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_INVALID_AUTHORIZATION_SPECIFICATION"
+      ],
+      "message": "no pg_hba.conf entry for host \"%s\", user \"%s\", database \"%s\", %s",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": "no-pg-hba-conf-entry-for-host-user-database",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1734,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: handshake start: \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1738,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: handshake done: \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1742,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: accept loop: \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1746,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: accept exit (%d): \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1762,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: write alert (0x%04x): \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 323,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_REGULAR_EXPRESSION"
+      ],
+      "message": "invalid regular expression \"%s\": %s",
+      "scenarios": [
+        "tier3__bad_hba"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 1487,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "end-of-line before IP address specification",
+      "scenarios": [
+        "tier3__bad_hba"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 1591,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "invalid CIDR mask in address \"%s\"",
+      "scenarios": [
+        "tier3__bad_hba"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 1750,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "invalid authentication method \"%s\"",
+      "scenarios": [
+        "tier3__bad_hba"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 2320,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "unrecognized authentication option name: \"%s\"",
+      "scenarios": [
+        "tier3__bad_hba"
+      ],
+      "slug": "unrecognized-authentication-option-name",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/postmaster/autovacuum.c",
+      "line": 1735,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "Autovacuum VacuumUpdateCosts(db=%u, rel=%u, dobalance=%s, cost_limit=%d, cost_delay=%g active=%s failsafe=%s)",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba",
+        "tier4__corruption",
+        "tier4__crash_recovery",
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber",
+        "tier4__replication_primary",
+        "tier4__resource_timeouts"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/postmaster/bgworker.c",
+      "line": 436,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "registering background worker \"%s\"",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": "registering-background-worker",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/postmaster/bgworker.c",
+      "line": 473,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "unregistering background worker \"%s\"",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2027,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "postmaster received reload request signal",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2032,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "received SIGHUP, reloading configuration files",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2039,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "%s was not reloaded",
+      "scenarios": [
+        "tier3__bad_hba"
+      ],
+      "slug": "was-not-reloaded",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2044,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "%s was not reloaded",
+      "scenarios": [
+        "tier3__bad_hba"
+      ],
+      "slug": "was-not-reloaded",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2223,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "received immediate shutdown request",
+      "scenarios": [
+        "tier4__disk_full"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 3784,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system is ready to accept read-only connections",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/launcher.c",
+      "line": 365,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "starting logical replication worker for subscription \"%s\"",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 603,
+      "level": "LogicalDecodingLogLevel()",
+      "sqlstates": [],
+      "message": "starting logical decoding for slot \"%s\"",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 633,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "searching for logical decoding starting point, starting at %X/%08X",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 1897,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "updated xmin: %u restart: %u",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 1961,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logicalctl.c",
+      "line": 612,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "update logical decoding status to %d at the end of recovery",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 780,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "adding a new snapshot and invalidations to %u at %X/%08X",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 896,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "purged committed transactions from %u to %u, xmin: %u, xmax: %u",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 1024,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "found top level transaction %u, with catalog changes",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 1188,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "xmin: %u, xmax: %u, oldest running: %u, oldest xmin: %u",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 1316,
+      "level": "LogicalDecodingLogLevel()",
+      "sqlstates": [],
+      "message": "logical decoding found consistent point at %X/%08X",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": "logical-decoding-found-consistent-point-at",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 1577,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "serializing snapshot to %s",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 2038,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "removing snapbuild snapshot %s",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/syncutils.c",
+      "line": 82,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication table synchronization worker for subscription \"%s\", table \"%s\" has finished",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/tablesync.c",
+      "line": 1513,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "LogicalRepSyncTableStart: '%s' origin_startpos lsn %X/%08X",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 4386,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sending feedback (force %d) to recv %X/%08X, write %X/%08X, flush %X/%08X",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5775,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "logical replication apply worker for subscription \"%s\" two_phase is %s",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5834,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication worker for subscription %u will not start because the subscription was removed during startup",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5917,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication table synchronization worker for subscription \"%s\", table \"%s\" has started",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5926,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication apply worker for subscription \"%s\" has started",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5989,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "connecting to publisher using connection string \"%s\"",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/pgoutput/pgoutput.c",
+      "line": 651,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "skipped replication of an empty transaction with XID: %u",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 753,
+      "level": "log_replication_commands ? LOG : DEBUG1",
+      "sqlstates": [],
+      "message": "acquired logical replication slot \"%s\"",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 840,
+      "level": "log_replication_commands ? LOG : DEBUG1",
+      "sqlstates": [],
+      "message": "released logical replication slot \"%s\"",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walreceiver.c",
+      "line": 400,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "started streaming WAL from primary at %X/%08X on timeline %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walreceiver.c",
+      "line": 1190,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sending write %X/%08X flush %X/%08X apply %X/%08X%s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walreceiver.c",
+      "line": 1281,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sending hot standby feedback xmin %u epoch %u catalog_xmin %u catalog_xmin_epoch %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walreceiver.c",
+      "line": 1338,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sendtime %s receipttime %s replication apply delay %d ms transfer latency %d ms",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 2203,
+      "level": "log_replication_commands ? LOG : DEBUG1",
+      "sqlstates": [],
+      "message": "received replication command: %s",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 2564,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "write %X/%08X flush %X/%08X apply %X/%08X%s reply_time %s",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 2747,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "hot standby feedback xmin %u epoch %u, catalog_xmin %u epoch %u reply_time %s",
+      "scenarios": [
+        "tier4__replication_primary"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 3101,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "\"%s\" has now caught up with upstream server",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 4410,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sending replication keepalive",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/file/buffile.c",
+      "line": 544,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not write to file \"%s\": %m",
+      "scenarios": [
+        "tier4__disk_full"
+      ],
+      "slug": "could-not-write-to-file-16a7e3",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/storage/file/fd.c",
+      "line": 877,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "could not remove file \"%s\": %m",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": "could-not-remove-file-cd3a60",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/storage/file/reinit.c",
+      "line": 56,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "resetting unlogged relations: cleanup %d init %d",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 1295,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "recovery snapshots are now enabled",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": "recovery-snapshots-are-now-enabled",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 4449,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "record known xact %u latestObservedXid %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 5031,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "remove KnownAssignedXid %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 5085,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "removing all KnownAssignedXids",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 5091,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "prune KnownAssignedXids to %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 5281,
+      "level": "trace_level",
+      "sqlstates": [],
+      "message": "%d KnownAssignedXids (num=%d tail=%d head=%d) %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/standby.c",
+      "line": 1113,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "release all standby locks",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/proc.c",
+      "line": 458,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_TOO_MANY_CONNECTIONS"
+      ],
+      "message": "sorry, too many clients already",
+      "scenarios": [
+        "tier4__resource_timeouts"
+      ],
+      "slug": "sorry-too-many-clients-already",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/proc.c",
+      "line": 1711,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "process %d still waiting for %s on %s after %ld.%03d ms",
+      "scenarios": [
+        "tier4__resource_timeouts"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/proc.c",
+      "line": 1721,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "process %d acquired %s on %s after %ld.%03d ms",
+      "scenarios": [
+        "tier4__resource_timeouts"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/storage/page/bufpage.c",
+      "line": 161,
+      "level": "flags & PIV_LOG_WARNING ? WARNING : LOG",
+      "sqlstates": [
+        "ERRCODE_DATA_CORRUPTED"
+      ],
+      "message": "page verification failed, calculated checksum %u but expected %u%s",
+      "scenarios": [
+        "tier4__corruption"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/tcop/backend_startup.c",
+      "line": 225,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "connection received: host=%s port=%s",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_hba",
+        "tier4__logical_publisher",
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ],
+      "slug": "connection-received-host-port",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3482,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_ADMIN_SHUTDOWN"
+      ],
+      "message": "terminating autovacuum process due to administrator command",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/activity/pgstat.c",
+      "line": 549,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "didn't need to unlink permanent stats file \"%s\" - didn't exist",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/array_typanalyze.c",
+      "line": 488,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba",
+        "tier4__corruption",
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber",
+        "tier4__replication_primary",
+        "tier4__resource_timeouts"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/catcache.c",
+      "line": 1009,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "rehashing catalog cache id %d for %s; %d tups, %d buckets",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba",
+        "tier4__corruption",
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber",
+        "tier4__replication_primary",
+        "tier4__resource_timeouts"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/inval.c",
+      "line": 1142,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "replaying commit with %d messages%s",
+      "scenarios": [
+        "tier4__crash_recovery",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/inval.c",
+      "line": 1147,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "removing relcache init files for database %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/fmgr/dfmgr.c",
+      "line": 631,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "%s: trying \"%s\"",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber",
+        "tier4__replication_standby"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 613,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "configuration file \"%s\" contains errors; unaffected changes were applied",
+      "scenarios": [
+        "tier3__bad_config"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3077,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "%d%s%s is outside the valid range for parameter \"%s\" (%d%s%s .. %d%s%s)",
+      "scenarios": [
+        "tier3__bad_config"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3118,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "%g%s%s is outside the valid range for parameter \"%s\" (%g%s%s .. %g%s%s)",
+      "scenarios": [
+        "tier3__bad_config"
+      ],
+      "slug": null,
+      "page_reproduced": null
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3184,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid value for parameter \"%s\": \"%s\"",
+      "scenarios": [
+        "tier3__bad_config"
+      ],
+      "slug": "invalid-value-for-parameter-821f2c",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3411,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CANT_CHANGE_RUNTIME_PARAM"
+      ],
+      "message": "parameter \"%s\" cannot be changed without restarting the server",
+      "scenarios": [
+        "tier3__bad_config"
+      ],
+      "slug": "parameter-cannot-be-changed-without-restarting-the-server",
+      "page_reproduced": false
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3751,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CANT_CHANGE_RUNTIME_PARAM"
+      ],
+      "message": "parameter \"%s\" cannot be changed without restarting the server",
+      "scenarios": [
+        "tier3__bad_config"
+      ],
+      "slug": "parameter-cannot-be-changed-without-restarting-the-server",
+      "page_reproduced": false
+    }
+  ],
+  "sites_with_slug": 17,
+  "flip_candidates": 17
+}
