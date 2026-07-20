@@ -9,5 +9,3 @@ CODEOWNERS
 stylelint
 proselint
 toml
-oversized
-extensible
