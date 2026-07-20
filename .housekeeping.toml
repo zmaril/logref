@@ -15,5 +15,6 @@ allow = [
     "reproducers/run.sh",
     "reproducers/lib.sh",
     "reproducers/env-run.sh",
+    "reproducers/sql-caps.sh",
     "reproducers/env/entrypoint.sh",
 ]

@@ -1,40 +1,69 @@
 # Reproducer coverage report
 
 The Validate stage of LogRef (see `notes/design.md` §4). A HEAD build of
-Postgres is driven through two families of scenarios and its `jsonlog`
+Postgres is driven through several families of scenarios and its `jsonlog`
 output captured; each line's `file_name:file_line_num` is joined against the
 extracted catalog by `(basename, line)`.
 
-- **Tier 1-2** (`scenarios/`, driver `run.sh`): one stock cluster, crafted
-  SQL — boot/lifecycle LOGs and user-triggerable ERRORs.
+- **Baseline — Tier 1** (`scenarios/00`-`14`, driver `run.sh`): one stock
+  cluster's boot/lifecycle LOGs and the first crafted-SQL error batch.
+- **Tier 2** (`scenarios/15`-`43`, driver `run.sh`): a broad, systematic
+  crafted-SQL error corpus — every built-in type, the DDL/catalog surface,
+  function/operator resolution, query semantics, plpgsql runtime, and the
+  installed `contrib` extensions' input/validation paths.
 - **Tier 3-4** (`env/`, driver `env-run.sh`): deliberately hostile
   environments — broken config, rejecting auth, corrupted files, a
   primary/standby pair, exhausted resources, an un-clean shutdown.
 
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
-- Tier 1-2 baseline (exact file:line): **245** (1.65%)
-- Tier 3-4 adds **117** new distinct sites
-- **Combined: 362 of 14806 (2.44%)**
+- Baseline (Tier 1, exact file:line): **245** (1.65%)
+- Tier 2-4 scenarios add **473** new distinct sites
+- **Combined: 718 of 14806 (4.85%)**
 
-## New sites by tier (Tier 3-4)
+## New sites by tier
 
 Attributed to the first tier that fired each site (no double-counting).
 
 | tier | new sites |
 |---|--:|
-| Tier 3 — config / auth / SSL | 29 |
+| Tier 2 — crafted-SQL error corpus + contrib | 363 |
+| Tier 3 — config / auth / SSL | 22 |
 | Tier 4 — corruption / replication / resource / crash | 88 |
 
 ## New sites by scenario
 
 | scenario | new sites (excl. baseline) |
 |---|--:|
+| `tier2__15_types_extended` | 11 |
+| `tier2__16_datetime_extended` | 3 |
+| `tier2__17_strings_format_regex` | 9 |
+| `tier2__18_arrays_ranges_composite` | 6 |
+| `tier2__19_json_sqljson` | 13 |
+| `tier2__20_network_geo_enum_ts_xml` | 9 |
+| `tier2__21_ddl_objects` | 16 |
+| `tier2__22_system_admin_funcs` | 31 |
+| `tier2__23_query_semantics_extended` | 17 |
+| `tier2__24_txn_copy_cursor` | 19 |
+| `tier2__25_ddl_objects_more` | 30 |
+| `tier2__26_roles_acl_plpgsql` | 13 |
+| `tier2__27_alter_table` | 27 |
+| `tier2__28_typecmds_domain_comment` | 30 |
+| `tier2__29_func_index_extension_ddl` | 30 |
+| `tier2__30_plpgsql_runtime` | 2 |
+| `tier2__31_createtable_view_trigger` | 29 |
+| `tier2__32_adt_arithmetic_overflow` | 14 |
+| `tier2__33_grant_roles_coerce_dml` | 14 |
+| `tier2__34_guc_vacuum_copy_xml` | 29 |
+| `tier2__40_extensions_setup` | 7 |
+| `tier2__41_contrib_input_errors` | 7 |
+| `tier2__42_contrib_inspection` | 30 |
+| `tier2__43_contrib_fdw_indexam` | 14 |
 | `tier3__auth_ssl` | 16 |
 | `tier3__bad_config` | 11 |
 | `tier3__bad_hba` | 13 |
-| `tier4__corruption` | 4 |
-| `tier4__crash_recovery` | 11 |
+| `tier4__corruption` | 7 |
+| `tier4__crash_recovery` | 3 |
 | `tier4__disk_full` | 2 |
 | `tier4__logical_publisher` | 25 |
 | `tier4__logical_subscriber` | 19 |
@@ -46,73 +75,75 @@ Attributed to the first tier that fired each site (no double-counting).
 
 | level | new sites |
 |---|--:|
-| DEBUG1 | 25 |
-| LOG | 25 |
-| DEBUG2 | 21 |
-| elevel | 13 |
-| DEBUG4 | 13 |
+| ERROR | 331 |
+| DEBUG1 | 29 |
+| LOG | 27 |
+| DEBUG2 | 22 |
+| elevel | 17 |
+| DEBUG4 | 16 |
+| WARNING | 7 |
 | DEBUG3 | 5 |
-| FATAL | 4 |
+| NOTICE | 5 |
+| FATAL | 5 |
 | log_replication_commands ? LOG : DEBUG1 | 3 |
-| NOTICE | 2 |
 | LogicalDecodingLogLevel() | 2 |
-| trace_level | 1 |
-| emode_for_corrupt_record(emode, xlogreader->EndRecPtr) | 1 |
 | flags & PIV_LOG_WARNING ? WARNING : LOG | 1 |
-| ERROR | 1 |
+| emode_for_corrupt_record(emode, xlogreader->EndRecPtr) | 1 |
+| trace_level | 1 |
+| stmt->elog_level | 1 |
 
 ## Top source files by new sites
 
 | file | new | in catalog |
 |---|--:|--:|
-| `postgres/src/backend/access/transam/xlogrecovery.c` | 18 | 115 |
+| `postgres/src/backend/commands/tablecmds.c` | 27 | 521 |
+| `postgres/src/backend/access/transam/xlogrecovery.c` | 17 | 115 |
+| `postgres/src/backend/commands/copy.c` | 12 | 57 |
+| `postgres/src/backend/commands/indexcmds.c` | 11 | 80 |
+| `postgres/src/backend/commands/functioncmds.c` | 10 | 99 |
+| `postgres/src/backend/utils/adt/timestamp.c` | 9 | 147 |
 | `postgres/src/backend/access/transam/xlog.c` | 9 | 140 |
+| `postgres/src/backend/utils/misc/guc.c` | 8 | 107 |
+| `postgres/src/backend/postmaster/postmaster.c` | 8 | 91 |
 | `postgres/src/backend/replication/logical/snapbuild.c` | 7 | 50 |
+| `postgres/src/backend/parser/parse_utilcmd.c` | 6 | 147 |
+| `postgres/src/backend/commands/sequence.c` | 6 | 41 |
+| `postgres/src/backend/parser/parse_func.c` | 6 | 68 |
+| `postgres/src/backend/commands/vacuum.c` | 6 | 33 |
 | `postgres/src/backend/storage/ipc/procarray.c` | 6 | 25 |
-| `postgres/src/backend/utils/misc/guc.c` | 6 | 107 |
+| `postgres/src/backend/commands/subscriptioncmds.c` | 6 | 81 |
+| `postgres/src/backend/catalog/namespace.c` | 6 | 46 |
+| `postgres/src/backend/commands/extension.c` | 6 | 81 |
 | `postgres/src/backend/replication/logical/worker.c` | 6 | 78 |
-| `postgres/src/backend/postmaster/postmaster.c` | 6 | 91 |
+| `postgres/src/backend/commands/trigger.c` | 6 | 89 |
+| `postgres/src/backend/commands/typecmds.c` | 5 | 122 |
 | `postgres/src/backend/libpq/hba.c` | 5 | 52 |
+| `postgres/src/backend/utils/adt/jsonpath_exec.c` | 5 | 96 |
 | `postgres/src/backend/replication/walsender.c` | 5 | 54 |
 | `postgres/src/backend/libpq/be-secure-openssl.c` | 5 | 67 |
-| `postgres/src/backend/replication/walreceiver.c` | 4 | 26 |
-| `postgres/src/backend/replication/logical/logical.c` | 4 | 40 |
-| `postgres/src/backend/libpq/auth.c` | 3 | 81 |
-| `postgres/src/backend/storage/lmgr/proc.c` | 3 | 17 |
-| `postgres/src/backend/commands/subscriptioncmds.c` | 2 | 81 |
-| `postgres/src/backend/utils/cache/inval.c` | 2 | 10 |
-| `postgres/src/backend/postmaster/bgworker.c` | 2 | 24 |
-| `postgres/src/backend/libpq/auth-sasl.c` | 2 | 5 |
-| `postgres/src/backend/replication/slot.c` | 2 | 57 |
-| `postgres/src/backend/backup/basebackup.c` | 2 | 68 |
-| `postgres/src/backend/utils/fmgr/dfmgr.c` | 1 | 13 |
-| `postgres/src/backend/replication/pgoutput/pgoutput.c` | 1 | 28 |
-| `postgres/src/backend/tcop/backend_startup.c` | 1 | 32 |
-| `postgres/src/backend/storage/ipc/standby.c` | 1 | 10 |
-| `postgres/src/backend/utils/adt/array_typanalyze.c` | 1 | 4 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 
-- `postgres/src/backend/access/transam/xlog.c:2784` [DEBUG2/-] — updated min recovery point to %X/%08X on timeline %u  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlog.c:3887` [DEBUG2/-] — removing all temporary WAL segments  _(via tier4__crash_recovery, tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlog.c:4012` [DEBUG2/-] — attempting to remove WAL segments newer than log file %s  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlog.c:4083` [DEBUG2/-] — recycled write-ahead log file "%s"  _(via tier4__crash_recovery, tier4__replication_primary, tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlog.c:4225` [DEBUG2/-] — removing WAL backup history file "%s"  _(via tier4__replication_primary)_
-- `postgres/src/backend/access/transam/xlog.c:5928` [LOG/-] — database system was interrupted; last known up at %s  _(via tier4__crash_recovery, tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlog.c:6217` [DEBUG1/-] — initializing for hot standby  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlog.c:6380` [LOG/-] — selected new timeline ID: %u  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlog.c:6413` [LOG/-] — archive recovery complete  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:561` [LOG/-] — starting backup recovery with redo LSN %X/%08X, checkpoint LSN %X/%08…  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:577` [DEBUG1/-] — checkpoint record is at %X/%08X  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:760` [LOG/-] — entering standby mode  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:894` [LOG/-] — database system was not properly shut down; automatic recovery in pro…  _(via tier4__crash_recovery)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:1259` [DEBUG1/-] — backup time %s in file "%s"  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:1264` [DEBUG1/-] — backup label %s in file "%s"  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:1281` [DEBUG1/-] — backup timeline %u in file "%s"  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:1699` [LOG/-] — redo starts at %X/%08X  _(via tier4__crash_recovery, tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:1848` [LOG/-] — redo done at %X/%08X system usage: %s  _(via tier4__crash_recovery, tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:1854` [LOG/-] — last completed transaction was at log time %s  _(via tier4__replication_standby)_
-- `postgres/src/backend/access/transam/xlogrecovery.c:2093` [DEBUG1/-] — end of backup record reached  _(via tier4__replication_standby)_
+- `postgres/contrib/amcheck/verify_heapam.c:337` [ERROR/ERRCODE_WRONG_OBJECT_TYPE] — cannot check relation "%s"  _(via tier2__43_contrib_fdw_indexam)_
+- `postgres/contrib/amcheck/verify_heapam.c:389` [ERROR/ERRCODE_INVALID_PARAMETER_VALUE] — starting block number must be between 0 and %u  _(via tier2__43_contrib_fdw_indexam)_
+- `postgres/contrib/dblink/dblink.c:187` [ERROR/ERRCODE_CONNECTION_DOES_NOT_EXIST] — connection "%s" not available  _(via tier2__43_contrib_fdw_indexam)_
+- `postgres/contrib/dblink/dblink.c:235` [ERROR/ERRCODE_SQLCLIENT_UNABLE_TO_ESTABLISH_SQLCONNECTION] — could not establish connection  _(via tier2__43_contrib_fdw_indexam)_
+- `postgres/contrib/dblink/dblink.c:337` [ERROR/ERRCODE_SQLCLIENT_UNABLE_TO_ESTABLISH_SQLCONNECTION] — could not establish connection  _(via tier2__43_contrib_fdw_indexam)_
+- `postgres/contrib/fuzzystrmatch/fuzzystrmatch.c:292` [ERROR/ERRCODE_ZERO_LENGTH_CHARACTER_STRING] — output cannot be empty string  _(via tier2__41_contrib_input_errors)_
+- `postgres/contrib/hstore/hstore_io.c:668` [ERROR/ERRCODE_ARRAY_SUBSCRIPT_ERROR] — arrays must have same bounds  _(via tier2__41_contrib_input_errors)_
+- `postgres/contrib/hstore/hstore_io.c:1013` [ERROR/ERRCODE_DATATYPE_MISMATCH] — first argument must be a rowtype  _(via tier2__41_contrib_input_errors)_
+- `postgres/contrib/intarray/_int_op.c:223` [ERROR/ERRCODE_INVALID_PARAMETER_VALUE] — second parameter must be "ASC" or "DESC"  _(via tier2__41_contrib_input_errors)_
+- `postgres/contrib/ltree/ltree_op.c:308` [ERROR/ERRCODE_INVALID_PARAMETER_VALUE] — invalid positions  _(via tier2__41_contrib_input_errors)_
+- `postgres/contrib/pageinspect/btreefuncs.c:229` [ERROR/ERRCODE_WRONG_OBJECT_TYPE] — "%s" is not a %s index  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pageinspect/btreefuncs.c:862` [ERROR/ERRCODE_WRONG_OBJECT_TYPE] — "%s" is not a %s index  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pageinspect/heapfuncs.c:411` [ERROR/ERRCODE_DATA_CORRUPTED] — end of tuple reached without looking at all its data  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pageinspect/rawpage.c:162` [ERROR/ERRCODE_WRONG_OBJECT_TYPE] — cannot get raw page from relation "%s"  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pageinspect/rawpage.c:179` [ERROR/ERRCODE_INVALID_PARAMETER_VALUE] — block number %u is out of range for relation "%s"  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pageinspect/rawpage.c:223` [ERROR/ERRCODE_INVALID_PARAMETER_VALUE] — invalid page size  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pg_prewarm/pg_prewarm.c:99` [ERROR/ERRCODE_INVALID_PARAMETER_VALUE] — invalid prewarm type  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pg_prewarm/pg_prewarm.c:155` [ERROR/ERRCODE_WRONG_OBJECT_TYPE] — relation "%s" does not have storage  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pg_surgery/heap_surgery.c:112` [ERROR/ERRCODE_WRONG_OBJECT_TYPE] — cannot operate on relation "%s"  _(via tier2__42_contrib_inspection)_
+- `postgres/contrib/pg_surgery/heap_surgery.c:171` [NOTICE/ERRCODE_INVALID_PARAMETER_VALUE] — skipping block %u for relation "%s" because the block number is out o…  _(via tier2__42_contrib_inspection)_
 
 ## Methodology and honest limits
 
@@ -127,9 +158,10 @@ representative run. What this environment could **not** reach:
 
 - **OOM / the memory-context dump path** — needs a cgroup memory cap or a
   real allocator failure; not provokable without container limits here.
-- **amcheck corruption reports** — `contrib/amcheck` is not installed in
-  this build, and its findings return as result rows, not log lines, so they
-  never reach the jsonlog join regardless.
+- **amcheck / pageinspect corruption *reports*** — the `contrib` modules are
+  installed and their argument/validation ERROR paths are exercised (Tier 2),
+  but a genuine corruption *finding* returns as a result row, not a log line,
+  so it never reaches the jsonlog join regardless.
 - **Archiver / `archive_command` failures** and most I/O-error paths in
   `md.c`/`fd.c` — need a failing archive target or an injected read fault.
 - **Startup-time GUC/`postgresql.conf` fatals** — these print to stderr

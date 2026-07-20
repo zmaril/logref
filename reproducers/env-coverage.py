@@ -140,27 +140,32 @@ def main():
     a = L.append
     a("# Reproducer coverage report\n")
     a("The Validate stage of LogRef (see `notes/design.md` §4). A HEAD build of")
-    a("Postgres is driven through two families of scenarios and its `jsonlog`")
+    a("Postgres is driven through several families of scenarios and its `jsonlog`")
     a("output captured; each line's `file_name:file_line_num` is joined against the")
     a("extracted catalog by `(basename, line)`.\n")
-    a("- **Tier 1-2** (`scenarios/`, driver `run.sh`): one stock cluster, crafted")
-    a("  SQL — boot/lifecycle LOGs and user-triggerable ERRORs.")
+    a("- **Baseline — Tier 1** (`scenarios/00`-`14`, driver `run.sh`): one stock")
+    a("  cluster's boot/lifecycle LOGs and the first crafted-SQL error batch.")
+    a("- **Tier 2** (`scenarios/15`-`43`, driver `run.sh`): a broad, systematic")
+    a("  crafted-SQL error corpus — every built-in type, the DDL/catalog surface,")
+    a("  function/operator resolution, query semantics, plpgsql runtime, and the")
+    a("  installed `contrib` extensions' input/validation paths.")
     a("- **Tier 3-4** (`env/`, driver `env-run.sh`): deliberately hostile")
     a("  environments — broken config, rejecting auth, corrupted files, a")
     a("  primary/standby pair, exhausted resources, an un-clean shutdown.\n")
     a(f"- Postgres HEAD commit: `{args.commit}`")
     a(f"- Catalog sites: **{total}**")
-    a(f"- Tier 1-2 baseline (exact file:line): **{len(baseline_sites)}** "
+    a(f"- Baseline (Tier 1, exact file:line): **{len(baseline_sites)}** "
       f"({100.0*len(baseline_sites)/total:.2f}%)")
-    a(f"- Tier 3-4 adds **{len(new_sites)}** new distinct sites")
+    a(f"- Tier 2-4 scenarios add **{len(new_sites)}** new distinct sites")
     a(f"- **Combined: {len(combined)} of {total} "
       f"({100.0*len(combined)/total:.2f}%)**\n")
 
-    a("## New sites by tier (Tier 3-4)\n")
+    a("## New sites by tier\n")
     a("Attributed to the first tier that fired each site (no double-counting).\n")
     a("| tier | new sites |")
     a("|---|--:|")
-    labels = {"tier3": "Tier 3 — config / auth / SSL",
+    labels = {"tier2": "Tier 2 — crafted-SQL error corpus + contrib",
+              "tier3": "Tier 3 — config / auth / SSL",
               "tier4": "Tier 4 — corruption / replication / resource / crash"}
     for tier, sites in per_tier_new.items():
         a(f"| {labels.get(tier, tier)} | {len(sites)} |")
@@ -217,9 +222,10 @@ def main():
     a("representative run. What this environment could **not** reach:\n")
     a("- **OOM / the memory-context dump path** — needs a cgroup memory cap or a")
     a("  real allocator failure; not provokable without container limits here.")
-    a("- **amcheck corruption reports** — `contrib/amcheck` is not installed in")
-    a("  this build, and its findings return as result rows, not log lines, so they")
-    a("  never reach the jsonlog join regardless.")
+    a("- **amcheck / pageinspect corruption *reports*** — the `contrib` modules are")
+    a("  installed and their argument/validation ERROR paths are exercised (Tier 2),")
+    a("  but a genuine corruption *finding* returns as a result row, not a log line,")
+    a("  so it never reaches the jsonlog join regardless.")
     a("- **Archiver / `archive_command` failures** and most I/O-error paths in")
     a("  `md.c`/`fd.c` — need a failing archive target or an injected read fault.")
     a("- **Startup-time GUC/`postgresql.conf` fatals** — these print to stderr")

@@ -15,8 +15,9 @@ and join each captured line back to the catalog by `file:line`. Every number in
 - **Postgres HEAD, from source.** The catalog is extracted from `master`, so the
   cluster is built from `master` too — the emitted strings and their line
   numbers line up with the catalog exactly. `base/Dockerfile` clones the tip of
-  `postgres/postgres` and does `configure && make && make install`; nothing is
-  pinned to a released tag.
+  `postgres/postgres` and does `configure && make && make install` plus
+  `make -C contrib install` (the Tier 2 corpus exercises the contrib modules'
+  error paths); nothing is pinned to a released tag.
 - **`jsonlog` with verbose errors.** `base/logging.conf` sets
   `log_destination = 'jsonlog'` and `log_error_verbosity = verbose`, so every
   record carries `file_name`, `file_line_num`, `func_name`, `error_severity` and
@@ -36,12 +37,13 @@ run.sh              boots the cluster, runs every scenario, joins, writes the re
 coverage.py         the catalog join + report generator (Tiers 1-2)
 
 lib.sh              shared cluster-lifecycle helpers (init/start/stop/psql/capture)
+sql-caps.sh         per-scenario Tier 2 capture driver (one cap per scenario)
 env-run.sh          the Tier 3-4 driver: hostile-environment scenarios
 env/Dockerfile      the parametrized env-variant image (extends base)
 env/entrypoint.sh   the env image's entrypoint (runs one scenario, captures)
-env-coverage.py     the Tier 3-4 delta join + report generator
-coverage-report.md  the committed result (baseline + Tier 3-4 delta)
-reproduced-sites.json  machine-readable list of newly-reproduced sites + slugs
+env-coverage.py     the delta join + report generator (Tiers 2-4 over baseline)
+coverage-report.md  the committed result (baseline + Tier 2-4 delta)
+reproduced-sites.json  machine-readable list of newly-reproduced sites
 ```
 
 ## How to run
@@ -57,7 +59,8 @@ same HEAD Postgres on the host and runs it in a scratch dir):
 
 ```sh
 # build once: git clone --depth 1 https://github.com/postgres/postgres.git \
-#   && ./configure --prefix=<install> && make && make install
+#   && ./configure --prefix=<install> && make && make install \
+#   && make -C contrib install     # contrib error paths are Tier 2 scenarios
 PGBIN=<install>/bin PGSRC=<postgres-src> \
 CATALOG=/path/to/pg-log-catalog.jsonl \
 LOG_LEVEL=debug5 reproducers/run.sh --direct
@@ -67,26 +70,38 @@ Postgres refuses to run as root, so the direct path must run as an unprivileged
 user. The captured jsonlog can be large; it stays in the scratch `WORKDIR` and is
 not committed — only `coverage-report.md` is.
 
-### Tier 3-4 env variants
+### Per-scenario Tier 2 + Tier 3-4 captures
 
-The env-variant scenarios run through their own driver, which stands up a fresh
-scratch cluster (or a primary/standby pair) per scenario and captures each one's
-jsonlog separately:
+The committed `coverage-report.md` and `reproduced-sites.json` attribute every
+newly-reproduced site to the scenario that fired it. That needs a *per-scenario*
+capture, which two drivers produce (both write `<tier>__<scenario>.json` caps a
+shared join step consumes):
 
 ```sh
-# unprivileged user; a from-source build's client tools need PGLIB so they load
-# the matching libpq (not a system one).
+# Tier 2 — one cap per crafted-SQL scenario (scenarios/15-43). Shares one
+# cluster, preloads the baseline scenarios, isolates each scenario's jsonlog.
+PGBIN=<install>/bin PGLIB=<install>/lib \
+OUTDIR=/tmp/caps LOG_LEVEL=debug5 reproducers/sql-caps.sh
+
+# Tier 3-4 — one cap per hostile-environment scenario. Stands up a fresh scratch
+# cluster (or a primary/standby pair) per scenario.
 PGBIN=<install>/bin PGLIB=<install>/lib \
 CATALOG=/path/to/pg-log-catalog.jsonl \
-BASELINE=/path/to/tier12-capture.json \
+BASELINE=/path/to/tier1-capture.json \
 LOG_LEVEL=debug5 reproducers/env-run.sh
+
+# join everything: baseline + all caps -> the committed artifacts.
+python3 reproducers/env-coverage.py --catalog <catalog.jsonl> \
+    --caps <dir-of-all-caps> --baseline <tier1-capture.json> \
+    --out reproducers/coverage-report.md \
+    --json-out reproducers/reproduced-sites.json
 ```
 
-`BASELINE` is a Tier 1-2 capture jsonlog; the report then shows the Tier 3-4
-delta over it. `ONLY="corruption replication"` restricts the run to named
-scenarios. The disk-full scenario needs a small full-able filesystem: run the
-driver as root (it mounts a tmpfs itself) or hand it a pre-mounted one via
-`DISKFULL_DIR`.
+`BASELINE` is the Tier 1 capture jsonlog (`run.sh` over `scenarios/00`-`14`); the
+report shows the Tier 2-4 delta over it. `ONLY="corruption replication"`
+restricts an `env-run.sh` run to named scenarios. The disk-full scenario needs a
+small full-able filesystem: run the driver as root (it mounts a tmpfs itself) or
+hand it a pre-mounted one via `DISKFULL_DIR`.
 
 The same scenarios ship as a parametrized image (`env/Dockerfile`, extends the
 base image) for the container path; `SCENARIO=<name>` picks one.
@@ -105,11 +120,14 @@ line; it is not the headline.
 
 From a HEAD build (commit `54cd6fc`) at `log_min_messages = debug5`:
 
-- Tier 1-2 baseline: **245 of 14,806** sites by exact `file:line`.
-- Tier 3-4 env variants add **117 new distinct sites** on top.
-- **Combined: 362 of 14,806 (2.44%).**
+- Baseline (Tier 1, `scenarios/00`-`14`): **245 of 14,806** sites by exact
+  `file:line`.
+- Tier 2 (`scenarios/15`-`43`, the broad crafted-SQL error corpus + contrib)
+  adds **363 new distinct sites**.
+- Tier 3-4 env variants add **110 new distinct sites** on top.
+- **Combined: 718 of 14,806 (4.85%).**
 
-Tier 1-2 example: the driver runs `SELECT 32768::int2`; the cluster logs
+Tier 2 example: the driver runs `SELECT 32768::int2`; the cluster logs
 `int.c:942 "smallint out of range"`, joining to catalog site
 `postgres/src/backend/utils/adt/int.c:942` [`ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE`].
 
@@ -120,18 +138,22 @@ never reaches. See `coverage-report.md` for the full per-tier breakdown.
 
 ## Reachability tiers
 
-Scenarios target the two tiers reachable from a single stock cluster:
+Two tiers are reachable from a single stock cluster:
 
 - **Tier 1 — free (lifecycle).** Boot, checkpoint, autovacuum, connection and
   shutdown LOG sites. They fire just by starting and stopping the cluster;
   `00_setup.sql` adds maintenance commands (`VACUUM`, `ANALYZE`, `REINDEX`,
   `CLUSTER`, `CHECKPOINT`) to widen this.
 - **Tier 2 — high-yield (user-triggerable ERRORs).** Crafted SQL that provokes
-  clusters of call sites: parser/syntax, type input, numeric range and math,
-  constraint violations, missing catalog objects, duplicate objects, privileges,
-  JSON/jsonpath, date/time, strings/regex, query semantics, arrays/rows, and
-  transaction/session control. This is where most of the 243 come from — the type
-  input functions in `utils/adt` alone are ~1,700 catalog sites.
+  clusters of call sites, exercised systematically across `scenarios/15`-`43`:
+  every built-in type's input/range/cast/overflow errors; the DDL and catalog
+  surface (`ALTER TABLE`, `CREATE`/`ALTER` for every object type, constraints,
+  partitions); function/operator resolution and coercion; query semantics
+  (aggregates, windows, CTEs, `MERGE`, `ON CONFLICT`); transaction/cursor/COPY/
+  `EXPLAIN` state; the plpgsql runtime; the system/admin functions; and the
+  installed `contrib` extensions' own input and validation paths. The type input
+  functions in `utils/adt` alone are ~1,700 catalog sites, and `tablecmds.c`
+  another ~490 — this is the largest reachable vein.
 
 The env-variant tiers (driver `env-run.sh`, image `env/Dockerfile`) reach sites
 no stock cluster can:
@@ -148,7 +170,8 @@ no stock cluster can:
   recovery on restart.
 
 Out of reach in a plain container here (and honestly reported as such):
-out-of-memory (needs a cgroup cap), `contrib/amcheck` corruption reports (not
-installed, and they surface as result rows, not log lines), archiver failures,
+out-of-memory (needs a cgroup cap), genuine `amcheck`/`pageinspect` corruption
+*reports* (the modules are installed and their argument/validation errors fire,
+but a real finding surfaces as a result row, not a log line), archiver failures,
 and startup-time config fatals that print to stderr before the logging collector
 starts. Growing the number further is mostly more scenarios against these tiers.
