@@ -1,0 +1,53 @@
+{
+  "fluessig": {
+    "format": 1,
+    "emitter": "fluessig-derive/0"
+  },
+  "source": "logref.scan",
+  "models": [
+    {
+      "name": "Lowered",
+      "doc": "A format string lowered to a regex, plus a couple of specificity signals.\nMirrors `logref_core::Lowered` (the `{regex, literal_len, spec_count}` core).\n\nThe counts are `i32` (fluessig `int32`) so they cross the wasm boundary as\nplain JS numbers — `serde_wasm_bindgen` maps `i64` to `BigInt`, which would\nbreak `===` against the TS mirror's `number` fields.",
+      "fields": [
+        {
+          "name": "regex",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "literalLen",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "specCount",
+          "type": "int32",
+          "nullable": false
+        }
+      ]
+    }
+  ],
+  "unions": [],
+  "interfaces": [
+    {
+      "name": "Scan",
+      "doc": "Stateless log-line lowering/resolution helpers.",
+      "ops": [
+        {
+          "name": "lowerFormat",
+          "doc": "Lower a Postgres/C `printf`-style format string into an anchored regex.\nLiteral runs are escaped verbatim; each conversion spec becomes a capture\ngroup. Fallible: a dangling `%` or an unknown conversion is rejected.",
+          "shape": "unary",
+          "params": [
+            {
+              "name": "fmt",
+              "type": "string"
+            }
+          ],
+          "returns": {
+            "model": "Lowered"
+          }
+        }
+      ]
+    }
+  ]
+}
