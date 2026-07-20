@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "bun run src/build.ts && bun build ./src/index.ts --outdir dist --target browser --minify",
-    "dev": "bun run src/build.ts && bun build ./src/index.ts --outdir dist --target browser --watch",
+    "build": "bun run src/build.ts && bun build ./src/index.ts ./src/scan.ts --outdir dist --target browser --minify",
+    "dev": "bun run src/build.ts && bun build ./src/index.ts ./src/scan.ts --outdir dist --target browser --watch",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
     "lint": "biome check",

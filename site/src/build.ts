@@ -7,8 +7,9 @@
 
 import { mkdir, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { parseFrontmatter } from "./frontmatter.ts";
-import { indexPage, messagePage } from "./render.ts";
+import { type MessageDoc, parseFrontmatter } from "./frontmatter.ts";
+import { buildPatternIndex } from "./patterns.ts";
+import { indexPage, messagePage, scanPage } from "./render.ts";
 import type { MessageEntry } from "./search.ts";
 
 const here = dirname(new URL(import.meta.url).pathname);
@@ -28,6 +29,7 @@ async function main(): Promise<void> {
 
   const glob = new Bun.Glob("*.md");
   const entries: MessageEntry[] = [];
+  const docs: MessageDoc[] = [];
   let pages = 0;
 
   for await (const file of glob.scan({ cwd: messagesDir })) {
@@ -42,11 +44,19 @@ async function main(): Promise<void> {
         ...new Set(doc.sqlstate.map((s) => s.code).filter((c) => c !== "")),
       ],
     });
+    docs.push(doc);
     pages++;
   }
 
   // Stable ordering: alphabetical by message text.
   entries.sort((a, b) => a.message.localeCompare(b.message));
+
+  // The Scan surface: lower every page's format string to a regex and emit the
+  // pattern index the scan page fetches. Fully static — matching runs in the
+  // browser, the user's log never leaves it.
+  const { patterns, report } = buildPatternIndex(docs);
+  await write(join(dist, "patterns.json"), JSON.stringify(patterns));
+  await write(join(dist, "scan.html"), scanPage(patterns.length));
 
   // The client search index is inlined into the bundle (via this JSON import in
   // index.ts) so search works from pure static files, no fetch required.
@@ -59,6 +69,10 @@ async function main(): Promise<void> {
 
   const ms = (performance.now() - started).toFixed(0);
   console.log(`built ${pages} message pages + index in ${ms}ms → dist/`);
+  console.log(
+    `scan index: ${report.compiled}/${report.total} lowered ` +
+      `(${report.catchAlls} catch-alls, ${report.lowerFailed} unlowerable) → patterns.json`,
+  );
 }
 
 await main();

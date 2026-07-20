@@ -94,6 +94,19 @@ a:hover {
   color: var(--muted);
   font-size: 0.9rem;
 }
+.site-nav {
+  margin-left: auto;
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+.site-nav a {
+  color: var(--muted);
+  font-weight: 600;
+}
+.site-nav a:hover {
+  color: var(--link);
+}
 
 main {
   max-width: 900px;
@@ -246,4 +259,152 @@ pre code {
 }
 .message li {
   margin: 0.2rem 0;
+}
+
+/* ---- Scan surface ---- */
+.scan-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+#scan-input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  resize: vertical;
+}
+#scan-input:focus {
+  outline: 2px solid var(--link);
+  outline-offset: 1px;
+}
+.scan-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.scan-actions button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid var(--link);
+  border-radius: var(--radius);
+  background: var(--link);
+  color: #fff;
+  cursor: pointer;
+}
+.scan-actions button.secondary {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.file-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+.file-btn input {
+  display: none;
+}
+
+#scan-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.scan-line {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.7rem 0.9rem;
+}
+.scan-line-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  border-left: 3px solid var(--border);
+  padding-left: 0.6rem;
+}
+.scan-line-status.matched {
+  border-left-color: var(--ok);
+}
+.scan-line-status.ambiguous {
+  border-left-color: var(--warn);
+}
+.scan-line-status.no-match {
+  border-left-color: var(--muted);
+}
+.scan-raw {
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  word-break: break-word;
+}
+.scan-verdict {
+  margin-top: 0.55rem;
+  padding-left: 0.6rem;
+}
+.scan-match-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.scan-match-msg {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.no-match-text {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+.flag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+.flag-ambiguous {
+  color: var(--warn);
+  background: var(--warn-bg);
+}
+.scan-captures {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.45rem;
+}
+.capture {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+.capture-spec {
+  background: var(--code-bg);
+  color: var(--muted);
+  padding: 0.1rem 0.4rem;
+}
+.capture-value {
+  padding: 0.1rem 0.45rem;
+  color: var(--text);
+  word-break: break-all;
 }
