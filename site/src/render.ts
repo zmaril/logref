@@ -7,6 +7,7 @@
 import type { MessageDoc } from "./frontmatter.ts";
 import { escapeHtml, renderInline, renderMarkdown } from "./markdown.ts";
 import type { MessageEntry } from "./search.ts";
+import { severityTier } from "./severity.ts";
 
 /** Postgres SQLSTATE error classes (first two chars of a code → class name),
  * per the standard errcodes appendix. Drives the `## SQLSTATE` section's class
@@ -57,13 +58,6 @@ const SQLSTATE_CLASSES: Record<string, string> = {
   P0: "PL/pgSQL Error",
   XX: "Internal Error",
 };
-
-/** Severity tiers drive badge colour: hard failures, warnings, everything else. */
-function severityTier(level: string): "error" | "warn" | "info" {
-  if (["ERROR", "FATAL", "PANIC", "COMMERROR"].includes(level)) return "error";
-  if (level === "WARNING") return "warn";
-  return "info";
-}
 
 function badge(level: string): string {
   return `<span class="badge badge-${severityTier(level)}">${escapeAttr(level)}</span>`;

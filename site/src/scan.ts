@@ -11,17 +11,12 @@ import {
   type PatternEntry,
   ScanIndex,
 } from "./scanner.ts";
+import { severityTier } from "./severity.ts";
 
 /** Cap on line-cards rendered, so a huge paste can't lock up the DOM. */
 const MAX_RENDERED = 500;
 /** Cap on how many input lines we scan at all. */
 const MAX_LINES = 20000;
-
-function severityTier(level: string): "error" | "warn" | "info" {
-  if (["ERROR", "FATAL", "PANIC", "COMMERROR"].includes(level)) return "error";
-  if (level === "WARNING") return "warn";
-  return "info";
-}
 
 function badge(level: string): HTMLElement {
   const el = document.createElement("span");
