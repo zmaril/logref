@@ -11,18 +11,46 @@
 //!    each conversion spec (`%s`, `%d`, `%m`, width/precision/positional forms)
 //!    becomes a capture group sized to what it can render.
 //! 2. **Scanning** ([`Scanner`]) compiles every lowered pattern into a
-//!    [`regex::RegexSet`] (which patterns match a line) *paired* with a parallel
-//!    `Vec<Regex>` (per-hit captures — a `RegexSet` reports membership only, not
-//!    groups). A line is resolved by asking the set for candidate patterns then
-//!    running each candidate's `Regex::captures` to pull the variable bits out.
+//!    `Vec<Regex>` and builds a **trigram prefilter** over each pattern's literal
+//!    runs (the same algorithm as the hand-tuned TS `ScanIndex` in
+//!    `site/src/scanner.ts`). A line is resolved by extracting its trigrams,
+//!    unioning the candidate patterns that share a trigram (plus a small
+//!    "always-check" set for patterns with no usable literal run — including bare
+//!    `%s`-style catch-alls), then running each candidate's `Regex::captures` to
+//!    confirm the match and pull the variable bits out. Because every literal run
+//!    must appear verbatim in any matching line, the prefilter is *sound*: it
+//!    only narrows the candidate set, and the real regex still verifies — so the
+//!    results are identical to the historical [`regex::RegexSet`] path (kept as
+//!    [`Scanner::scan_line_regexset`] for the equivalence cross-check).
+//!
+//! Unlike the TS scanner, the Rust `Scanner` stays *ground truth*: it does NOT
+//! exclude bare catch-alls or strip a log prefix — those are TS-side product
+//! choices. Catch-alls land in the always-check set and are reported like any
+//! other match.
 //!
 //! [`render_sample`] is the inverse used for round-trip testing and for
 //! synthesizing a sample log from the catalog: it fills each conversion spec
 //! with a plausible concrete value, producing a line the lowering must match.
 
+use std::collections::HashMap;
+
 use regex::{Regex, RegexSet, RegexSetBuilder};
 
 use crate::Index;
+
+/// Push the lowercase 3-char trigrams of `s` onto `out` (nothing for `s`
+/// shorter than 3 chars). Mirrors the TS `trigrams()` in `site/src/scanner.ts`:
+/// lowercase, then every length-3 sliding window. Char-based (not byte-based)
+/// so it is UTF-8 safe; lowercasing both the pattern literals and the scanned
+/// line keeps the prefilter sound (a verbatim literal in the line always yields
+/// its lowercased trigrams).
+fn push_trigrams(s: &str, out: &mut Vec<String>) {
+    let lower = s.to_lowercase();
+    let chars: Vec<char> = lower.chars().collect();
+    for w in chars.windows(3) {
+        out.push(w.iter().collect());
+    }
+}
 
 /// Why a format string could not be lowered to a regex.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -56,6 +84,18 @@ pub struct Lowered {
     pub literal_len: usize,
     /// Number of conversion specs (capture groups) in the pattern.
     pub spec_count: usize,
+    /// The conversion character for each capture group, in order.
+    /// `database "%s" does not exist` yields `["s"]`; `%d of %d tuples` yields
+    /// `["d", "d"]`. `%n` and `%%` contribute no group and no entry. Mirrors the
+    /// TS `Lowered.groups` (see `site/src/lower.ts`) so bindings can label each
+    /// extracted value with the `%`-spec it came from.
+    pub groups: Vec<String>,
+    /// The maximal literal runs between conversion specs (each unescaped, `%%`
+    /// folded to `%`). Every one of these must appear verbatim in any line the
+    /// pattern matches, so the scanner uses them to build a sound trigram
+    /// prefilter. `database "%s" does not exist` yields
+    /// `['database "', '" does not exist']`. Mirrors the TS `Lowered.literals`.
+    pub literals: Vec<String>,
 }
 
 /// Consume a field-width-style token starting at `chars[i]`: a single `*`
@@ -144,12 +184,14 @@ pub fn lower_format(fmt: &str) -> Result<Lowered, LowerError> {
     let mut literal = String::new();
     let mut literal_len = 0usize;
     let mut spec_count = 0usize;
+    let mut groups: Vec<String> = Vec::new();
+    let mut literals: Vec<String> = Vec::new();
     let mut i = 0;
 
-    fn flush(literal: &mut String, out: &mut String) {
+    fn flush(literal: &mut String, out: &mut String, literals: &mut Vec<String>) {
         if !literal.is_empty() {
             out.push_str(&regex::escape(literal));
-            literal.clear();
+            literals.push(std::mem::take(literal));
         }
     }
 
@@ -170,18 +212,21 @@ pub fn lower_format(fmt: &str) -> Result<Lowered, LowerError> {
         }
         let (conv, next) = parse_spec(&chars, i)?;
         if let Some(group) = conversion_group(conv)? {
-            flush(&mut literal, &mut out);
+            flush(&mut literal, &mut out, &mut literals);
             out.push_str(group);
             spec_count += 1;
+            groups.push(conv.to_string());
         }
         i = next;
     }
-    flush(&mut literal, &mut out);
+    flush(&mut literal, &mut out, &mut literals);
     out.push('$');
     Ok(Lowered {
         regex: out,
         literal_len,
         spec_count,
+        groups,
+        literals,
     })
 }
 
@@ -255,20 +300,32 @@ pub struct BuildReport {
     pub compiled: usize,
 }
 
-/// A `RegexSet` over every lowered catalog pattern, paired with a parallel
-/// `Vec<Regex>` so a hit can be re-run for captures. Site provenance is kept as
-/// a parallel index back into the source [`Index`].
+/// A trigram-prefiltered scanner over every lowered catalog pattern.
+///
+/// Each pattern keeps its compiled [`Regex`] (for capture extraction) plus its
+/// site provenance and literal length. The prefilter maps each pattern to the
+/// *rarest* trigram of its literal runs (the `pg_trgm` trick — smaller, more
+/// balanced buckets); patterns with no literal run ≥3 chars (short literals and
+/// bare catch-alls) go in an `always_check` set. A [`RegexSet`] over the same
+/// patterns is retained so [`Scanner::scan_line_regexset`] can cross-check the
+/// prefilter against the exhaustive path.
 pub struct Scanner {
     set: RegexSet,
     regexes: Vec<Regex>,
     site_idx: Vec<usize>,
     literal_len: Vec<usize>,
+    /// trigram → indices of patterns anchored on it (each in exactly one bucket).
+    buckets: HashMap<String, Vec<usize>>,
+    /// Patterns with no usable trigram (literal runs all <3 chars, or none) —
+    /// checked against every line. Includes bare `%s`-style catch-alls.
+    always_check: Vec<usize>,
 }
 
 impl Scanner {
     /// Lower every site with a literal message, compile the patterns, and build
-    /// the `RegexSet`. Returns the scanner and a [`BuildReport`] tallying what
-    /// was lowered, skipped, or failed.
+    /// the trigram prefilter (and the `RegexSet` retained for cross-check).
+    /// Returns the scanner and a [`BuildReport`] tallying what was lowered,
+    /// skipped, or failed.
     pub fn build(index: &Index) -> Result<(Scanner, BuildReport), regex::Error> {
         let mut report = BuildReport {
             total: index.sites.len(),
@@ -278,6 +335,10 @@ impl Scanner {
         let mut regexes: Vec<Regex> = Vec::new();
         let mut site_idx: Vec<usize> = Vec::new();
         let mut literal_len: Vec<usize> = Vec::new();
+        // The unique trigrams of each compiled pattern's literal runs, kept so we
+        // can pick each pattern's rarest anchor after the global freq is tallied.
+        let mut per_pattern: Vec<Vec<String>> = Vec::new();
+        let mut freq: HashMap<String, usize> = HashMap::new();
 
         for (idx, site) in index.sites.iter().enumerate() {
             let text = match site.message.text.as_deref() {
@@ -301,12 +362,48 @@ impl Scanner {
                     continue;
                 }
             };
+
+            // Unique trigrams across this pattern's literal runs, tallied into
+            // the global frequency table for rarest-anchor selection.
+            let mut tris: Vec<String> = Vec::new();
+            for lit in &lowered.literals {
+                push_trigrams(lit, &mut tris);
+            }
+            tris.sort_unstable();
+            tris.dedup();
+            for t in &tris {
+                *freq.entry(t.clone()).or_insert(0) += 1;
+            }
+
             patterns.push(lowered.regex);
             regexes.push(re);
             site_idx.push(idx);
             literal_len.push(lowered.literal_len);
+            per_pattern.push(tris);
         }
         report.compiled = patterns.len();
+
+        // Anchor each pattern under its rarest trigram; patterns with none go in
+        // the always-check set (short-literal patterns and bare catch-alls).
+        let mut buckets: HashMap<String, Vec<usize>> = HashMap::new();
+        let mut always_check: Vec<usize> = Vec::new();
+        for (i, tris) in per_pattern.iter().enumerate() {
+            if tris.is_empty() {
+                always_check.push(i);
+                continue;
+            }
+            // Rarest trigram wins; ties broken by the smallest trigram so the
+            // choice is deterministic.
+            let best = tris
+                .iter()
+                .min_by(|a, b| {
+                    freq[*a]
+                        .cmp(&freq[*b])
+                        .then_with(|| a.as_str().cmp(b.as_str()))
+                })
+                .expect("non-empty");
+            buckets.entry(best.clone()).or_default().push(i);
+        }
 
         // Generous limits: ~14k anchored patterns overflow the default budget.
         let set = RegexSetBuilder::new(&patterns)
@@ -320,37 +417,122 @@ impl Scanner {
                 regexes,
                 site_idx,
                 literal_len,
+                buckets,
+                always_check,
             },
             report,
         ))
     }
 
-    /// Number of live patterns in the set.
+    /// Number of live patterns in the scanner.
     pub fn pattern_count(&self) -> usize {
         self.regexes.len()
     }
 
+    /// Number of patterns held in the always-check set (no usable trigram —
+    /// short-literal patterns and bare `%s`-style catch-alls).
+    pub fn always_check_count(&self) -> usize {
+        self.always_check.len()
+    }
+
+    /// How many candidate patterns the prefilter would verify for `line` — the
+    /// prefilter's selectivity (a diagnostic for benchmarking; the smaller
+    /// relative to `pattern_count`, the more the prefilter narrows).
+    pub fn candidate_count(&self, line: &str) -> usize {
+        let lower = line.to_lowercase();
+        let bounds: Vec<usize> = lower
+            .char_indices()
+            .map(|(i, _)| i)
+            .chain(std::iter::once(lower.len()))
+            .collect();
+        let mut candidates: Vec<usize> = Vec::new();
+        if bounds.len() > 3 {
+            for k in 0..bounds.len() - 3 {
+                if let Some(bucket) = self.buckets.get(&lower[bounds[k]..bounds[k + 3]]) {
+                    candidates.extend_from_slice(bucket);
+                }
+            }
+        }
+        candidates.extend_from_slice(&self.always_check);
+        candidates.sort_unstable();
+        candidates.dedup();
+        candidates.len()
+    }
+
+    /// Verify candidate pattern `pi` against `line`, producing a [`MatchHit`]
+    /// (with captures) when it matches. Shared by both scan paths so their hit
+    /// shape is byte-identical.
+    fn verify(&self, pi: usize, line: &str) -> Option<MatchHit> {
+        let caps = self.regexes[pi].captures(line)?;
+        let captures = caps
+            .iter()
+            .skip(1)
+            .map(|m| m.map(|mm| mm.as_str().to_string()).unwrap_or_default())
+            .collect();
+        Some(MatchHit {
+            site: self.site_idx[pi],
+            literal_len: self.literal_len[pi],
+            captures,
+        })
+    }
+
     /// Resolve one rendered log line to every catalog site whose pattern
-    /// matches it, most-specific (longest literal) first. An empty result means
-    /// no site matched; more than one means the line is ambiguous.
+    /// matches it, most-specific (longest literal) first, via the **trigram
+    /// prefilter**. An empty result means no site matched; more than one means
+    /// the line is ambiguous.
+    ///
+    /// The prefilter narrows the candidate patterns to those sharing a trigram
+    /// with the line (plus the always-check set); each candidate's real `Regex`
+    /// still verifies, so the result is identical to
+    /// [`Scanner::scan_line_regexset`] — this is a pure speed optimization.
     pub fn scan_line(&self, line: &str) -> Vec<MatchHit> {
+        // Union candidate pattern indices: prefilter buckets that share a
+        // trigram with the line, plus the always-check set. The line is
+        // lowercased ONCE and each 3-char window is looked up as a borrowed
+        // `&str` slice (HashMap<String>::get accepts `&str` via `Borrow`), so
+        // the hot path allocates no per-trigram strings.
+        let lower = line.to_lowercase();
+        let mut candidates: Vec<usize> = Vec::new();
+        // Byte offsets of each char boundary, plus the end, so a length-3 char
+        // window is `lower[bounds[k]..bounds[k + 3]]`.
+        let bounds: Vec<usize> = lower
+            .char_indices()
+            .map(|(i, _)| i)
+            .chain(std::iter::once(lower.len()))
+            .collect();
+        if bounds.len() > 3 {
+            for k in 0..bounds.len() - 3 {
+                if let Some(bucket) = self.buckets.get(&lower[bounds[k]..bounds[k + 3]]) {
+                    candidates.extend_from_slice(bucket);
+                }
+            }
+        }
+        candidates.extend_from_slice(&self.always_check);
+        // Verify in ascending pattern-index order, then a *stable* sort by
+        // descending literal_len — this reproduces the RegexSet path's ordering
+        // exactly (RegexSet also yields ascending indices, ties preserved).
+        candidates.sort_unstable();
+        candidates.dedup();
+
+        let mut hits: Vec<MatchHit> = candidates
+            .iter()
+            .filter_map(|&pi| self.verify(pi, line))
+            .collect();
+        hits.sort_by_key(|h| std::cmp::Reverse(h.literal_len));
+        hits
+    }
+
+    /// Resolve one rendered log line via the exhaustive [`RegexSet`] path (no
+    /// prefilter). Retained as the ground-truth cross-check for [`scan_line`];
+    /// the two MUST return identical `Vec<MatchHit>` for every line.
+    ///
+    /// [`scan_line`]: Scanner::scan_line
+    pub fn scan_line_regexset(&self, line: &str) -> Vec<MatchHit> {
         let mut hits: Vec<MatchHit> = self
             .set
             .matches(line)
             .into_iter()
-            .filter_map(|pi| {
-                let caps = self.regexes[pi].captures(line)?;
-                let captures = caps
-                    .iter()
-                    .skip(1)
-                    .map(|m| m.map(|mm| mm.as_str().to_string()).unwrap_or_default())
-                    .collect();
-                Some(MatchHit {
-                    site: self.site_idx[pi],
-                    literal_len: self.literal_len[pi],
-                    captures,
-                })
-            })
+            .filter_map(|pi| self.verify(pi, line))
             .collect();
         hits.sort_by_key(|h| std::cmp::Reverse(h.literal_len));
         hits
@@ -373,6 +555,50 @@ mod tests {
         let re = Regex::new(&l.regex).unwrap();
         let caps = re.captures(r#"database "orders" does not exist"#).unwrap();
         assert_eq!(&caps[1], "orders");
+    }
+
+    // `groups`/`literals` must byte-match the TS `lowerFormat` output
+    // (site/src/lower.ts, oracle site/src/lower.test.ts) so the trigram index
+    // built either side is the same.
+    #[test]
+    fn groups_and_literals_mirror_the_ts_lowering() {
+        let l = lower(r#"database "%s" does not exist"#);
+        assert_eq!(l.groups, vec!["s".to_string()]);
+        assert_eq!(
+            l.literals,
+            vec![
+                r#"database ""#.to_string(),
+                r#"" does not exist"#.to_string()
+            ]
+        );
+
+        let l = lower("%d of %d tuples");
+        assert_eq!(l.groups, vec!["d".to_string(), "d".to_string()]);
+        assert_eq!(l.literals, vec![" of ".to_string(), " tuples".to_string()]);
+
+        let l = lower(r#"could not open file "%s": %m"#);
+        assert_eq!(l.groups, vec!["s".to_string(), "m".to_string()]);
+        assert_eq!(
+            l.literals,
+            vec![r#"could not open file ""#.to_string(), r#"": "#.to_string()]
+        );
+
+        // `%%` folds to a literal `%` inside the run; a bare `%s` has no literal.
+        let l = lower("disk is %d%% full");
+        assert_eq!(l.groups, vec!["d".to_string()]);
+        assert_eq!(
+            l.literals,
+            vec!["disk is ".to_string(), "% full".to_string()]
+        );
+
+        let l = lower("%s");
+        assert!(l.groups == vec!["s".to_string()]);
+        assert!(l.literals.is_empty(), "bare catch-all has no literal run");
+
+        // `%n` writes nothing: no group, and the literal run spans across it.
+        let l = lower("count%n done");
+        assert!(l.groups.is_empty());
+        assert_eq!(l.literals, vec!["count done".to_string()]);
     }
 
     #[test]
@@ -481,6 +707,9 @@ mod tests {
         assert_eq!(report.no_text, 1);
         assert_eq!(report.compiled, 3);
         assert_eq!(scanner.pattern_count(), 3);
+        // The bare `%s` catch-all has no literal run → always-check (the Rust
+        // scanner still reports it; it is NOT excluded like the TS side).
+        assert_eq!(scanner.always_check_count(), 1);
 
         // A specific line: the specific site outranks the bare "%s" catch-all.
         let hits = scanner.scan_line(r#"database "orders" does not exist"#);
@@ -493,5 +722,53 @@ mod tests {
         let hits = scanner.scan_line("7 of 512 tuples");
         assert_eq!(hits[0].site, 1);
         assert_eq!(hits[0].captures, vec!["7".to_string(), "512".to_string()]);
+    }
+
+    /// Two `MatchHit` vecs are field-for-field identical (site, literal_len,
+    /// captures, and order).
+    fn hits_eq(a: &[MatchHit], b: &[MatchHit]) -> bool {
+        a.len() == b.len()
+            && a.iter().zip(b).all(|(x, y)| {
+                x.site == y.site && x.literal_len == y.literal_len && x.captures == y.captures
+            })
+    }
+
+    #[test]
+    fn trigram_scan_line_equals_regexset_scan_line() {
+        // A mix: quoted-string, repeated ints, %m, a short-literal pattern, and a
+        // bare catch-all — exercising buckets AND the always-check set.
+        let jsonl = concat!(
+            r#"{"api":"ereport","kind":"backend","message":{"text":"database \"%s\" does not exist"},"path":"a.c","line":1}"#,
+            "\n",
+            r#"{"api":"elog","kind":"backend","message":{"text":"%d of %d tuples"},"path":"b.c","line":2}"#,
+            "\n",
+            r#"{"api":"elog","kind":"backend","message":{"text":"could not open file \"%s\": %m"},"path":"c.c","line":3}"#,
+            "\n",
+            // Short literal run (<3 chars) → always-check, not a trigram bucket.
+            r#"{"api":"elog","kind":"backend","message":{"text":"a%db"},"path":"d.c","line":4}"#,
+            "\n",
+            // Bare catch-all → always-check.
+            r#"{"api":"elog","kind":"backend","message":{"text":"%s"},"path":"e.c","line":5}"#
+        );
+        let index = Index::from_jsonl(jsonl).unwrap();
+        let (scanner, _) = Scanner::build(&index).unwrap();
+
+        let lines = [
+            r#"database "orders" does not exist"#,
+            "7 of 512 tuples",
+            r#"could not open file "pg_wal/1": No such file or directory"#,
+            "a5b",
+            "totally unrelated line",
+            "",
+            "DATABASE \"X\" DOES NOT EXIST", // case: only the catch-all matches
+        ];
+        for line in lines {
+            let tri = scanner.scan_line(line);
+            let rs = scanner.scan_line_regexset(line);
+            assert!(
+                hits_eq(&tri, &rs),
+                "trigram vs regexset differ on {line:?}:\n  trigram={tri:?}\n  regexset={rs:?}"
+            );
+        }
     }
 }
