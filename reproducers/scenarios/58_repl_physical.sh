@@ -27,7 +27,9 @@ CHECKPOINT;
 SQL
 
 # --- base-backup a streaming standby off the slot ---------------------------
-if repl_standby_up "$primary" "$pport" "$standby" -S standby_slot -C -c fast; then
+# The slot was created above (pg_create_physical_replication_slot), so hand it to
+# pg_basebackup with -S alone — adding -C would try to re-create it and fail.
+if repl_standby_up "$primary" "$pport" "$standby" -S standby_slot -c fast; then
     sport="$PGPORT"
     repl_wait_streaming "$pport" 1 30 || log "  primary never saw the standby attach"
     # More WAL; the standby replays it (recovery/replay LOGs on the standby).
@@ -49,14 +51,27 @@ if repl_standby_up "$primary" "$pport" "$standby" -S standby_slot -C -c fast; th
     qpsql "$(sock_of "$primary")" "$pport" \
         -c "SET synchronous_commit=on; INSERT INTO t VALUES (100001,'syncrep');"
     # Then name a standby that will never report — the commit blocks in
-    # SyncRepWaitForLSN; a per-statement timeout is the bounded escape so the
-    # cancel path fires instead of hanging the driver.
+    # SyncRepWaitForLSN. statement_timeout does NOT cover the sync-rep wait (it
+    # only bounds statement execution, not the post-commit wait), so a
+    # query-cancel from a second session is the only thing that releases it and
+    # fires syncrep.c's "canceling wait for synchronous replication" path. Run
+    # the commit in the background and cancel it once it has parked, bounded so
+    # the driver never blocks.
     qpsql "$(sock_of "$primary")" "$pport" -c \
         "ALTER SYSTEM SET synchronous_standby_names = 'FIRST 1 (does_not_exist)';"
     pg_ctl -D "$primary" reload >/dev/null 2>&1 || true
     sleep 1
     qpsql "$(sock_of "$primary")" "$pport" \
-        -c "SET statement_timeout='2s'; INSERT INTO t VALUES (100002,'stuck');"
+        -c "INSERT INTO t VALUES (100002,'stuck');" &
+    stuck=$!
+    for _ in 1 2 3 4 5; do
+        sleep 1
+        kicked="$(qval "$pport" \
+            "SELECT count(pg_cancel_backend(pid)) FROM pg_stat_activity
+               WHERE wait_event = 'SyncRep'")"
+        [ -n "${kicked:-}" ] && [ "$kicked" != "0" ] && break
+    done
+    wait "$stuck" 2>/dev/null || true
     qpsql "$(sock_of "$primary")" "$pport" -c \
         "ALTER SYSTEM RESET synchronous_standby_names;"
     pg_ctl -D "$primary" reload >/dev/null 2>&1 || true

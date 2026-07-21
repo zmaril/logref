@@ -18,8 +18,8 @@ extracted catalog by `(basename, line)`.
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
 - Baseline (Tier 1, exact file:line): **245** (1.65%)
-- Tier 2-4 scenarios add **522** new distinct sites
-- **Combined: 767 of 14806 (5.18%)**
+- Tier 2-4 scenarios add **549** new distinct sites
+- **Combined: 794 of 14806 (5.36%)**
 
 ## New sites by tier
 
@@ -29,7 +29,7 @@ Attributed to the first scenario that fired each site (no double-counting).
 |---|--:|
 | Tier 2 — crafted-SQL error corpus + contrib | 363 |
 | Tier 3 — config / auth / SSL | 22 |
-| Tier 4 — corruption / replication / resource / crash | 137 |
+| Tier 4 — corruption / replication / resource / crash | 164 |
 
 ## New sites by scenario
 
@@ -61,6 +61,13 @@ Attributed to the first scenario that fired each site (no double-counting).
 | `tier3__auth_ssl` | 13 |
 | `tier3__bad_config` | 2 |
 | `tier3__bad_hba` | 7 |
+| `tier4__58_repl_physical_cascade` | 3 |
+| `tier4__58_repl_physical_primary` | 7 |
+| `tier4__58_repl_physical_standby` | 1 |
+| `tier4__59_repl_slots_primary` | 5 |
+| `tier4__59_repl_slots_standby` | 2 |
+| `tier4__61_pub_sub_pub_standby` | 5 |
+| `tier4__61_pub_sub_subscriber` | 4 |
 | `tier4__checkpoint_bgwriter` | 21 |
 | `tier4__corruption` | 1 |
 | `tier4__crash_recovery` | 3 |
@@ -81,16 +88,16 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | level | new sites |
 |---|--:|
-| ERROR | 337 |
-| LOG | 41 |
-| DEBUG1 | 36 |
+| ERROR | 346 |
+| LOG | 48 |
+| DEBUG1 | 40 |
 | DEBUG2 | 31 |
+| elevel | 20 |
 | DEBUG4 | 19 |
-| elevel | 18 |
-| DEBUG3 | 8 |
+| DEBUG3 | 9 |
+| WARNING | 9 |
 | FATAL | 8 |
-| WARNING | 7 |
-| NOTICE | 5 |
+| NOTICE | 7 |
 | log_replication_commands ? LOG : DEBUG1 | 3 |
 | IsPostmasterEnvironment ? LOG : NOTICE | 2 |
 | LogicalDecodingLogLevel() | 2 |
@@ -107,30 +114,30 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | file | new sites |
 |---|--:|
 | `postgres/src/backend/commands/tablecmds.c` | 27 |
-| `postgres/src/backend/access/transam/xlogrecovery.c` | 24 |
+| `postgres/src/backend/access/transam/xlogrecovery.c` | 26 |
+| `postgres/src/backend/access/transam/xlog.c` | 20 |
 | `postgres/src/backend/postmaster/postmaster.c` | 17 |
-| `postgres/src/backend/access/transam/xlog.c` | 16 |
 | `postgres/src/backend/commands/copy.c` | 12 |
-| `postgres/src/backend/commands/indexcmds.c` | 11 |
+| `postgres/src/backend/commands/indexcmds.c` | 12 |
 | `postgres/src/backend/commands/functioncmds.c` | 10 |
+| `postgres/src/backend/utils/misc/guc.c` | 10 |
+| `postgres/src/backend/commands/subscriptioncmds.c` | 9 |
 | `postgres/src/backend/utils/adt/timestamp.c` | 9 |
-| `postgres/src/backend/utils/misc/guc.c` | 8 |
+| `postgres/src/backend/replication/logical/logical.c` | 7 |
 | `postgres/src/backend/replication/logical/snapbuild.c` | 7 |
+| `postgres/src/backend/replication/logical/worker.c` | 7 |
 | `postgres/src/backend/catalog/namespace.c` | 6 |
 | `postgres/src/backend/commands/extension.c` | 6 |
 | `postgres/src/backend/commands/sequence.c` | 6 |
-| `postgres/src/backend/commands/subscriptioncmds.c` | 6 |
 | `postgres/src/backend/commands/trigger.c` | 6 |
 | `postgres/src/backend/commands/vacuum.c` | 6 |
 | `postgres/src/backend/parser/parse_func.c` | 6 |
 | `postgres/src/backend/parser/parse_utilcmd.c` | 6 |
-| `postgres/src/backend/replication/logical/worker.c` | 6 |
+| `postgres/src/backend/replication/slot.c` | 6 |
 | `postgres/src/backend/storage/ipc/procarray.c` | 6 |
 | `postgres/src/backend/commands/typecmds.c` | 5 |
 | `postgres/src/backend/libpq/be-secure-openssl.c` | 5 |
 | `postgres/src/backend/libpq/hba.c` | 5 |
-| `postgres/src/backend/replication/walsender.c` | 5 |
-| `postgres/src/backend/tcop/postgres.c` | 5 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 
