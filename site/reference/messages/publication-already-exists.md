@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/publicationcmds.c:876"
   - "postgres/src/bin/pg_basebackup/pg_createsubscriber.c:1828"
-reproduced: false
+reproduced: true
 ---
 
 # `publication "%s" already exists`
@@ -29,10 +29,16 @@ Use a different name, or modify the existing publication with `ALTER PUBLICATION
 
 ## Example
 
-*Illustrative* — creating a publication that already exists.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
+
+```sql
+CREATE PUBLICATION s35_pub;
+```
+
+Produces:
 
 ```text
-ERROR:  publication "pub_orders" already exists
+ERROR:  publication "s35_pub" already exists
 ```
 
 ## Related

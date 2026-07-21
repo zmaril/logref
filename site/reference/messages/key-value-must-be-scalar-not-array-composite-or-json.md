@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/json.c:201"
   - "postgres/src/backend/utils/adt/jsonb.c:655"
-reproduced: false
+reproduced: true
 ---
 
 # `key value must be scalar, not array, composite, or json`
@@ -29,7 +29,13 @@ Provide a scalar key — cast or extract a text/number value for the key positio
 
 ## Example
 
-*Illustrative* — a composite used as a key.
+*Reproduced* — captured from `reproducers/scenarios/33_type_io_json_range_misc.sql`.
+
+```sql
+SELECT jsonb_build_object(ARRAY[1,2], 3);
+```
+
+Produces:
 
 ```text
 ERROR:  key value must be scalar, not array, composite, or json

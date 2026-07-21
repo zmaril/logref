@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/access/heap/heapam.c:4993"
   - "postgres/src/backend/access/heap/heapam.c:5260"
   - "postgres/src/backend/access/heap/heapam_handler.c:371"
-reproduced: false
+reproduced: true
 ---
 
 # `could not obtain lock on row in relation "%s"`
@@ -31,10 +31,10 @@ Retry after the conflicting transaction releases the lock, or drop `NOWAIT` to w
 
 ## Example
 
-*Illustrative* — a NOWAIT lock on a contended row.
+*Reproduced* — this site fired under `reproducers/scenarios/50_txn_concurrency.sh`; see the reproducer for the triggering workload. It emits:
 
-```sql
-SELECT * FROM t WHERE id = 1 FOR UPDATE NOWAIT;
+```text
+ERROR:  could not obtain lock on row in relation "%s"
 ```
 
 ## Related

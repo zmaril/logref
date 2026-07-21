@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/matview.c:205"
-reproduced: false
+reproduced: true
 ---
 
 # `CONCURRENTLY cannot be used when the materialized view is not populated`
@@ -28,12 +28,16 @@ Run a plain `REFRESH MATERIALIZED VIEW` (without `CONCURRENTLY`) first to popula
 
 ## Example
 
-*Illustrative* — concurrent refresh of an unpopulated matview.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-CREATE MATERIALIZED VIEW mv AS SELECT 1 WITH NO DATA;
-REFRESH MATERIALIZED VIEW CONCURRENTLY mv;
--- ERROR:  CONCURRENTLY cannot be used when the materialized view is not populated
+REFRESH MATERIALIZED VIEW CONCURRENTLY repro.mv2;
+```
+
+Produces:
+
+```text
+ERROR:  CONCURRENTLY cannot be used when the materialized view is not populated
 ```
 
 ## Related

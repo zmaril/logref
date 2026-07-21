@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/catalog/objectaddress.c:1482"
   - "postgres/src/backend/commands/tablecmds.c:20379"
   - "postgres/src/backend/commands/view.c:110"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not a view`
@@ -30,10 +30,16 @@ Confirm the object is a view (`\dv` in psql). If you meant a table, use `ALTER T
 
 ## Example
 
-*Illustrative* — altering a table as a view.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-ALTER VIEW orders ALTER COLUMN id SET DEFAULT 0;  -- "orders" is not a view
+COMMENT ON VIEW s35.base IS 'x';
+```
+
+Produces:
+
+```text
+ERROR:  "base" is not a view
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/foreigncmds.c:157"
   - "postgres/src/backend/commands/foreigncmds.c:166"
-reproduced: false
+reproduced: true
 ---
 
 # `option "%s" not found`
@@ -29,10 +29,16 @@ List the object's current options first (for example `\des+` for foreign servers
 
 ## Example
 
-*Illustrative* — dropping an option a foreign table never had.
+*Reproduced* — captured from `reproducers/scenarios/43_contrib_fdw_indexam.sql`.
+
+```sql
+ALTER SERVER pgfdw OPTIONS (SET fetch_size 'notanumber');
+```
+
+Produces:
 
 ```text
-ERROR:  option "delimiter" not found
+ERROR:  option "fetch_size" not found
 ```
 
 ## Related

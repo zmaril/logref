@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/catalog/pg_aggregate.c:496"
   - "postgres/src/backend/catalog/pg_proc.c:217"
   - "postgres/src/backend/catalog/pg_proc.c:251"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot determine result data type`
@@ -32,10 +32,16 @@ Give the resolver something to work with: cast the arguments to concrete types (
 
 ## Example
 
-*Illustrative* — untyped arguments to a polymorphic function.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-SELECT array_append(NULL, NULL);  -- cannot determine result data type
+CREATE FUNCTION repro.f_poly1() RETURNS anyelement LANGUAGE sql AS 'SELECT 1';
+```
+
+Produces:
+
+```text
+ERROR:  cannot determine result data type
 ```
 
 ## Related

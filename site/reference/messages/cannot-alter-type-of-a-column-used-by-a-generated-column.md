@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:15749"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot alter type of a column used by a generated column`
@@ -28,7 +28,13 @@ Drop the generated column, alter the source column's type, then recreate the gen
 
 ## Example
 
-*Illustrative* — a column read by a generated column.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
+
+```sql
+ALTER TABLE s37.gdep ALTER COLUMN a TYPE bigint;
+```
+
+Produces:
 
 ```text
 ERROR:  cannot alter type of a column used by a generated column

@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/commands/copyto.c:815"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot copy from view "%s"`
@@ -28,10 +28,16 @@ Use `COPY (SELECT ... FROM view) TO ...` to export a view's rows through a query
 
 ## Example
 
-*Illustrative* — COPY from a view.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
+
+```sql
+COPY repro.child_v TO STDOUT;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot copy from view "v"
+ERROR:  cannot copy from view "child_v"
 ```
 
 ## Related

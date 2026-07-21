@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/operatorcmds.c:152"
   - "postgres/src/backend/commands/operatorcmds.c:585"
-reproduced: false
+reproduced: true
 ---
 
 # `operator attribute "%s" not recognized`
@@ -29,10 +29,16 @@ Use only the recognized operator attributes. Correct the misspelled or unsupport
 
 ## Example
 
-*Illustrative* — an unknown operator attribute.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-CREATE OPERATOR === (LEFTARG=int, RIGHTARG=int, FUNC=f);  -- 'FUNC' not recognized (use FUNCTION)
+CREATE OPERATOR repro.@@@ (LEFTARG = int, RIGHTARG = int, PROCEDURE = int4pl, COMMUTATOR = @@@, NONSENSE = x);
+```
+
+Produces:
+
+```text
+WARNING:  operator attribute "nonsense" not recognized
 ```
 
 ## Related

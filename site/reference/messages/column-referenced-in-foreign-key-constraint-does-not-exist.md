@@ -9,7 +9,7 @@ sqlstate:
     code: "42703"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:13879"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" referenced in foreign key constraint does not exist`
@@ -28,11 +28,16 @@ Use column names that exist on both tables. Check the spelling and confirm the c
 
 ## Example
 
-*Illustrative* — a foreign key naming a missing column.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-ALTER TABLE child ADD FOREIGN KEY (parent_ref) REFERENCES parent (id);
--- ERROR:  column "parent_ref" referenced in foreign key constraint does not exist
+CREATE TABLE repro.ct2 (a int REFERENCES repro.parent(nonexistent));
+```
+
+Produces:
+
+```text
+ERROR:  column "nonexistent" referenced in foreign key constraint does not exist
 ```
 
 ## Related

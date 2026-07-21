@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/typecmds.c:947"
   - "postgres/src/backend/commands/typecmds.c:968"
-reproduced: false
+reproduced: true
 ---
 
 # `conflicting NULL/NOT NULL constraints`
@@ -29,11 +29,16 @@ Specify only one of NULL or NOT NULL. Decide the intended nullability and remove
 
 ## Example
 
-*Illustrative* — a domain declared both NULL and NOT NULL.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-CREATE DOMAIN d AS int NOT NULL NULL;
--- ERROR:  conflicting NULL/NOT NULL constraints
+CREATE DOMAIN s37.d_null AS int NOT NULL NULL;
+```
+
+Produces:
+
+```text
+ERROR:  conflicting NULL/NOT NULL constraints
 ```
 
 ## Related

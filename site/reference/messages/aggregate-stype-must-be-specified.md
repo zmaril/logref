@@ -9,7 +9,7 @@ sqlstate:
     code: "42P13"
 call_sites:
   - "postgres/src/backend/commands/aggregatecmds.c:200"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate stype must be specified`
@@ -28,7 +28,13 @@ Add the `stype` clause naming the transition state type. The transition function
 
 ## Example
 
-*Illustrative* — a definition missing stype.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE AGGREGATE repro.badagg3(int) (SFUNC = int4pl);
+```
+
+Produces:
 
 ```text
 ERROR:  aggregate stype must be specified

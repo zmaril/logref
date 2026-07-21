@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/executor/execMain.c:1238"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot lock rows in sequence "%s"`
@@ -28,10 +28,16 @@ Remove the row-locking clause when reading a sequence. Use `nextval()` and `setv
 
 ## Example
 
-*Illustrative* — FOR UPDATE on a sequence.
+*Reproduced* — captured from `reproducers/scenarios/52_locks_rowmarks_advisory.sql`.
+
+```sql
+SELECT * FROM repro.churn_id_seq FOR UPDATE;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot lock rows in sequence "my_seq"
+ERROR:  cannot lock rows in sequence "churn_id_seq"
 ```
 
 ## Related

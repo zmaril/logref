@@ -9,7 +9,7 @@ sqlstate:
     code: "42804"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:15045"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" cannot be cast automatically to type %s`
@@ -28,11 +28,16 @@ Add a `USING` clause that gives the conversion expression, for example `ALTER TA
 
 ## Example
 
-*Illustrative* — a type change with no automatic cast.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-ALTER TABLE t ALTER COLUMN c TYPE integer;
--- ERROR:  column "c" cannot be cast automatically to type integer
+ALTER TABLE repro.at ALTER COLUMN b TYPE int;
+```
+
+Produces:
+
+```text
+ERROR:  column "b" cannot be cast automatically to type integer
 ```
 
 ## Related

@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/extension.c:808"
   - "postgres/src/backend/commands/extension.c:816"
   - "postgres/src/backend/utils/misc/guc.c:3039"
-reproduced: false
+reproduced: true
 ---
 
 # `parameter "%s" requires a Boolean value`
@@ -32,10 +32,16 @@ Use a recognized boolean literal — `on`, `off`, `true`, `false`, `yes`, `no`, 
 
 ## Example
 
-*Illustrative* — a non-boolean value for a boolean option.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-SET enable_seqscan TO 'maybe';  -- requires a Boolean value
+SET row_security = maybe;
+```
+
+Produces:
+
+```text
+ERROR:  parameter "row_security" requires a Boolean value
 ```
 
 ## Related

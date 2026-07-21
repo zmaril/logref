@@ -12,7 +12,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/explain_state.c:207"
   - "postgres/src/backend/commands/matview.c:211"
-reproduced: false
+reproduced: true
 ---
 
 # `%s options %s and %s cannot be used together`
@@ -31,10 +31,16 @@ Choose one of the two options and remove the other. The message names both; cons
 
 ## Example
 
-*Illustrative* — passing two conflicting flags to one command.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
+
+```sql
+EXPLAIN (GENERIC_PLAN, ANALYZE) SELECT 1;
+```
+
+Produces:
 
 ```text
-ERROR:  pg_dump options -a and -s cannot be used together
+ERROR:  EXPLAIN options ANALYZE and GENERIC_PLAN cannot be used together
 ```
 
 ## Related

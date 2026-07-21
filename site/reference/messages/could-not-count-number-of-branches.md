@@ -6,7 +6,7 @@ api: [pg_log_error]
 level: [ERROR]
 call_sites:
   - "postgres/src/bin/pgbench/pgbench.c:5424"
-reproduced: false
+reproduced: true
 ---
 
 # `could not count number of branches: %s`
@@ -25,10 +25,10 @@ Check the custom `pgbench` script for unbalanced or improperly nested conditiona
 
 ## Example
 
-*Illustrative* — a malformed conditional block in a pgbench script.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__68_bench_psql`); see the reproducer for the triggering workload. It emits:
 
 ```text
-pgbench: error: could not count number of branches: ...reason...
+ERROR:  could not count number of branches: %s
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "42P13"
 call_sites:
   - "postgres/src/backend/commands/aggregatecmds.c:227"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate msfunc must not be specified without mstype`
@@ -28,7 +28,13 @@ Add `mstype` (and `minvfunc`) so the forward function has a state to maintain, o
 
 ## Example
 
-*Illustrative* — msfunc without mstype.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
+
+```sql
+CREATE AGGREGATE repro.agg_moving (int) (SFUNC = int4pl, STYPE = int, MSFUNC = int4pl);
+```
+
+Produces:
 
 ```text
 ERROR:  aggregate msfunc must not be specified without mstype

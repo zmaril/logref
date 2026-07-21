@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/typecmds.c:331"
   - "postgres/src/backend/commands/typecmds.c:1506"
   - "postgres/src/backend/commands/typecmds.c:4518"
-reproduced: false
+reproduced: true
 ---
 
 # `type attribute "%s" not recognized`
@@ -30,10 +30,16 @@ Use a valid type attribute name. Consult the `CREATE TYPE` documentation for the
 
 ## Example
 
-*Illustrative* — an unrecognized type attribute.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-CREATE TYPE mytype (INPUT = in_fn, OUTPUT = out_fn, WIDTH = 4);  -- no such attribute
+CREATE TYPE repro.rng_badopt AS RANGE (SUBTYPE = int, NOSUCHOPT = 1);
+```
+
+Produces:
+
+```text
+ERROR:  type attribute "nosuchopt" not recognized
 ```
 
 ## Related

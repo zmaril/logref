@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/repack.c:2508"
   - "postgres/src/backend/commands/tablecmds.c:17161"
   - "postgres/src/backend/commands/tablecmds.c:19224"
-reproduced: false
+reproduced: true
 ---
 
 # `index "%s" for table "%s" does not exist`
@@ -30,10 +30,16 @@ Check the actual index names on the table with `\d tablename` in psql, or query 
 
 ## Example
 
-*Illustrative* — clustering on an index that is not on the table.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-ALTER TABLE orders CLUSTER ON no_such_idx;  -- index "no_such_idx" for table "orders" does not exist
+CLUSTER repro.parent USING nonexistent_idx;
+```
+
+Produces:
+
+```text
+ERROR:  index "nonexistent_idx" for table "parent" does not exist
 ```
 
 ## Related

@@ -6,7 +6,7 @@ api: [pg_log_error]
 level: [ERROR]
 call_sites:
   - "postgres/src/bin/scripts/dropdb.c:156"
-reproduced: false
+reproduced: true
 ---
 
 # `database removal failed: %s`
@@ -25,10 +25,10 @@ Read the trailing server error. `database ... is being accessed by other users` 
 
 ## Example
 
-*Illustrative* — active connections blocked the drop.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-dropdb: error: database removal failed: ERROR:  database "app" is being accessed by other users
+ERROR:  database removal failed: %s
 ```
 
 ## Related

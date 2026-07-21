@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/executor/execCurrent.c:135"
   - "postgres/src/backend/executor/execCurrent.c:180"
-reproduced: false
+reproduced: true
 ---
 
 # `cursor "%s" is not positioned on a row`
@@ -29,10 +29,16 @@ Using `WHERE CURRENT OF` before the first `FETCH`, after the cursor moved past t
 
 ## Example
 
-*Illustrative* — updating a cursor with no current row.
+*Reproduced* — captured from `reproducers/scenarios/39_cte_cursors_prepared_lock.sql`.
+
+```sql
+UPDATE repro.parent SET label='x' WHERE CURRENT OF cp;
+```
+
+Produces:
 
 ```text
-ERROR:  cursor "c1" is not positioned on a row
+ERROR:  cursor "cp" is not positioned on a row
 ```
 
 ## Related

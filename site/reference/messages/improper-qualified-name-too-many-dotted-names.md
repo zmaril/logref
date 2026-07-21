@@ -18,7 +18,7 @@ call_sites:
   - "postgres/src/bin/pg_dump/pg_dump.c:1779"
   - "postgres/src/bin/pg_dump/pg_dumpall.c:1582"
   - "postgres/src/bin/psql/describe.c:6447"
-reproduced: false
+reproduced: true
 ---
 
 # `improper qualified name (too many dotted names): %s`
@@ -37,16 +37,16 @@ Reduce the name to at most the allowed parts. For a table use `schema.table`; fo
 
 ## Example
 
-*Illustrative* — an over-qualified name.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-SELECT * FROM mydb.public.users.id;
+SELECT a.b.c.d.addone(1);
 ```
 
 Produces:
 
 ```text
-ERROR:  improper qualified name (too many dotted names): mydb.public.users.id
+ERROR:  improper qualified name (too many dotted names): a.b.c.d.addone
 ```
 
 ## Related

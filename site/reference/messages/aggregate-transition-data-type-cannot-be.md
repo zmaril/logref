@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/aggregatecmds.c:345"
   - "postgres/src/backend/commands/aggregatecmds.c:386"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate transition data type cannot be %s`
@@ -29,10 +29,16 @@ Choose a valid transition type for the aggregate's state. Use a concrete type, o
 
 ## Example
 
-*Illustrative* — a disallowed aggregate state type.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-CREATE AGGREGATE a(int) (SFUNC = f, STYPE = anyelement);  -- not allowed as a state type
+CREATE AGGREGATE repro.agg_tt(int) (SFUNC = int4pl, STYPE = cstring);
+```
+
+Produces:
+
+```text
+ERROR:  aggregate transition data type cannot be cstring
 ```
 
 ## Related

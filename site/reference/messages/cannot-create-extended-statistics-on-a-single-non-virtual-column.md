@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/statscmds.c:411"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot create extended statistics on a single non-virtual column`
@@ -28,10 +28,16 @@ List at least two columns for multi-column statistics, or define statistics over
 
 ## Example
 
-*Illustrative* — statistics on one plain column.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-CREATE STATISTICS s ON a FROM t;
+CREATE STATISTICS st3 ON id FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  cannot create extended statistics on a single non-virtual column
 ```
 
 ## Related

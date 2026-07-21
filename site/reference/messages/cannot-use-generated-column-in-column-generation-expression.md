@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/catalog/heap.c:3222"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use generated column "%s" in column generation expression`
@@ -28,12 +28,16 @@ Rewrite the expression to reference only ordinary stored columns. If you need a 
 
 ## Example
 
-*Illustrative* — a generated column referencing another.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-CREATE TABLE t (a int, b int GENERATED ALWAYS AS (a*2) STORED,
-  c int GENERATED ALWAYS AS (b+1) STORED);
--- ERROR:  cannot use generated column "b" in column generation expression
+CREATE TABLE repro.gen2 (a int, b int GENERATED ALWAYS AS (a) STORED, c int GENERATED ALWAYS AS (b) STORED);
+```
+
+Produces:
+
+```text
+ERROR:  cannot use generated column "b" in column generation expression
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/contrib/amcheck/verify_common.c:170"
-reproduced: false
+reproduced: true
 ---
 
 # `expected "%s" index as targets for verification`
@@ -28,10 +28,16 @@ Pass an index of the type the function supports. `bt_index_check` and `bt_index_
 
 ## Example
 
-*Illustrative* — B-tree checker needs a B-tree index.
+*Reproduced* — captured from `reproducers/scenarios/64_contrib_inspect_deep.sql`.
 
 ```sql
-SELECT bt_index_check('my_btree_index'::regclass);
+SELECT gin_index_check('repro.big_pkey');
+```
+
+Produces:
+
+```text
+ERROR:  expected "gin" index as targets for verification
 ```
 
 ## Related

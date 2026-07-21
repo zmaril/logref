@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/contrib/pg_walinspect/pg_walinspect.c:110"
-reproduced: false
+reproduced: true
 ---
 
 # `could not read WAL at LSN %X/%08X`
@@ -28,11 +28,16 @@ Pass an LSN that falls inside the currently available WAL. Bound your query with
 
 ## Example
 
-*Illustrative* — an out-of-range LSN.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
 
 ```sql
-SELECT * FROM pg_get_wal_records_info('FF/FFFFFFFF', 'FF/FFFFFFFF');
--- ERROR:  could not read WAL at LSN FF/FFFFFFFF
+SELECT * FROM pg_get_wal_record_info('0/0');
+```
+
+Produces:
+
+```text
+ERROR:  could not read WAL at LSN 0/00000000
 ```
 
 ## Related

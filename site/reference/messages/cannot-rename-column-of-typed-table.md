@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:3879"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot rename column of typed table`
@@ -28,7 +28,13 @@ Rename the attribute on the underlying composite type with `ALTER TYPE ... RENAM
 
 ## Example
 
-*Illustrative* — renaming a typed-table column.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
+
+```sql
+ALTER TABLE s35.typedtab RENAME COLUMN a TO z;
+```
+
+Produces:
 
 ```text
 ERROR:  cannot rename column of typed table

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/aclchk.c:1212"
   - "postgres/src/backend/catalog/aclchk.c:1223"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use IN SCHEMA clause when using %s`
@@ -29,10 +29,16 @@ Choose one scoping mechanism: either use `IN SCHEMA` alone, or the other form al
 
 ## Example
 
-*Illustrative* — combining IN SCHEMA with a conflicting form.
+*Reproduced* — captured from `reproducers/scenarios/49_rls_policies_defaclr.sql`.
+
+```sql
+ALTER DEFAULT PRIVILEGES IN SCHEMA acl49 GRANT USAGE ON SCHEMAS TO acl_low;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot use IN SCHEMA clause when using GRANT ON SCHEMAS
+ERROR:  cannot use IN SCHEMA clause when using GRANT/REVOKE ON SCHEMAS
 ```
 
 ## Related

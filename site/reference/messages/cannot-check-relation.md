@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/contrib/amcheck/verify_heapam.c:337"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot check relation "%s"`
@@ -28,10 +28,16 @@ Point the check at a supported relation kind in a checkable state. Review the ve
 
 ## Example
 
-*Illustrative* — checking an unsupported relation.
+*Reproduced* — captured from `reproducers/scenarios/43_contrib_fdw_indexam.sql`.
+
+```sql
+SELECT verify_heapam(relation => 'repro.child_v');
+```
+
+Produces:
 
 ```text
-ERROR:  cannot check relation "r"
+ERROR:  cannot check relation "child_v"
 ```
 
 ## Related

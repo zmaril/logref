@@ -9,7 +9,7 @@ sqlstate:
     code: "42703"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:20541"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" named in partition key does not exist`
@@ -28,11 +28,16 @@ Use a column that exists on the table in the partition key, or add the column to
 
 ## Example
 
-*Illustrative* — a partition key naming a missing column.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-CREATE TABLE t (a int) PARTITION BY RANGE (b);
--- ERROR:  column "b" named in partition key does not exist
+CREATE TABLE repro.ct15 (a serial, b bigserial, PRIMARY KEY (a)) PARTITION BY HASH (nonexistent);
+```
+
+Produces:
+
+```text
+ERROR:  column "nonexistent" named in partition key does not exist
 ```
 
 ## Related

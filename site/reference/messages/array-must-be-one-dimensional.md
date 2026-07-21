@@ -18,7 +18,7 @@ call_sites:
   - "postgres/contrib/ltree/lquery_op.c:296"
   - "postgres/contrib/ltree/ltree_gist.c:598"
   - "postgres/src/backend/replication/logical/logicalfuncs.c:154"
-reproduced: false
+reproduced: true
 ---
 
 # `array must be one-dimensional`
@@ -37,10 +37,10 @@ Flatten the array to one dimension, or ensure it was constructed as 1-D. Check `
 
 ## Example
 
-*Illustrative* — a 2-D array where 1-D is required.
+*Reproduced* — captured from `reproducers/scenarios/62_contrib_type_input_deep.sql`.
 
 ```sql
-SELECT ('{{1,2},{3,4}}'::int[]) & '{1}'::int[];
+SELECT '{{a}}'::ltree[] <@ 'a'::ltree;
 ```
 
 Produces:

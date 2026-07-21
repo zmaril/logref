@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/dependency.c:843"
   - "postgres/src/backend/catalog/dependency.c:1080"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot drop %s because %s requires it`
@@ -29,11 +29,16 @@ Drop or alter the dependent object first, or add `CASCADE` to remove both togeth
 
 ## Example
 
-*Illustrative* — a type still used by a column.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-DROP TYPE mood;
--- ERROR:  cannot drop type mood because other objects depend on it
+DROP INDEX s35.pidx1_a_idx;
+```
+
+Produces:
+
+```text
+ERROR:  cannot drop index s35.pidx1_a_idx because index s35.pidx_idx requires it
 ```
 
 ## Related

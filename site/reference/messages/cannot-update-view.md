@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/rewrite/rewriteHandler.c:3230"
   - "postgres/src/backend/rewrite/rewriteHandler.c:3266"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot update view "%s"`
@@ -29,11 +29,16 @@ Update the base table directly, or make the view updatable with an `INSTEAD OF U
 
 ## Example
 
-*Illustrative* — updating a non-updatable view.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-UPDATE order_summary SET total = 0;
--- ERROR:  cannot update view "order_summary"
+UPDATE repro.v_agg SET count = 1;
+```
+
+Produces:
+
+```text
+ERROR:  cannot update view "v_agg"
 ```
 
 ## Related

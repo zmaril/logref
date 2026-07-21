@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_expr.c:2877"
   - "postgres/src/backend/parser/parse_expr.c:3073"
-reproduced: false
+reproduced: true
 ---
 
 # `unequal number of entries in row expressions`
@@ -29,7 +29,13 @@ Make both sides of the row comparison have the same number of fields. Adjust the
 
 ## Example
 
-*Illustrative* — comparing rows of different widths.
+*Reproduced* — captured from `reproducers/scenarios/33_grant_roles_coerce_dml.sql`.
+
+```sql
+SELECT ROW(1,2) = ROW(1,2,3);
+```
+
+Produces:
 
 ```text
 ERROR:  unequal number of entries in row expressions

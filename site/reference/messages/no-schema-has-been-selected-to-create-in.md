@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/catalog/namespace.c:3592"
   - "postgres/src/backend/commands/extension.c:1986"
   - "postgres/src/backend/commands/extension.c:1992"
-reproduced: false
+reproduced: true
 ---
 
 # `no schema has been selected to create in`
@@ -31,11 +31,16 @@ Either schema-qualify the new object (`CREATE TABLE myschema.foo`) or set a `sea
 
 ## Example
 
-*Illustrative* — creating into an empty search_path.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-SET search_path TO '';
-CREATE TABLE foo (id int);  -- no schema has been selected to create in
+CREATE TABLE unqualified_t (a int);
+```
+
+Produces:
+
+```text
+ERROR:  no schema has been selected to create in
 ```
 
 ## Related

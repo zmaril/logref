@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/copy.c:498"
   - "postgres/src/backend/commands/copy.c:556"
-reproduced: false
+reproduced: true
 ---
 
 # `COPY %s "%s" not recognized`
@@ -29,11 +29,16 @@ Check the `COPY` syntax for the server version and correct the option name or pl
 
 ## Example
 
-*Illustrative* — an unknown COPY option.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-COPY t FROM STDIN (FORMAT wibble);
--- ERROR:  COPY format "wibble" not recognized
+COPY repro.parent FROM STDIN WITH (FORMAT csv, ON_ERROR nonsense);
+```
+
+Produces:
+
+```text
+ERROR:  COPY ON_ERROR "nonsense" not recognized
 ```
 
 ## Related

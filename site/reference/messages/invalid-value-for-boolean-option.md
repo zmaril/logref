@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/access/common/reloptions.c:1713"
   - "postgres/src/backend/access/common/reloptions.c:1727"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid value for boolean option "%s": %s`
@@ -29,10 +29,16 @@ Use a recognized boolean literal: `true`/`false`, `on`/`off`, `yes`/`no`, or `1`
 
 ## Example
 
-*Illustrative* — a non-boolean value for a boolean option.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-OPTIONS ( use_remote_estimate 'maybe' )  -- expects true/false
+ALTER TABLE repro.at SET (autovacuum_enabled = maybe);
+```
+
+Produces:
+
+```text
+ERROR:  invalid value for boolean option "autovacuum_enabled": maybe
 ```
 
 ## Related

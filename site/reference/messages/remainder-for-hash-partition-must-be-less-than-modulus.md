@@ -12,7 +12,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_utilcmd.c:4890"
   - "postgres/src/backend/partitioning/partbounds.c:4801"
-reproduced: false
+reproduced: true
 ---
 
 # `remainder for hash partition must be less than modulus`
@@ -31,7 +31,13 @@ Choose a remainder in the range `0` to `m-1`. Each hash partition of a given mod
 
 ## Example
 
-*Illustrative* — a hash partition whose remainder is not below its modulus.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
+
+```sql
+CREATE TABLE s36.hp1 PARTITION OF s36.hp FOR VALUES WITH (MODULUS 4, REMAINDER 5);
+```
+
+Produces:
 
 ```text
 ERROR:  remainder for hash partition must be less than modulus

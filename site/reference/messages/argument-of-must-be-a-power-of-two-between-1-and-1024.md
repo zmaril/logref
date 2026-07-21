@@ -7,7 +7,7 @@ level: [FATAL]
 call_sites:
   - "postgres/src/bin/initdb/initdb.c:3497"
   - "postgres/src/bin/pg_resetwal/pg_resetwal.c:332"
-reproduced: false
+reproduced: true
 ---
 
 # `argument of %s must be a power of two between 1 and 1024`
@@ -26,10 +26,10 @@ Choose a power of two within the allowed range, such as 1, 2, 4, 8, and so on up
 
 ## Example
 
-*Illustrative* — a non-power-of-two option value.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-initdb: error: argument of --wal-segsize must be a power of two between 1 and 1024
+FATAL:  argument of %s must be a power of two between 1 and 1024
 ```
 
 ## Related

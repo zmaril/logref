@@ -30,7 +30,7 @@ call_sites:
   - "postgres/src/bin/pg_archivecleanup/pg_archivecleanup.c:165"
   - "postgres/src/bin/pg_rewind/file_ops.c:206"
   - "postgres/src/common/rmtree.c:97"
-reproduced: false
+reproduced: true
 ---
 
 # `could not remove file "%s": %m`
@@ -49,10 +49,10 @@ Read `%m`. `Permission denied` is an ownership problem on the data directory. `N
 
 ## Example
 
-*Illustrative* — cleanup of a temp file the server cannot unlink.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier4__replication_standby`). The site emits a background log record; the captured line was:
 
 ```text
-WARNING:  could not remove file "base/pgsql_tmp/pgsql_tmp999.0": Permission denied
+DEBUG:  could not remove file "pg_wal/000000020000000000000004": No such file or directory
 ```
 
 ## Related

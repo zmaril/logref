@@ -9,7 +9,7 @@ sqlstate:
     code: "22026"
 call_sites:
   - "postgres/src/backend/utils/adt/varbit.c:1340"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot XOR bit strings of different sizes`
@@ -28,11 +28,16 @@ Make both operands the same length before the operation. Pad or truncate one sid
 
 ## Example
 
-*Illustrative* — XOR on mismatched lengths.
+*Reproduced* — captured from `reproducers/scenarios/15_types_extended.sql`.
 
 ```sql
-SELECT B'101' # B'1100';
--- ERROR:  cannot XOR bit strings of different sizes
+SELECT '101'::bit(3) # '1'::bit(1);
+```
+
+Produces:
+
+```text
+ERROR:  cannot XOR bit strings of different sizes
 ```
 
 ## Related

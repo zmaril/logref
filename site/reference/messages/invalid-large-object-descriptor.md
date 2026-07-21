@@ -16,7 +16,7 @@ call_sites:
   - "postgres/src/backend/libpq/be-fsstubs.c:281"
   - "postgres/src/backend/libpq/be-fsstubs.c:304"
   - "postgres/src/backend/libpq/be-fsstubs.c:563"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid large-object descriptor: %d`
@@ -35,16 +35,16 @@ Open the large object with `lo_open` inside the same transaction where you read/
 
 ## Example
 
-*Illustrative* — using a stale large-object descriptor.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
 
 ```sql
-SELECT lo_read(999, 10);
+SELECT loread(-1, -1);
 ```
 
 Produces:
 
 ```text
-ERROR:  invalid large-object descriptor: 999
+ERROR:  invalid large-object descriptor: -1
 ```
 
 ## Related

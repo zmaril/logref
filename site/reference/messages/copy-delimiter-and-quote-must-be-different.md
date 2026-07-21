@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/commands/copy.c:903"
-reproduced: false
+reproduced: true
 ---
 
 # `COPY delimiter and quote must be different`
@@ -28,11 +28,16 @@ Set the delimiter and quote to different characters. For example, keep the defau
 
 ## Example
 
-*Illustrative* — identical delimiter and quote.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-COPY t TO STDOUT WITH (FORMAT csv, DELIMITER '"', QUOTE '"');
--- ERROR:  COPY delimiter and quote must be different
+COPY repro.parent TO STDOUT WITH (FORMAT csv, DELIMITER ',', QUOTE ',');
+```
+
+Produces:
+
+```text
+ERROR:  COPY delimiter and quote must be different
 ```
 
 ## Related

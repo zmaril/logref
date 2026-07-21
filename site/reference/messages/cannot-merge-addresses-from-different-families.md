@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/utils/adt/network.c:1416"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot merge addresses from different families`
@@ -28,7 +28,13 @@ Operate on addresses of a single family. Filter or convert the values so both ar
 
 ## Example
 
-*Illustrative* — merging IPv4 with IPv6.
+*Reproduced* — captured from `reproducers/scenarios/20_network_geo_enum_ts_xml.sql`.
+
+```sql
+SELECT inet_merge('1.2.3.4'::inet, '::1'::inet);
+```
+
+Produces:
 
 ```text
 ERROR:  cannot merge addresses from different families

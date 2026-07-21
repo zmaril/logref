@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:8577"
   - "postgres/src/backend/commands/tablecmds.c:8673"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" of relation "%s" is not an identity column`
@@ -29,11 +29,16 @@ Target a column that is actually an identity column, or use `IF EXISTS` where su
 
 ## Example
 
-*Illustrative* — dropping identity from a plain column.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-ALTER TABLE t ALTER COLUMN name DROP IDENTITY;
--- ERROR:  column "name" of relation "t" is not an identity column
+ALTER TABLE repro.at ALTER COLUMN a DROP IDENTITY;
+```
+
+Produces:
+
+```text
+ERROR:  column "a" of relation "at" is not an identity column
 ```
 
 ## Related

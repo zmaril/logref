@@ -32,7 +32,7 @@ call_sites:
   - "postgres/src/common/rmtree.c:63"
   - "postgres/src/timezone/pgtz.c:387"
   - "postgres/src/timezone/pgtz.c:440"
-reproduced: false
+reproduced: true
 ---
 
 # `could not open directory "%s": %m`
@@ -51,10 +51,16 @@ Read `%m`. For `Permission denied`, ensure the directory and its parents are own
 
 ## Example
 
-*Illustrative* — a tablespace directory the server user cannot read.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
+
+```sql
+SELECT pg_ls_dir('/nonexistent_dir_xyz');
+```
+
+Produces:
 
 ```text
-ERROR:  could not open directory "/mnt/data/pg_tblspc": Permission denied
+ERROR:  could not open directory "/nonexistent_dir_xyz": No such file or directory
 ```
 
 ## Related

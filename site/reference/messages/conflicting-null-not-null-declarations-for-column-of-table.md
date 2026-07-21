@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/parser/parse_utilcmd.c:761"
   - "postgres/src/backend/parser/parse_utilcmd.c:869"
   - "postgres/src/backend/parser/parse_utilcmd.c:902"
-reproduced: false
+reproduced: true
 ---
 
 # `conflicting NULL/NOT NULL declarations for column "%s" of table "%s"`
@@ -31,10 +31,16 @@ Declare each column's nullability once. Choose `NOT NULL` or leave it nullable, 
 
 ## Example
 
-*Illustrative* — contradictory nullability.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-CREATE TABLE t (a int NULL NOT NULL);
+CREATE TABLE repro.ct22 (a int NOT NULL NULL);
+```
+
+Produces:
+
+```text
+ERROR:  conflicting NULL/NOT NULL declarations for column "a" of table "ct22"
 ```
 
 ## Related

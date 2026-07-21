@@ -9,7 +9,7 @@ sqlstate:
     code: "39000"
 call_sites:
   - "postgres/contrib/pgcrypto/pgcrypto.c:332"
-reproduced: false
+reproduced: true
 ---
 
 # `decrypt error: %s`
@@ -28,10 +28,16 @@ Confirm you are decrypting with the exact key, cipher, and mode used to encrypt 
 
 ## Example
 
-*Illustrative* — decrypting with the wrong key.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
 
 ```sql
-SELECT decrypt(ciphertext, 'wrongkey', 'aes') FROM vault;  -- decrypt error: ...
+SELECT decrypt('\x00'::bytea, 'k'::bytea, 'aes');
+```
+
+Produces:
+
+```text
+ERROR:  decrypt error: Decryption failed
 ```
 
 ## Related

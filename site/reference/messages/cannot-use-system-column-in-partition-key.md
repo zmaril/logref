@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:20549"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use system column "%s" in partition key`
@@ -28,11 +28,16 @@ Use ordinary user columns or expressions over them as the partition key. Remove 
 
 ## Example
 
-*Illustrative* — a system column partition key.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-CREATE TABLE t (a int) PARTITION BY RANGE (ctid);
--- ERROR:  cannot use system column "ctid" in partition key
+CREATE TABLE s36.pk_sys (a int) PARTITION BY RANGE (xmin);
+```
+
+Produces:
+
+```text
+ERROR:  cannot use system column "xmin" in partition key
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:4038"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot rename system column "%s"`
@@ -28,10 +28,16 @@ Rename only user-defined columns. Leave system columns as they are; they are man
 
 ## Example
 
-*Illustrative* — renaming a system column.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
+
+```sql
+ALTER TABLE s35.base RENAME COLUMN xmin TO x;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot rename system column "ctid"
+ERROR:  cannot rename system column "xmin"
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:848"
   - "postgres/src/backend/commands/functioncmds.c:1454"
-reproduced: false
+reproduced: true
 ---
 
 # `ROWS must be positive`
@@ -29,7 +29,13 @@ Provide a positive estimate for `ROWS` — a rough count of the rows the functio
 
 ## Example
 
-*Illustrative* — a non-positive ROWS estimate.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+ALTER FUNCTION repro.srf() ROWS -1;
+```
+
+Produces:
 
 ```text
 ERROR:  ROWS must be positive

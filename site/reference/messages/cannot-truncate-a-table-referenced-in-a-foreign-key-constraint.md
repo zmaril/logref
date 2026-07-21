@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/catalog/heap.c:3763"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot truncate a table referenced in a foreign key constraint`
@@ -28,11 +28,16 @@ Truncate the referencing tables together in one command, or add `CASCADE` to inc
 
 ## Example
 
-*Illustrative* — truncating a referenced table alone.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-TRUNCATE orders;
--- ERROR:  cannot truncate a table referenced in a foreign key constraint
+TRUNCATE repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  cannot truncate a table referenced in a foreign key constraint
 ```
 
 ## Related

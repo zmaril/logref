@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/jsonfuncs.c:1883"
   - "postgres/src/backend/utils/adt/jsonfuncs.c:1920"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot get array length of a scalar`
@@ -29,11 +29,16 @@ Check the JSON type with `jsonb_typeof(val) = 'array'` before calling the functi
 
 ## Example
 
-*Illustrative* — array-length on a scalar.
+*Reproduced* — captured from `reproducers/scenarios/19_json_sqljson.sql`.
 
 ```sql
-SELECT jsonb_array_length('42');
--- ERROR:  cannot get array length of a scalar
+SELECT jsonb_array_length('5');
+```
+
+Produces:
+
+```text
+ERROR:  cannot get array length of a scalar
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/extension.c:825"
   - "postgres/src/bin/scripts/createdb.c:175"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not a valid encoding name`
@@ -29,10 +29,10 @@ Use a supported encoding name, such as `UTF8` or `LATIN1`. List the valid names 
 
 ## Example
 
-*Illustrative* — an unrecognized encoding name.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
-```sql
-CREATE DATABASE d ENCODING 'UTF-8x';  -- not a valid encoding name
+```text
+FATAL:  "%s" is not a valid encoding name
 ```
 
 ## Related

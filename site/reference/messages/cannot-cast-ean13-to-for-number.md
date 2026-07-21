@@ -9,7 +9,7 @@ sqlstate:
     code: "22P02"
 call_sites:
   - "postgres/contrib/isn/isn.c:409"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot cast EAN13(%s) to %s for number: "%s"`
@@ -28,10 +28,16 @@ Only cast EAN13 values whose prefix belongs to the target subtype. Keep values t
 
 ## Example
 
-*Illustrative* — an out-of-range EAN13 cast.
+*Reproduced* — captured from `reproducers/scenarios/62_contrib_type_input_deep.sql`.
+
+```sql
+SELECT '9771234567003'::ean13::isbn13;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot cast EAN13(978...) to isbn13 for number: "..."
+ERROR:  cannot cast EAN13(ISSN) to ISBN for number: "9771234567003"
 ```
 
 ## Related

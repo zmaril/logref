@@ -28,7 +28,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/jsonfuncs.c:4872"
   - "postgres/src/backend/utils/adt/jsonfuncs.c:4976"
   - "postgres/src/backend/utils/adt/jsonfuncs.c:5021"
-reproduced: false
+reproduced: true
 ---
 
 # `wrong number of array subscripts`
@@ -47,10 +47,10 @@ Match the subscript count to the array's dimensionality. Check `array_ndims(a)` 
 
 ## Example
 
-*Illustrative* — two subscripts on a one-dimensional array.
+*Reproduced* — captured from `reproducers/scenarios/62_contrib_type_input_deep.sql`.
 
 ```sql
-SELECT (ARRAY[1,2,3])[1][2];
+SELECT hstore('{{{a}}}'::text[]);
 ```
 
 Produces:

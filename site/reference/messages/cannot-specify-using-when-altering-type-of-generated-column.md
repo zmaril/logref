@@ -9,7 +9,7 @@ sqlstate:
     code: "42611"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:14962"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot specify USING when altering type of generated column`
@@ -28,11 +28,16 @@ Drop the `USING` clause. If the stored values need to change, alter the generati
 
 ## Example
 
-*Illustrative* — USING on a generated column.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-ALTER TABLE t ALTER COLUMN g TYPE bigint USING g::bigint;
--- ERROR:  cannot specify USING when altering type of generated column
+ALTER TABLE s37.gdep ALTER COLUMN b TYPE bigint USING b::bigint;
+```
+
+Produces:
+
+```text
+ERROR:  cannot specify USING when altering type of generated column
 ```
 
 ## Related

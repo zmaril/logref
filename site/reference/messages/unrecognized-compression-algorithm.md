@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/bin/pg_basebackup/pg_basebackup.c:2643"
   - "postgres/src/bin/pg_basebackup/pg_receivewal.c:802"
   - "postgres/src/bin/pg_dump/pg_dump.c:931"
-reproduced: false
+reproduced: true
 ---
 
 # `unrecognized compression algorithm: "%s"`
@@ -31,10 +31,10 @@ Use an algorithm this build supports. Check the spelling and that the server/too
 
 ## Example
 
-*Illustrative* — an unknown compression name.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-ERROR:  unrecognized compression algorithm: "brotli"
+FATAL:  unrecognized compression algorithm: "%s"
 ```
 
 ## Related

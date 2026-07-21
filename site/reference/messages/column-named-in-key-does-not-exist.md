@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/indexcmds.c:1974"
   - "postgres/src/backend/parser/parse_utilcmd.c:2739"
   - "postgres/src/backend/parser/parse_utilcmd.c:2928"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" named in key does not exist`
@@ -30,10 +30,16 @@ Correct the column name to one that exists on the table (`\d tablename` lists th
 
 ## Example
 
-*Illustrative* — indexing a nonexistent column.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-CREATE INDEX ON t (nope);  -- column "nope" named in key does not exist
+ALTER TABLE repro.at ADD UNIQUE (nosuchcol);
+```
+
+Produces:
+
+```text
+ERROR:  column "nosuchcol" named in key does not exist
 ```
 
 ## Related

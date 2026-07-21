@@ -6,7 +6,7 @@ api: [pg_log_error]
 level: [ERROR]
 call_sites:
   - "postgres/src/bin/pg_basebackup/pg_recvlogical.c:912"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use --create-slot or --start together with --drop-slot`
@@ -25,10 +25,10 @@ Run one mode at a time. Drop the slot in one command, then create or start strea
 
 ## Example
 
-*Illustrative* — drop combined with create or start.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-pg_recvlogical: error: cannot use --create-slot or --start together with --drop-slot
+ERROR:  cannot use --create-slot or --start together with --drop-slot
 ```
 
 ## Related

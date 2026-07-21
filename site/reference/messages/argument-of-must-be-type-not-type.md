@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_coerce.c:1174"
   - "postgres/src/backend/parser/parse_coerce.c:1222"
-reproduced: false
+reproduced: true
 ---
 
 # `argument of %s must be type %s, not type %s`
@@ -29,10 +29,16 @@ Convert the argument to the required type or replace it with an expression of th
 
 ## Example
 
-*Illustrative* — an argument of the wrong type.
+*Reproduced* — captured from `reproducers/scenarios/33_grant_roles_coerce_dml.sql`.
 
 ```sql
-SELECT * FROM t LIMIT 'x';  -- argument of LIMIT must be type integer, not type text
+DELETE FROM repro.parent WHERE (SELECT count(*) FROM repro.parent) ;
+```
+
+Produces:
+
+```text
+ERROR:  argument of WHERE must be type boolean, not type bigint
 ```
 
 ## Related

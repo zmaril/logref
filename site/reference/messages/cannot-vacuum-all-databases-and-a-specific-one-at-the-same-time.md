@@ -6,7 +6,7 @@ api: [pg_fatal]
 level: [FATAL]
 call_sites:
   - "postgres/src/bin/scripts/vacuumdb.c:331"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot vacuum all databases and a specific one at the same time`
@@ -25,10 +25,10 @@ Choose one scope. Use `--all` to vacuum every database, or name a single databas
 
 ## Example
 
-*Illustrative* — all plus a specific database.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-vacuumdb: error: cannot vacuum all databases and a specific one at the same time
+FATAL:  cannot vacuum all databases and a specific one at the same time
 ```
 
 ## Related

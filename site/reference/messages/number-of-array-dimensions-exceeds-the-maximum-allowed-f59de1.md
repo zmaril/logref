@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/arrayfuncs.c:6145"
   - "postgres/src/backend/utils/adt/arraysubs.c:150"
   - "postgres/src/backend/utils/adt/arraysubs.c:488"
-reproduced: false
+reproduced: true
 ---
 
 # `number of array dimensions (%d) exceeds the maximum allowed (%d)`
@@ -34,10 +34,10 @@ Reduce the nesting to at most 6 dimensions. Most cases are accidental — check 
 
 ## Example
 
-*Illustrative* — nesting an array past six dimensions.
+*Reproduced* — captured from `reproducers/scenarios/33_type_io_json_range_misc.sql`.
 
 ```sql
-SELECT ARRAY[ARRAY[ARRAY[ARRAY[ARRAY[ARRAY[ARRAY[1]]]]]]];
+SELECT array_fill(0, ARRAY[1,1,1,1,1,1,1]);
 ```
 
 Produces:

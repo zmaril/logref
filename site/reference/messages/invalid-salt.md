@@ -14,7 +14,7 @@ call_sites:
   - "postgres/contrib/pgcrypto/crypt-des.c:695"
   - "postgres/contrib/pgcrypto/crypt-des.c:743"
   - "postgres/contrib/pgcrypto/crypt-sha.c:138"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid salt`
@@ -33,10 +33,16 @@ Always generate the salt with `gen_salt()`, choosing the algorithm you want, and
 
 ## Example
 
-*Illustrative* — a hand-written salt rejected by crypt().
+*Reproduced* — captured from `reproducers/scenarios/65_contrib_fdw_dblink_crypto.sql`.
 
 ```sql
-SELECT crypt('secret', 'not-a-salt');
+SELECT crypt('pw', '_z');
+```
+
+Produces:
+
+```text
+ERROR:  invalid salt
 ```
 
 ## Related

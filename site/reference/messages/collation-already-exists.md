@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/pg_collation.c:108"
   - "postgres/src/backend/catalog/pg_collation.c:164"
-reproduced: false
+reproduced: true
 ---
 
 # `collation "%s" already exists`
@@ -29,11 +29,16 @@ Use `CREATE COLLATION IF NOT EXISTS` to skip when it already exists, choose a di
 
 ## Example
 
-*Illustrative* — recreating an existing collation.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-CREATE COLLATION mycoll (locale = 'en_US');
--- ERROR:  collation "mycoll" already exists
+CREATE COLLATION s37.c1 (LOCALE = 'C');
+```
+
+Produces:
+
+```text
+ERROR:  collation "c1" for encoding "SQL_ASCII" already exists
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:1616"
-reproduced: false
+reproduced: true
 ---
 
 # `DROP INDEX CONCURRENTLY does not support dropping multiple objects`
@@ -28,11 +28,16 @@ Issue one `DROP INDEX CONCURRENTLY` per index, in separate commands. If you can 
 
 ## Example
 
-*Illustrative* — dropping two indexes concurrently.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-DROP INDEX CONCURRENTLY idx_a, idx_b;
--- DROP INDEX CONCURRENTLY does not support dropping multiple objects
+DROP INDEX CONCURRENTLY s35.pidx_idx, s35.pidx1_a_idx;
+```
+
+Produces:
+
+```text
+ERROR:  DROP INDEX CONCURRENTLY does not support dropping multiple objects
 ```
 
 ## Related

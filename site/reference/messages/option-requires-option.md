@@ -8,7 +8,7 @@ call_sites:
   - "postgres/src/bin/pg_dump/pg_dump.c:864"
   - "postgres/src/bin/pg_dump/pg_dumpall.c:426"
   - "postgres/src/bin/pg_dump/pg_restore.c:460"
-reproduced: false
+reproduced: true
 ---
 
 # `option %s requires option %s`
@@ -27,10 +27,10 @@ Add the required companion option, or drop the dependent one. The message names 
 
 ## Example
 
-*Illustrative* — one option missing its required companion.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__66_dump`); see the reproducer for the triggering workload. It emits:
 
 ```text
-pg_dump: error: option --if-exists requires option --clean
+FATAL:  option %s requires option %s
 ```
 
 ## Related

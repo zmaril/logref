@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:18039"
   - "postgres/src/backend/commands/tablecmds.c:21159"
-reproduced: false
+reproduced: true
 ---
 
 # `circular inheritance not allowed`
@@ -29,11 +29,16 @@ Restructure the inheritance so the hierarchy forms a tree with no cycles. Remove
 
 ## Example
 
-*Illustrative* — a table inheriting from its own descendant.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-ALTER TABLE parent INHERIT child;  -- child already inherits from parent
--- ERROR:  circular inheritance not allowed
+ALTER TABLE s36.inhparent INHERIT s36.inhchild;
+```
+
+Produces:
+
+```text
+ERROR:  circular inheritance not allowed
 ```
 
 ## Related

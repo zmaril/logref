@@ -25,7 +25,7 @@ call_sites:
   - "postgres/src/backend/rewrite/rewriteDefine.c:278"
   - "postgres/src/backend/rewrite/rewriteDefine.c:785"
   - "postgres/src/backend/rewrite/rewriteRemove.c:72"
-reproduced: false
+reproduced: true
 ---
 
 # `permission denied: "%s" is a system catalog`
@@ -44,10 +44,10 @@ Use the proper DDL to achieve the change instead of editing the catalog. If you 
 
 ## Example
 
-*Illustrative* — a direct write to a catalog.
+*Reproduced* — captured from `reproducers/scenarios/49_rls_policies_defaclr.sql`.
 
 ```sql
-UPDATE pg_class SET relname = 'x' WHERE relname = 'y';
+CREATE POLICY p ON pg_class USING (true);
 ```
 
 Produces:

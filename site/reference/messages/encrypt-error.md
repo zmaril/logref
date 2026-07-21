@@ -9,7 +9,7 @@ sqlstate:
     code: "39000"
 call_sites:
   - "postgres/contrib/pgcrypto/pgcrypto.c:288"
-reproduced: false
+reproduced: true
 ---
 
 # `encrypt error: %s`
@@ -28,11 +28,16 @@ Check the cipher spec passed to `encrypt(data, key, 'aes')` — the algorithm an
 
 ## Example
 
-*Illustrative* — an unknown cipher name.
+*Reproduced* — captured from `reproducers/scenarios/65_contrib_fdw_dblink_crypto.sql`.
 
 ```sql
-SELECT encrypt('secret', 'key', 'nosuchcipher');
--- encrypt error: ...
+SELECT encrypt('data-not-block'::bytea, 'k'::bytea, 'aes-cbc/pad:none');
+```
+
+Produces:
+
+```text
+ERROR:  encrypt error: Encryption failed
 ```
 
 ## Related

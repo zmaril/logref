@@ -56,7 +56,7 @@ call_sites:
   - "postgres/src/common/file_utils.c:590"
   - "postgres/src/fe_utils/archive.c:86"
   - "postgres/src/fe_utils/version.c:60"
-reproduced: false
+reproduced: true
 ---
 
 # `could not stat file "%s": %m`
@@ -75,10 +75,16 @@ Read `%m`. For `No such file or directory`, confirm the path exists and was not 
 
 ## Example
 
-*Illustrative* — a tablespace symlink whose target was removed.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
+
+```sql
+SELECT pg_stat_file('/nonexistent_xyz');
+```
+
+Produces:
 
 ```text
-ERROR:  could not stat file "pg_tblspc/16500/PG_17_202406281/16384": No such file or directory
+ERROR:  could not stat file "/nonexistent_xyz": No such file or directory
 ```
 
 ## Related

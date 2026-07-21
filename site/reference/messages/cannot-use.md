@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/contrib/pgcrypto/pgcrypto.c:511"
-reproduced: false
+reproduced: true
 ---
 
 # `Cannot use "%s": %s`
@@ -28,10 +28,16 @@ Read the reason in the second half of the message and supply a value that satisf
 
 ## Example
 
-*Illustrative* — a rejected value with a reason.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT digest('x', 'nonexistent_algo');
+```
+
+Produces:
 
 ```text
-ERROR:  Cannot use "foo": not a valid choice
+ERROR:  Cannot use "nonexistent_algo": No such hash algorithm
 ```
 
 ## Related

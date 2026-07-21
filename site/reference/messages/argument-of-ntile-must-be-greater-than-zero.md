@@ -9,7 +9,7 @@ sqlstate:
     code: "22014"
 call_sites:
   - "postgres/src/backend/utils/adt/windowfuncs.c:447"
-reproduced: false
+reproduced: true
 ---
 
 # `argument of ntile must be greater than zero`
@@ -28,10 +28,16 @@ Pass a positive integer for the number of buckets. If the count is computed, ens
 
 ## Example
 
-*Illustrative* — ntile with a non-positive bucket count.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
 
 ```sql
-SELECT ntile(0) OVER (ORDER BY x) FROM t;  -- ERROR
+SELECT ntile(0) OVER () FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  argument of ntile must be greater than zero
 ```
 
 ## Related

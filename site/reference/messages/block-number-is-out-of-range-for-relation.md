@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/contrib/pageinspect/rawpage.c:179"
-reproduced: false
+reproduced: true
 ---
 
 # `block number %u is out of range for relation "%s"`
@@ -28,10 +28,16 @@ Choose a block number within range. Find the relation's size in blocks with `pg_
 
 ## Example
 
-*Illustrative* — a block past the end of a relation.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT get_raw_page('repro.parent', 999999);
+```
+
+Produces:
 
 ```text
-ERROR:  block number 100000 is out of range for relation "t"
+ERROR:  block number 999999 is out of range for relation "parent"
 ```
 
 ## Related

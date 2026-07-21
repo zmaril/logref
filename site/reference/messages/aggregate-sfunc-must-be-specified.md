@@ -9,7 +9,7 @@ sqlstate:
     code: "42P13"
 call_sites:
   - "postgres/src/backend/commands/aggregatecmds.c:204"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate sfunc must be specified`
@@ -28,7 +28,13 @@ Add the `sfunc` clause naming the transition function. It, together with the sta
 
 ## Example
 
-*Illustrative* — a definition missing sfunc.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE AGGREGATE repro.badagg4(int) (STYPE = int);
+```
+
+Produces:
 
 ```text
 ERROR:  aggregate sfunc must be specified

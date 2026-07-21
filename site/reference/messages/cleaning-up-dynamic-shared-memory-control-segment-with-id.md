@@ -7,7 +7,7 @@ level: [DEBUG2]
 call_sites:
   - "postgres/src/backend/storage/ipc/dsm.c:312"
   - "postgres/src/backend/storage/ipc/dsm.c:416"
-reproduced: false
+reproduced: true
 ---
 
 # `cleaning up dynamic shared memory control segment with ID %u`
@@ -26,10 +26,10 @@ No action is needed. Reclaiming an orphaned DSM control segment at startup is no
 
 ## Example
 
-*Illustrative* — cleaning up an old DSM control segment.
+*Reproduced* — captured by `reproducers/scenarios/55_checkpoint_bgwriter.sh`. The site emits a background log record; the captured line was:
 
 ```text
-DEBUG:  cleaning up dynamic shared memory control segment with ID 1234567
+DEBUG:  cleaning up dynamic shared memory control segment with ID 986502282
 ```
 
 ## Related

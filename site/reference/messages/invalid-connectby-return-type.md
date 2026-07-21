@@ -15,7 +15,7 @@ call_sites:
   - "postgres/contrib/tablefunc/tablefunc.c:1456"
   - "postgres/contrib/tablefunc/tablefunc.c:1495"
   - "postgres/contrib/tablefunc/tablefunc.c:1508"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid connectby return type`
@@ -34,11 +34,10 @@ Match the column definition list to `connectby`'s output: the key and parent-key
 
 ## Example
 
-*Illustrative* — a connectby call with mismatched output types.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
 
 ```sql
-SELECT * FROM connectby('t','id','parent','1',0)
-  AS t(id int, parent int, level int);   -- but id is text
+SELECT * FROM connectby('repro.parent', 'id', 'id', '1', 0, '~') AS t(a int, b int, c int);
 ```
 
 Produces:

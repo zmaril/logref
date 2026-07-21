@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/catalog/aclchk.c:1832"
   - "postgres/src/backend/commands/tablecmds.c:16860"
   - "postgres/src/backend/commands/tablecmds.c:20415"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is a composite type`
@@ -30,10 +30,16 @@ Point the command at the correct object kind. If you meant to change the type, u
 
 ## Example
 
-*Illustrative* — treating a composite type as a table.
+*Reproduced* — captured from `reproducers/scenarios/46_grant_revoke_privtypes.sql`.
 
 ```sql
-ALTER TABLE my_rowtype ADD COLUMN x int;  -- "my_rowtype" is a composite type
+GRANT SELECT ON acl46.ct TO PUBLIC;
+```
+
+Produces:
+
+```text
+ERROR:  "ct" is a composite type
 ```
 
 ## Related

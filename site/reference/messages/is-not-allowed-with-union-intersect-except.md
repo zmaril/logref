@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/parser/analyze.c:2184"
   - "postgres/src/backend/parser/analyze.c:2443"
   - "postgres/src/backend/parser/analyze.c:3747"
-reproduced: false
+reproduced: true
 ---
 
 # `%s is not allowed with UNION/INTERSECT/EXCEPT`
@@ -31,10 +31,16 @@ Move the clause to a place where it is allowed: wrap the set operation in a subq
 
 ## Example
 
-*Illustrative* — a locking clause on a UNION.
+*Reproduced* — captured from `reproducers/scenarios/38_planner_executor_runtime.sql`.
 
 ```sql
-SELECT id FROM a UNION SELECT id FROM b FOR UPDATE;
+SELECT id FROM repro.parent UNION SELECT id FROM repro.child FOR UPDATE;
+```
+
+Produces:
+
+```text
+ERROR:  FOR UPDATE is not allowed with UNION/INTERSECT/EXCEPT
 ```
 
 ## Related

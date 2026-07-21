@@ -9,7 +9,7 @@ sqlstate:
     code: "39000"
 call_sites:
   - "postgres/contrib/pgcrypto/pgcrypto.c:439"
-reproduced: false
+reproduced: true
 ---
 
 # `decrypt_iv error: %s`
@@ -28,10 +28,16 @@ Use the same key, IV, cipher, and mode that `encrypt_iv()` used. The IV must be 
 
 ## Example
 
-*Illustrative* — an IV of the wrong length.
+*Reproduced* — captured from `reproducers/scenarios/65_contrib_fdw_dblink_crypto.sql`.
 
 ```sql
-SELECT decrypt_iv(ciphertext, key, 'short', 'aes') FROM vault;  -- decrypt_iv error: ...
+SELECT decrypt_iv('\x00'::bytea, 'k'::bytea, 'iv'::bytea, 'aes');
+```
+
+Produces:
+
+```text
+ERROR:  decrypt_iv error: Decryption failed
 ```
 
 ## Related

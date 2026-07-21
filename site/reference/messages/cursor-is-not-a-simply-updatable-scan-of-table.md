@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/executor/execCurrent.c:167"
   - "postgres/src/backend/executor/execCurrent.c:226"
   - "postgres/src/backend/executor/execCurrent.c:237"
-reproduced: false
+reproduced: true
 ---
 
 # `cursor "%s" is not a simply updatable scan of table "%s"`
@@ -30,11 +30,16 @@ Declare the cursor as a simple `SELECT` over the single target table (optionally
 
 ## Example
 
-*Illustrative* — CURRENT OF on a non-updatable cursor.
+*Reproduced* — captured from `reproducers/scenarios/39_cte_cursors_prepared_lock.sql`.
 
 ```sql
-DECLARE c CURSOR FOR SELECT * FROM a JOIN b USING (id);
-UPDATE a SET x=1 WHERE CURRENT OF c;  -- not a simply updatable scan
+UPDATE repro.parent SET label='x' WHERE CURRENT OF cs;
+```
+
+Produces:
+
+```text
+ERROR:  cursor "cs" is not a simply updatable scan of table "parent"
 ```
 
 ## Related

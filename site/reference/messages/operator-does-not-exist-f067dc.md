@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/operatorcmds.c:419"
   - "postgres/src/backend/parser/parse_oper.c:120"
   - "postgres/src/backend/parser/parse_oper.c:648"
-reproduced: false
+reproduced: true
 ---
 
 # `operator does not exist: %s`
@@ -30,10 +30,16 @@ Name an operator that exists, with its exact operand types. List operators with 
 
 ## Example
 
-*Illustrative* — referencing an operator that is not defined.
+*Reproduced* — captured from `reproducers/scenarios/21_ddl_objects.sql`.
 
 ```sql
-ALTER OPERATOR FAMILY fam USING btree ADD OPERATOR 1 === (int, int);  -- === does not exist
+DROP OPERATOR repro.+(int, int);
+```
+
+Produces:
+
+```text
+ERROR:  operator does not exist: integer repro.+ integer
 ```
 
 ## Related

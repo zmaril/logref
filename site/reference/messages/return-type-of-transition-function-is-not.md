@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/pg_aggregate.c:244"
   - "postgres/src/backend/catalog/pg_aggregate.c:288"
-reproduced: false
+reproduced: true
 ---
 
 # `return type of transition function %s is not %s`
@@ -29,10 +29,16 @@ Make the transition function return exactly the declared state type (`stype`). A
 
 ## Example
 
-*Illustrative* — a transition function whose result is not the state type.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE AGGREGATE repro.agg_tr(int) (SFUNC = int4eq, STYPE = int);
+```
+
+Produces:
 
 ```text
-ERROR:  return type of transition function my_trans is not internal
+ERROR:  return type of transition function int4eq is not integer
 ```
 
 ## Related

@@ -6,7 +6,7 @@ api: [pg_log_error_detail]
 level: [ERROR]
 call_sites:
   - "postgres/src/bin/pg_waldump/pg_waldump.c:1141"
-reproduced: false
+reproduced: true
 ---
 
 # `Expecting "tablespace OID/database OID/relation filenode".`
@@ -25,10 +25,10 @@ Write the relation filter as `tablespaceOID/databaseOID/relfilenode`, all numeri
 
 ## Example
 
-*Illustrative* — the accompanying detail line.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
-```
-Expecting "tablespace OID/database OID/relation filenode".
+```text
+ERROR:  Expecting "tablespace OID/database OID/relation filenode".
 ```
 
 ## Related

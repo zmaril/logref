@@ -9,7 +9,7 @@ sqlstate:
     code: "08003"
 call_sites:
   - "postgres/contrib/dblink/dblink.c:187"
-reproduced: false
+reproduced: true
 ---
 
 # `connection "%s" not available`
@@ -28,11 +28,16 @@ Open the named connection first with `dblink_connect('name', '...')`, and make s
 
 ## Example
 
-*Illustrative* — using an unopened dblink connection.
+*Reproduced* — captured from `reproducers/scenarios/43_contrib_fdw_indexam.sql`.
 
 ```sql
-SELECT dblink('myconn', 'SELECT 1');
--- ERROR:  connection "myconn" not available
+SELECT dblink_disconnect('nonexistent_conn');
+```
+
+Produces:
+
+```text
+ERROR:  connection "nonexistent_conn" not available
 ```
 
 ## Related

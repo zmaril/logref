@@ -20,7 +20,7 @@ call_sites:
   - "postgres/contrib/pg_surgery/heap_surgery.c:376"
   - "postgres/src/backend/replication/logical/logicalfuncs.c:160"
   - "postgres/src/backend/utils/adt/waitfuncs.c:66"
-reproduced: false
+reproduced: true
 ---
 
 # `array must not contain nulls`
@@ -39,10 +39,10 @@ Remove NULL elements before the operation, for example with `array_remove(arr, N
 
 ## Example
 
-*Illustrative* — a NULL element where none is allowed.
+*Reproduced* — captured from `reproducers/scenarios/62_contrib_type_input_deep.sql`.
 
 ```sql
-SELECT '{a,b}'::ltree[] @> ARRAY['a', NULL]::ltree[];
+SELECT 'a'::ltree <@ ARRAY['a', NULL]::ltree[];
 ```
 
 Produces:

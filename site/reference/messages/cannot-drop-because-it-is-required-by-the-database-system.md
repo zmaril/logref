@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/dependency.c:551"
   - "postgres/src/backend/catalog/pg_shdepend.c:701"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot drop %s because it is required by the database system`
@@ -29,11 +29,16 @@ Do not drop built-in objects; they are part of the running system. If a cascade 
 
 ## Example
 
-*Illustrative* — dropping a pinned system object.
+*Reproduced* — captured from `reproducers/scenarios/48_roles_membership_reserved.sql`.
 
 ```sql
-DROP TYPE integer;
--- ERROR:  cannot drop type integer because it is required by the database system
+DROP ROLE pg_read_all_data;
+```
+
+Produces:
+
+```text
+ERROR:  cannot drop role pg_read_all_data because it is required by the database system
 ```
 
 ## Related

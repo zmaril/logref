@@ -67,7 +67,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/xml.c:2623"
   - "postgres/src/backend/utils/adt/xml.c:2643"
   - "postgres/src/backend/utils/adt/xml.c:2650"
-reproduced: false
+reproduced: true
 ---
 
 # `timestamp out of range`
@@ -86,10 +86,10 @@ Keep values within the representable range, and validate inputs before inserting
 
 ## Example
 
-*Illustrative* — arithmetic that overflows the timestamp range.
+*Reproduced* — captured from `reproducers/scenarios/32_adt_arithmetic_overflow.sql`.
 
 ```sql
-SELECT timestamp '294276-01-01' + interval '1000 years';
+SELECT '4713-01-01 BC'::timestamp - '1 year'::interval;
 ```
 
 Produces:

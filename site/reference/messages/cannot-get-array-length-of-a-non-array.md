@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/jsonfuncs.c:1887"
   - "postgres/src/backend/utils/adt/jsonfuncs.c:1906"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot get array length of a non-array`
@@ -29,11 +29,16 @@ Guard the call with `jsonb_typeof(val) = 'array'`, or restructure the query so o
 
 ## Example
 
-*Illustrative* — array-length on an object.
+*Reproduced* — captured from `reproducers/scenarios/19_json_sqljson.sql`.
 
 ```sql
 SELECT jsonb_array_length('{"a":1}');
--- ERROR:  cannot get array length of a non-array
+```
+
+Produces:
+
+```text
+ERROR:  cannot get array length of a non-array
 ```
 
 ## Related

@@ -9,7 +9,7 @@ call_sites:
   - "postgres/src/backend/storage/file/fd.c:513"
   - "postgres/src/backend/utils/fmgr/dfmgr.c:212"
   - "postgres/src/bin/initdb/initdb.c:1022"
-reproduced: false
+reproduced: true
 ---
 
 # `could not access file "%s": %m`
@@ -28,10 +28,16 @@ Read the `%m` text. `No such file or directory` means the path is absent — ver
 
 ## Example
 
-*Illustrative* — probing a missing file.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
+
+```sql
+SELECT pg_create_logical_replication_slot('badslot', 'nonexistent_plugin');
+```
+
+Produces:
 
 ```text
-ERROR:  could not access file "pg_twophase/0000000A": No such file or directory
+ERROR:  could not access file "nonexistent_plugin": No such file or directory
 ```
 
 ## Related

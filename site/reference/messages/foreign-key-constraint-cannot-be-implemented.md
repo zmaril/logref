@@ -12,7 +12,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:10578"
   - "postgres/src/backend/commands/tablecmds.c:10612"
-reproduced: false
+reproduced: true
 ---
 
 # `foreign key constraint "%s" cannot be implemented`
@@ -31,11 +31,16 @@ Make the referencing and referenced columns type-compatible (matching or implici
 
 ## Example
 
-*Illustrative* — mismatched key column types.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
+
+```sql
+ALTER TABLE s36.fkt ADD FOREIGN KEY (r) REFERENCES s36.pkt (id);
+```
+
+Produces:
 
 ```text
-ERROR:  foreign key constraint "fk" cannot be implemented
-DETAIL:  Key columns "a" and "b" are of incompatible types: integer and text.
+ERROR:  foreign key constraint "fkt_r_fkey" cannot be implemented
 ```
 
 ## Related

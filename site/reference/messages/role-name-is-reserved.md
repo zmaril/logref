@@ -14,7 +14,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/acl.c:5760"
   - "postgres/src/backend/utils/adt/acl.c:5766"
   - "postgres/src/backend/utils/adt/ddlutils.c:185"
-reproduced: false
+reproduced: true
 ---
 
 # `role name "%s" is reserved`
@@ -33,10 +33,16 @@ Choose a name that does not begin with `pg_`. That prefix is set aside for prede
 
 ## Example
 
-*Illustrative* — a reserved role name.
+*Reproduced* — captured from `reproducers/scenarios/48_roles_membership_reserved.sql`.
 
 ```sql
-CREATE ROLE pg_myrole;
+CREATE ROLE pg_acl_test;
+```
+
+Produces:
+
+```text
+ERROR:  role name "pg_acl_test" is reserved
 ```
 
 ## Related

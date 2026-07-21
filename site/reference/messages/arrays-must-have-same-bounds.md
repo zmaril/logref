@@ -9,7 +9,7 @@ sqlstate:
     code: "2202E"
 call_sites:
   - "postgres/contrib/hstore/hstore_io.c:668"
-reproduced: false
+reproduced: true
 ---
 
 # `arrays must have same bounds`
@@ -28,7 +28,13 @@ Make the arrays the same shape — same number of dimensions and the same lower/
 
 ## Example
 
-*Illustrative* — combining arrays of different bounds.
+*Reproduced* — captured from `reproducers/scenarios/41_contrib_input_errors.sql`.
+
+```sql
+SELECT hstore(ARRAY['a'], ARRAY['1','2']);
+```
+
+Produces:
 
 ```text
 ERROR:  arrays must have same bounds

@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/indexcmds.c:798"
   - "postgres/src/backend/commands/tablecmds.c:945"
   - "postgres/src/backend/commands/tablespace.c:1190"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot specify default tablespace for partitioned relations`
@@ -30,10 +30,16 @@ Put the tablespace on the partitions, not the parent: specify `TABLESPACE` on ea
 
 ## Example
 
-*Illustrative* — a tablespace on the partitioned parent.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-CREATE TABLE t (a int) PARTITION BY RANGE (a) TABLESPACE ts;  -- not allowed
+CREATE TABLE s35.pt_ts (a int) PARTITION BY RANGE (a) TABLESPACE pg_default;
+```
+
+Produces:
+
+```text
+ERROR:  cannot specify default tablespace for partitioned relations
 ```
 
 ## Related
