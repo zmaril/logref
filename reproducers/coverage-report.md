@@ -18,8 +18,8 @@ extracted catalog by `(basename, line)`.
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
 - Baseline (Tier 1, exact file:line): **245** (1.65%)
-- Tier 2-4 scenarios add **706** new distinct sites
-- **Combined: 951 of 14806 (6.42%)**
+- Tier 2-4 scenarios add **744** new distinct sites
+- **Combined: 989 of 14806 (6.68%)**
 
 ## New sites by tier
 
@@ -27,7 +27,7 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | tier | new sites |
 |---|--:|
-| Tier 2 — crafted-SQL error corpus + contrib | 513 |
+| Tier 2 — crafted-SQL error corpus + contrib | 551 |
 | Tier 3 — config / auth / SSL | 22 |
 | Tier 3-4 — multi-session concurrency | 7 |
 | Tier 4 — corruption / replication / resource / crash | 164 |
@@ -51,9 +51,13 @@ Attributed to the first scenario that fired each site (no double-counting).
 | `tier2__27_alter_table` | 25 |
 | `tier2__28_typecmds_domain_comment` | 20 |
 | `tier2__29_func_index_extension_ddl` | 24 |
+| `tier2__30_type_io_numeric_int` | 18 |
 | `tier2__31_createtable_view_trigger` | 23 |
+| `tier2__31_type_io_datetime` | 6 |
 | `tier2__32_adt_arithmetic_overflow` | 14 |
+| `tier2__32_type_io_net_geo_bit` | 3 |
 | `tier2__33_grant_roles_coerce_dml` | 8 |
+| `tier2__33_type_io_json_range_misc` | 11 |
 | `tier2__34_guc_vacuum_copy_xml` | 26 |
 | `tier2__35_ddl_object_lifecycle` | 24 |
 | `tier2__36_constraints_partitioning` | 21 |
@@ -101,15 +105,15 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | level | new sites |
 |---|--:|
-| ERROR | 483 |
+| ERROR | 520 |
 | LOG | 49 |
 | DEBUG1 | 46 |
 | DEBUG2 | 32 |
 | elevel | 23 |
 | DEBUG4 | 19 |
 | WARNING | 12 |
+| NOTICE | 11 |
 | FATAL | 10 |
-| NOTICE | 10 |
 | DEBUG3 | 9 |
 | log_replication_commands ? LOG : DEBUG1 | 3 |
 | IsPostmasterEnvironment ? LOG : NOTICE | 2 |
@@ -135,23 +139,23 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/commands/copy.c` | 12 |
 | `postgres/src/backend/commands/indexcmds.c` | 12 |
 | `postgres/src/backend/utils/misc/guc.c` | 12 |
+| `postgres/src/backend/utils/adt/jsonpath_exec.c` | 11 |
+| `postgres/src/backend/utils/adt/timestamp.c` | 11 |
 | `postgres/src/backend/commands/functioncmds.c` | 10 |
 | `postgres/contrib/postgres_fdw/option.c` | 9 |
+| `postgres/src/backend/catalog/namespace.c` | 9 |
 | `postgres/src/backend/commands/subscriptioncmds.c` | 9 |
 | `postgres/src/backend/parser/parse_utilcmd.c` | 9 |
 | `postgres/src/backend/tcop/postgres.c` | 9 |
-| `postgres/src/backend/utils/adt/timestamp.c` | 9 |
+| `postgres/src/backend/utils/adt/int.c` | 9 |
 | `postgres/src/backend/access/transam/xact.c` | 8 |
-| `postgres/src/backend/catalog/namespace.c` | 8 |
 | `postgres/src/backend/catalog/objectaddress.c` | 8 |
 | `postgres/src/backend/parser/analyze.c` | 8 |
+| `postgres/src/backend/utils/adt/int8.c` | 8 |
 | `postgres/src/backend/commands/vacuum.c` | 7 |
 | `postgres/src/backend/replication/logical/logical.c` | 7 |
 | `postgres/src/backend/replication/logical/snapbuild.c` | 7 |
 | `postgres/src/backend/replication/logical/worker.c` | 7 |
-| `postgres/contrib/amcheck/verify_nbtree.c` | 6 |
-| `postgres/contrib/hstore/hstore_io.c` | 6 |
-| `postgres/contrib/pgcrypto/pgcrypto.c` | 6 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 

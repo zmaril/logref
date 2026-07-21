@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 706,
-  "combined_total": 951,
+  "new_sites": 744,
+  "combined_total": 989,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -8418,6 +8418,460 @@
       "message": "invalid bound specification for a range partition",
       "scenarios": [
         "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 3405,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "improper qualified name (too many dotted names): %s",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/dropcmds.c",
+      "line": 522,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/arrayfuncs.c",
+      "line": 6145,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_PROGRAM_LIMIT_EXCEEDED"
+      ],
+      "message": "number of array dimensions (%d) exceeds the maximum allowed (%d)",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/cash.c",
+      "line": 160,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DIVISION_BY_ZERO"
+      ],
+      "message": "division by zero",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 1230,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "unit \"%s\" not supported for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 2331,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "unit \"%s\" not supported for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 2347,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unit \"%s\" not recognized for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 3136,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "unit \"%s\" not supported for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/float.c",
+      "line": 1565,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ARGUMENT_FOR_POWER_FUNCTION"
+      ],
+      "message": "a negative number raised to a non-integer power yields a complex result",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/geo_ops.c",
+      "line": 1169,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid line specification: must be two distinct points",
+      "scenarios": [
+        "tier2__32_type_io_net_geo_bit"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 886,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "integer out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 920,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 956,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1002,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1194,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DIVISION_BY_ZERO"
+      ],
+      "message": "division by zero",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1241,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1291,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "integer out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1359,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "integer out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 453,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 490,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 504,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 560,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 579,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DIVISION_BY_ZERO"
+      ],
+      "message": "division by zero",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 643,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 711,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonb.c",
+      "line": 655,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "key value must be scalar, not array, composite, or json",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonfuncs.c",
+      "line": 4981,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot delete path in scalar",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 968,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_SQL_JSON_SUBSCRIPT"
+      ],
+      "message": "jsonpath array subscript is out of bounds",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1020,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQL_JSON_ARRAY_NOT_FOUND"
+      ],
+      "message": "jsonpath array accessor can only be applied to an array",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1150,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQL_JSON_ARRAY_NOT_FOUND"
+      ],
+      "message": "jsonpath item method .%s() can only be applied to an array",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1232,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NON_NUMERIC_SQL_JSON_ITEM"
+      ],
+      "message": "NaN or Infinity is not allowed for jsonpath item method .%s()",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 2412,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NON_NUMERIC_SQL_JSON_ITEM"
+      ],
+      "message": "jsonpath item method .%s() can only be applied to a numeric value",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 3111,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQL_JSON_OBJECT_NOT_FOUND"
+      ],
+      "message": "jsonpath item method .%s() can only be applied to an object",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/network.c",
+      "line": 353,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid mask length: %d",
+      "scenarios": [
+        "tier2__32_type_io_net_geo_bit"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/network.c",
+      "line": 1958,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot subtract inet values of different sizes",
+      "scenarios": [
+        "tier2__32_type_io_net_geo_bit"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/pseudorandomfuncs.c",
+      "line": 80,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "setseed parameter %g is out of allowed range [-1,1]",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 2974,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "interval out of range",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 5759,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unit \"%s\" not recognized for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
       ]
     }
   ]
