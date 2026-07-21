@@ -10,18 +10,21 @@
 //!    format string into an anchored regex: literal runs are escaped verbatim,
 //!    each conversion spec (`%s`, `%d`, `%m`, width/precision/positional forms)
 //!    becomes a capture group sized to what it can render.
-//! 2. **Scanning** ([`Scanner`]) compiles every lowered pattern into a
-//!    `Vec<Regex>` and builds a **trigram prefilter** over each pattern's literal
-//!    runs (the same algorithm as the hand-tuned TS `ScanIndex` in
-//!    `site/src/scanner.ts`). A line is resolved by extracting its trigrams,
-//!    unioning the candidate patterns that share a trigram (plus a small
-//!    "always-check" set for patterns with no usable literal run — including bare
-//!    `%s`-style catch-alls), then running each candidate's `Regex::captures` to
-//!    confirm the match and pull the variable bits out. Because every literal run
-//!    must appear verbatim in any matching line, the prefilter is *sound*: it
-//!    only narrows the candidate set, and the real regex still verifies — so the
-//!    results are identical to the historical [`regex::RegexSet`] path (kept as
-//!    [`Scanner::scan_line_regexset`] for the equivalence cross-check).
+//! 2. **Scanning** ([`Scanner`]) resolves lines with a **specialized
+//!    printf-pattern matcher** ([`SpecMatcher`]): every lowered pattern is an
+//!    alternation-free anchored token sequence `lit₀ SPEC lit₁ …` over a tiny
+//!    capture-class set, so instead of running regexes the scanner (a) finds
+//!    candidate patterns with ONE Aho-Corasick pass over each pattern's anchor
+//!    literal (position-constrained, plus an always-candidate set for
+//!    zero-literal catch-alls), and (b) verifies each candidate with direct
+//!    byte loops that reproduce the regex crate's leftmost-first semantics
+//!    exactly — captures fall out as byte spans. Two older paths are retained:
+//!    the **trigram prefilter** + per-candidate `Regex`
+//!    ([`Scanner::scan_line_trigram`], the same algorithm as the hand-tuned TS
+//!    `ScanIndex` in `site/src/scanner.ts`) for benchmarking, and the
+//!    exhaustive [`regex::RegexSet`] path
+//!    ([`Scanner::scan_line_regexset`]) as the ground-truth oracle — all three
+//!    return identical results (the equivalence tests prove it).
 //!
 //! Unlike the TS scanner, the Rust `Scanner` stays *ground truth*: it does NOT
 //! exclude bare catch-alls or strip a log prefix — those are TS-side product
@@ -34,6 +37,8 @@
 
 use std::collections::HashMap;
 
+use aho_corasick::AhoCorasick;
+use memchr::memmem;
 use regex::{Regex, RegexSet, RegexSetBuilder};
 
 use crate::Index;
@@ -72,6 +77,63 @@ impl std::fmt::Display for LowerError {
 
 impl std::error::Error for LowerError {}
 
+/// The capture class a conversion spec lowers to — the tiny, closed set of
+/// shapes a printf-derived pattern can contain. Each variant corresponds 1:1 to
+/// a [`conversion_group`] regex fragment; the specialized matcher
+/// ([`Scanner::scan_line`]'s fast path) verifies each class with a direct byte
+/// loop instead of a regex, reproducing the regex crate's leftmost-first
+/// preference order exactly.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum SpecKind {
+    /// `%s` → `(.*?)` — lazy any-run (no `\n`), possibly empty.
+    Str,
+    /// `%d`/`%i` → `(-?\d+)` — greedy digits with optional sign.
+    Int,
+    /// `%u` → `(\d+)`.
+    Uint,
+    /// `%o` → `([0-7]+)`.
+    Oct,
+    /// `%x`/`%X` → `([0-9a-fA-F]+)`.
+    Hex,
+    /// Float conversions → `([-+0-9.eEpPxXaAfFnN]+)`.
+    Float,
+    /// `%c` → `(.)` — exactly one char (not `\n`).
+    Char,
+    /// `%p` → `(0x[0-9a-fA-F]+|\(nil\))`.
+    Ptr,
+    /// `%m` → `(.+?)` — lazy any-run (no `\n`), at least one char.
+    Errno,
+}
+
+impl SpecKind {
+    /// The minimum number of BYTES this class can consume in a match — the
+    /// specialized matcher's positional pruning uses these to bound where a
+    /// pattern's anchor literal can sit in a line.
+    fn min_bytes(self) -> usize {
+        match self {
+            SpecKind::Str => 0,
+            SpecKind::Int
+            | SpecKind::Uint
+            | SpecKind::Oct
+            | SpecKind::Hex
+            | SpecKind::Float
+            | SpecKind::Char
+            | SpecKind::Errno => 1,
+            // "0x" + one hex digit (the `(nil)` arm is longer).
+            SpecKind::Ptr => 3,
+        }
+    }
+}
+
+/// One token of a lowered format string: a literal run or a conversion spec.
+/// This is the interleaving [`Lowered::literals`]/[`Lowered::groups`] lose
+/// (`"%s%d"` vs `"%s x %d"`), which the specialized matcher needs.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) enum FmtTok {
+    Lit(String),
+    Spec(SpecKind),
+}
+
 /// A format string lowered to a regex, plus a couple of specificity signals.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Lowered {
@@ -96,6 +158,10 @@ pub struct Lowered {
     /// prefilter. `database "%s" does not exist` yields
     /// `['database "', '" does not exist']`. Mirrors the TS `Lowered.literals`.
     pub literals: Vec<String>,
+    /// The full token sequence (literal runs and specs, interleaved) — the
+    /// structure `literals`/`groups` alone lose. Consumed by the scanner's
+    /// specialized matcher; crate-internal so the public DTO shape is unchanged.
+    pub(crate) tokens: Vec<FmtTok>,
 }
 
 /// Consume a field-width-style token starting at `chars[i]`: a single `*`
@@ -151,24 +217,43 @@ fn parse_spec(chars: &[char], start: usize) -> Result<(char, usize), LowerError>
     Ok((chars[i], i + 1))
 }
 
-/// The regex fragment a conversion character lowers to, or `None` for `%n`
+/// The capture class a conversion character belongs to, or `None` for `%n`
 /// (which writes nothing to the output) and `Err` for anything unrecognized.
-fn conversion_group(conv: char) -> Result<Option<&'static str>, LowerError> {
-    let group = match conv {
-        's' => "(.*?)",
-        'd' | 'i' => r"(-?\d+)",
-        'u' => r"(\d+)",
-        'o' => r"([0-7]+)",
-        'x' | 'X' => r"([0-9a-fA-F]+)",
-        'e' | 'E' | 'f' | 'F' | 'g' | 'G' | 'a' | 'A' => r"([-+0-9.eEpPxXaAfFnN]+)",
-        'c' => "(.)",
-        'p' => r"(0x[0-9a-fA-F]+|\(nil\))",
+fn conversion_kind(conv: char) -> Result<Option<SpecKind>, LowerError> {
+    let kind = match conv {
+        's' => SpecKind::Str,
+        'd' | 'i' => SpecKind::Int,
+        'u' => SpecKind::Uint,
+        'o' => SpecKind::Oct,
+        'x' | 'X' => SpecKind::Hex,
+        'e' | 'E' | 'f' | 'F' | 'g' | 'G' | 'a' | 'A' => SpecKind::Float,
+        'c' => SpecKind::Char,
+        'p' => SpecKind::Ptr,
         // Postgres %m expands to strerror(errno) — arbitrary prose.
-        'm' => "(.+?)",
+        'm' => SpecKind::Errno,
         'n' => return Ok(None),
         other => return Err(LowerError::UnknownConversion(other)),
     };
-    Ok(Some(group))
+    Ok(Some(kind))
+}
+
+impl SpecKind {
+    /// The regex fragment this class lowers to (the capture group emitted into
+    /// [`Lowered::regex`]). The specialized matcher must agree with these
+    /// byte-for-byte — `scan_line_regexset` is the oracle that proves it.
+    fn regex_fragment(self) -> &'static str {
+        match self {
+            SpecKind::Str => "(.*?)",
+            SpecKind::Int => r"(-?\d+)",
+            SpecKind::Uint => r"(\d+)",
+            SpecKind::Oct => r"([0-7]+)",
+            SpecKind::Hex => r"([0-9a-fA-F]+)",
+            SpecKind::Float => r"([-+0-9.eEpPxXaAfFnN]+)",
+            SpecKind::Char => "(.)",
+            SpecKind::Ptr => r"(0x[0-9a-fA-F]+|\(nil\))",
+            SpecKind::Errno => "(.+?)",
+        }
+    }
 }
 
 /// Lower a Postgres/C `printf`-style format string into an anchored regex.
@@ -186,12 +271,19 @@ pub fn lower_format(fmt: &str) -> Result<Lowered, LowerError> {
     let mut spec_count = 0usize;
     let mut groups: Vec<String> = Vec::new();
     let mut literals: Vec<String> = Vec::new();
+    let mut tokens: Vec<FmtTok> = Vec::new();
     let mut i = 0;
 
-    fn flush(literal: &mut String, out: &mut String, literals: &mut Vec<String>) {
+    fn flush(
+        literal: &mut String,
+        out: &mut String,
+        literals: &mut Vec<String>,
+        tokens: &mut Vec<FmtTok>,
+    ) {
         if !literal.is_empty() {
             out.push_str(&regex::escape(literal));
-            literals.push(std::mem::take(literal));
+            literals.push(literal.clone());
+            tokens.push(FmtTok::Lit(std::mem::take(literal)));
         }
     }
 
@@ -211,15 +303,16 @@ pub fn lower_format(fmt: &str) -> Result<Lowered, LowerError> {
             continue;
         }
         let (conv, next) = parse_spec(&chars, i)?;
-        if let Some(group) = conversion_group(conv)? {
-            flush(&mut literal, &mut out, &mut literals);
-            out.push_str(group);
+        if let Some(kind) = conversion_kind(conv)? {
+            flush(&mut literal, &mut out, &mut literals, &mut tokens);
+            out.push_str(kind.regex_fragment());
             spec_count += 1;
             groups.push(conv.to_string());
+            tokens.push(FmtTok::Spec(kind));
         }
         i = next;
     }
-    flush(&mut literal, &mut out, &mut literals);
+    flush(&mut literal, &mut out, &mut literals, &mut tokens);
     out.push('$');
     Ok(Lowered {
         regex: out,
@@ -227,6 +320,7 @@ pub fn lower_format(fmt: &str) -> Result<Lowered, LowerError> {
         spec_count,
         groups,
         literals,
+        tokens,
     })
 }
 
@@ -333,6 +427,425 @@ pub struct BuildReport {
     pub compiled: usize,
 }
 
+/// A pattern compiled for the specialized matcher: its token sequence (literal
+/// ids into [`SpecMatcher::lits`] + spec classes) and cheap-reject metadata.
+struct MPat {
+    toks: Vec<MTok>,
+    /// Sum of every token's minimum byte width — a line shorter than this
+    /// cannot match.
+    min_len: usize,
+    /// Number of capture groups (== spec tokens).
+    spec_count: usize,
+}
+
+/// One token of a compiled pattern: a deduped literal id or a spec class.
+#[derive(Clone, Copy)]
+enum MTok {
+    Lit(u32),
+    Spec(SpecKind),
+}
+
+/// One fan-out entry of the anchor Aho-Corasick automaton: when AC pattern
+/// `ac_id` occurs in a line, pattern `pat` is a candidate iff the occurrence
+/// satisfies these positional constraints.
+struct AnchorEntry {
+    pat: u32,
+    /// The anchor is the pattern's FIRST token → its occurrence must start at
+    /// byte 0 (the pattern regex is `^`-anchored on it).
+    exact_start: bool,
+    /// Minimum bytes the tokens before the anchor can consume — an occurrence
+    /// starting earlier cannot belong to this pattern.
+    min_start: usize,
+    /// Minimum bytes the tokens after the anchor must consume — an occurrence
+    /// ending after `line.len() - min_tail` cannot belong to this pattern.
+    min_tail: usize,
+}
+
+/// 256-entry membership table for the float conversion class
+/// `[-+0-9.eEpPxXaAfFnN]`.
+const FLOAT_CLASS: [bool; 256] = {
+    let members = b"-+.0123456789eEpPxXaAfFnN";
+    let mut t = [false; 256];
+    let mut i = 0;
+    while i < members.len() {
+        t[members[i] as usize] = true;
+        i += 1;
+    }
+    t
+};
+
+/// Byte length of the UTF-8 char starting with lead byte `b` (call only on a
+/// char boundary of valid UTF-8, so 1 is the correct floor for stray values).
+#[inline]
+fn utf8_width(b: u8) -> usize {
+    match b {
+        0x00..=0x7F => 1,
+        0xC0..=0xDF => 2,
+        0xE0..=0xEF => 3,
+        _ => 4,
+    }
+}
+
+/// The purpose-built printf-pattern matcher [`Scanner::scan_line`] runs by
+/// default — the replacement for "42 candidate regexes per line".
+///
+/// Every lowered pattern is an alternation-free anchored token sequence
+/// `lit₀ SPEC lit₁ SPEC …` over the tiny [`SpecKind`] class set, so a general
+/// regex engine does strictly redundant work. This matcher does two things
+/// instead:
+///
+/// 1. **Candidates in one pass** — each pattern is anchored on ONE literal run
+///    (its first literal when it starts with one — then the occurrence must sit
+///    at byte 0 — otherwise its longest literal, with min-start/min-tail
+///    positional pruning). One case-sensitive Aho-Corasick sweep over the line
+///    finds every anchor occurrence of every pattern simultaneously. This is
+///    both sharper than the lowercased trigram buckets (case-sensitive, and
+///    position-constrained) and still sound: a matching line must contain every
+///    literal run verbatim at a compatible position, so the true match set is
+///    always a subset of the candidates. Zero-literal patterns (bare `%s`-style
+///    catch-alls) are unfilterable and always candidates, as before.
+/// 2. **Verification without a regex** — a candidate is confirmed by walking
+///    its token sequence with direct byte loops: literals are `memcmp`s, numeric
+///    classes are table lookups, and each lazy `%s`/`%m` gap jumps straight to
+///    the next literal's occurrences via a precompiled SIMD `memmem` finder.
+///    Backtracking follows the regex crate's leftmost-first preference order
+///    exactly (lazy gaps grow, greedy classes shrink, `%p` tries the `0x` arm
+///    first), so sites, ordering, and capture spans are byte-identical to
+///    [`Scanner::scan_line_regexset`] — the equivalence tests prove it.
+struct SpecMatcher {
+    /// Deduped literal runs across all patterns (shared, e.g., message tails).
+    lits: Vec<String>,
+    /// A precompiled substring finder per literal (SIMD-accelerated memmem).
+    finders: Vec<memmem::Finder<'static>>,
+    /// Per compiled pattern, aligned with `Scanner::regexes`.
+    pats: Vec<MPat>,
+    /// The anchor automaton over deduped anchor literals.
+    ac: AhoCorasick,
+    /// Fan-out: AC pattern id → the patterns anchored on that literal.
+    fanout: Vec<Vec<AnchorEntry>>,
+    /// Patterns with no literal run at all — candidates for every line.
+    no_lit: Vec<usize>,
+}
+
+impl SpecMatcher {
+    /// Compile every pattern's token sequence and build the anchor automaton.
+    fn build(per_pattern_tokens: &[Vec<FmtTok>]) -> Result<SpecMatcher, aho_corasick::BuildError> {
+        let mut lits: Vec<String> = Vec::new();
+        let mut lit_ids: HashMap<String, u32> = HashMap::new();
+        let mut pats: Vec<MPat> = Vec::new();
+        let mut no_lit: Vec<usize> = Vec::new();
+        // anchor literal id → AC slot, deduped; slots hold the literal ids so
+        // the automaton is built once `lits` is complete.
+        let mut anchor_ids: HashMap<u32, usize> = HashMap::new();
+        let mut anchor_lits: Vec<u32> = Vec::new();
+        let mut fanout: Vec<Vec<AnchorEntry>> = Vec::new();
+
+        for (pi, toks) in per_pattern_tokens.iter().enumerate() {
+            let mtoks: Vec<MTok> = toks
+                .iter()
+                .map(|t| match t {
+                    FmtTok::Lit(s) => {
+                        let next = lits.len() as u32;
+                        let id = *lit_ids.entry(s.clone()).or_insert_with(|| {
+                            lits.push(s.clone());
+                            next
+                        });
+                        MTok::Lit(id)
+                    }
+                    FmtTok::Spec(k) => MTok::Spec(*k),
+                })
+                .collect();
+            let width = |t: &MTok| match t {
+                MTok::Lit(id) => lits[*id as usize].len(),
+                MTok::Spec(k) => k.min_bytes(),
+            };
+            let min_len: usize = mtoks.iter().map(width).sum();
+            let spec_count = mtoks.iter().filter(|t| matches!(t, MTok::Spec(_))).count();
+
+            // Anchor selection: the first token when it is a literal (exact
+            // position 0), else the longest literal (ties → the earliest).
+            let anchor_tok = match mtoks.first() {
+                Some(MTok::Lit(_)) => Some(0),
+                _ => mtoks
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(i, t)| match t {
+                        MTok::Lit(id) => Some((i, lits[*id as usize].len())),
+                        MTok::Spec(_) => None,
+                    })
+                    .max_by(|a, b| a.1.cmp(&b.1).then(b.0.cmp(&a.0)))
+                    .map(|(i, _)| i),
+            };
+            match anchor_tok {
+                None => no_lit.push(pi),
+                Some(k) => {
+                    let MTok::Lit(lit_id) = mtoks[k] else {
+                        unreachable!("anchor token is a literal")
+                    };
+                    let min_start: usize = mtoks[..k].iter().map(width).sum();
+                    let min_tail: usize = mtoks[k + 1..].iter().map(width).sum();
+                    let slot = *anchor_ids.entry(lit_id).or_insert_with(|| {
+                        anchor_lits.push(lit_id);
+                        fanout.push(Vec::new());
+                        anchor_lits.len() - 1
+                    });
+                    fanout[slot].push(AnchorEntry {
+                        pat: pi as u32,
+                        exact_start: k == 0,
+                        min_start,
+                        min_tail,
+                    });
+                }
+            }
+            pats.push(MPat {
+                toks: mtoks,
+                min_len,
+                spec_count,
+            });
+        }
+
+        let ac = AhoCorasick::new(anchor_lits.iter().map(|&id| lits[id as usize].as_bytes()))?;
+        let finders = lits
+            .iter()
+            .map(|l| memmem::Finder::new(l.as_bytes()).into_owned())
+            .collect();
+        Ok(SpecMatcher {
+            lits,
+            finders,
+            pats,
+            ac,
+            fanout,
+            no_lit,
+        })
+    }
+
+    /// Candidate pattern indices for `line`: every pattern whose anchor literal
+    /// occurs at a compatible position, plus the zero-literal set — deduped and
+    /// ascending (the order the RegexSet oracle verifies in).
+    fn candidates(&self, line: &str) -> Vec<usize> {
+        let n = line.len();
+        let mut out: Vec<usize> = Vec::with_capacity(self.no_lit.len() + 8);
+        out.extend_from_slice(&self.no_lit);
+        for m in self.ac.find_overlapping_iter(line) {
+            for e in &self.fanout[m.pattern().as_usize()] {
+                if e.exact_start {
+                    if m.start() != 0 {
+                        continue;
+                    }
+                } else if m.start() < e.min_start {
+                    continue;
+                }
+                if m.end() + e.min_tail > n {
+                    continue;
+                }
+                out.push(e.pat as usize);
+            }
+        }
+        out.sort_unstable();
+        out.dedup();
+        out
+    }
+
+    /// Verify candidate `pi` against `line`, returning each capture group's
+    /// byte span on a match. Reproduces the anchored regex's leftmost-first
+    /// semantics exactly (same spans, not just the same yes/no).
+    fn verify(&self, pi: usize, line: &str) -> Option<Vec<(usize, usize)>> {
+        let p = &self.pats[pi];
+        if line.len() < p.min_len {
+            return None;
+        }
+        // Cheap suffix reject: a pattern ending in a literal needs it at EOL.
+        if let Some(MTok::Lit(id)) = p.toks.last() {
+            if !line
+                .as_bytes()
+                .ends_with(self.lits[*id as usize].as_bytes())
+            {
+                return None;
+            }
+        }
+        let mut caps = vec![(0usize, 0usize); p.spec_count];
+        self.match_toks(&p.toks, line, 0, &mut caps).then_some(caps)
+    }
+
+    /// The backtracking core: match the token tail `toks` against `line[pos..]`
+    /// (which must be consumed COMPLETELY — the pattern is `^…$`-anchored),
+    /// filling `caps` (one slot per remaining spec token). Choice points are
+    /// tried in the regex engine's preference order, so the first overall
+    /// success carries the oracle's capture spans.
+    fn match_toks(
+        &self,
+        mut toks: &[MTok],
+        line: &str,
+        mut pos: usize,
+        mut caps: &mut [(usize, usize)],
+    ) -> bool {
+        let b = line.as_bytes();
+        let n = b.len();
+        // Literals never backtrack: consume any run of them iteratively.
+        loop {
+            match toks.first() {
+                None => return pos == n,
+                Some(MTok::Lit(id)) => {
+                    let lit = self.lits[*id as usize].as_bytes();
+                    if !b[pos..].starts_with(lit) {
+                        return false;
+                    }
+                    pos += lit.len();
+                    toks = &toks[1..];
+                }
+                Some(MTok::Spec(_)) => break,
+            }
+        }
+        let Some((MTok::Spec(kind), rest)) = toks.split_first() else {
+            unreachable!("loop exits only at a spec token")
+        };
+        let (cap, tail_caps) = caps.split_first_mut().expect("one cap slot per spec");
+        caps = tail_caps;
+
+        match *kind {
+            SpecKind::Char => {
+                // `(.)` — exactly one char, not `\n`.
+                if pos >= n || b[pos] == b'\n' {
+                    return false;
+                }
+                let end = pos + utf8_width(b[pos]);
+                *cap = (pos, end);
+                self.match_toks(rest, line, end, caps)
+            }
+            SpecKind::Int => {
+                // `(-?\d+)`: `-?` greedily takes a '-', then greedy digits
+                // backtrack from the longest run down to one digit. (If the '-'
+                // has no digit after it, the empty `-?` alternative would need
+                // '-' to be a digit — it can't — so there is nothing to retry.)
+                let ds = if pos < n && b[pos] == b'-' {
+                    pos + 1
+                } else {
+                    pos
+                };
+                let mut e = ds;
+                while e < n && b[e].is_ascii_digit() {
+                    e += 1;
+                }
+                while e > ds {
+                    *cap = (pos, e);
+                    if self.match_toks(rest, line, e, caps) {
+                        return true;
+                    }
+                    e -= 1;
+                }
+                false
+            }
+            SpecKind::Uint | SpecKind::Oct | SpecKind::Hex | SpecKind::Float => {
+                // A greedy byte class: longest run first, shrink on failure.
+                let member = |c: u8| match *kind {
+                    SpecKind::Uint => c.is_ascii_digit(),
+                    SpecKind::Oct => (b'0'..=b'7').contains(&c),
+                    SpecKind::Hex => c.is_ascii_hexdigit(),
+                    _ => FLOAT_CLASS[c as usize],
+                };
+                let mut e = pos;
+                while e < n && member(b[e]) {
+                    e += 1;
+                }
+                while e > pos {
+                    *cap = (pos, e);
+                    if self.match_toks(rest, line, e, caps) {
+                        return true;
+                    }
+                    e -= 1;
+                }
+                false
+            }
+            SpecKind::Ptr => {
+                // `(0x[0-9a-fA-F]+|\(nil\))` — leftmost-first: the `0x` arm
+                // (greedy hex) before the `(nil)` arm. The two arms' prefixes
+                // are disjoint, so at most one can apply to a given position.
+                if b[pos..].starts_with(b"0x") {
+                    let hs = pos + 2;
+                    let mut e = hs;
+                    while e < n && b[e].is_ascii_hexdigit() {
+                        e += 1;
+                    }
+                    while e > hs {
+                        *cap = (pos, e);
+                        if self.match_toks(rest, line, e, caps) {
+                            return true;
+                        }
+                        e -= 1;
+                    }
+                }
+                if b[pos..].starts_with(b"(nil)") {
+                    *cap = (pos, pos + 5);
+                    return self.match_toks(rest, line, pos + 5, caps);
+                }
+                false
+            }
+            SpecKind::Str | SpecKind::Errno => {
+                // `(.*?)` / `(.+?)` — a lazy gap of non-`\n` chars: shortest
+                // first, growing on failure. The gap may not cross a newline.
+                let nl = memchr::memchr(b'\n', &b[pos..]).map_or(n, |i| pos + i);
+                let min_one = matches!(*kind, SpecKind::Errno);
+                match rest.first() {
+                    None => {
+                        // Final token: the gap must run to EOL ('$').
+                        if nl < n || (min_one && pos == n) {
+                            return false;
+                        }
+                        *cap = (pos, n);
+                        true
+                    }
+                    Some(MTok::Lit(id)) => {
+                        // Lazy gap before a literal ⇒ the literal's EARLIEST
+                        // occurrence, then successive ones on failure — found
+                        // with the precompiled memmem finder instead of
+                        // char-stepping. (A valid-UTF-8 needle can only match
+                        // at a char boundary, so gap lengths stay whole chars.)
+                        let lit = self.lits[*id as usize].as_bytes();
+                        let finder = &self.finders[*id as usize];
+                        let mut from = if min_one { pos + 1 } else { pos };
+                        while from + lit.len() <= n {
+                            let Some(off) = finder.find(&b[from..]) else {
+                                return false;
+                            };
+                            let ls = from + off;
+                            if ls > nl {
+                                // The gap would swallow a newline; `.` can't.
+                                return false;
+                            }
+                            *cap = (pos, ls);
+                            if self.match_toks(&rest[1..], line, ls + lit.len(), caps) {
+                                return true;
+                            }
+                            from = ls + 1;
+                        }
+                        false
+                    }
+                    Some(MTok::Spec(_)) => {
+                        // Adjacent specs (`%s%d`): grow the gap char by char.
+                        let mut end = pos;
+                        if min_one {
+                            if end >= n || b[end] == b'\n' {
+                                return false;
+                            }
+                            end += utf8_width(b[end]);
+                        }
+                        loop {
+                            *cap = (pos, end);
+                            if self.match_toks(rest, line, end, caps) {
+                                return true;
+                            }
+                            if end >= n || b[end] == b'\n' {
+                                return false;
+                            }
+                            end += utf8_width(b[end]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 /// A trigram-prefiltered scanner over every lowered catalog pattern.
 ///
 /// Each pattern keeps its compiled [`Regex`] (for capture extraction) plus its
@@ -352,6 +865,9 @@ pub struct Scanner {
     /// Patterns with no usable trigram (literal runs all <3 chars, or none) —
     /// checked against every line. Includes bare `%s`-style catch-alls.
     always_check: Vec<usize>,
+    /// The specialized printf-pattern matcher — the default [`Self::scan_line`]
+    /// path (anchored Aho-Corasick candidates + regex-free verification).
+    matcher: SpecMatcher,
 }
 
 impl Scanner {
@@ -372,6 +888,8 @@ impl Scanner {
         // can pick each pattern's rarest anchor after the global freq is tallied.
         let mut per_pattern: Vec<Vec<String>> = Vec::new();
         let mut freq: HashMap<String, usize> = HashMap::new();
+        // Each compiled pattern's token sequence, for the specialized matcher.
+        let mut per_pattern_tokens: Vec<Vec<FmtTok>> = Vec::new();
 
         for (idx, site) in index.sites.iter().enumerate() {
             let text = match site.message.text.as_deref() {
@@ -413,6 +931,7 @@ impl Scanner {
             site_idx.push(idx);
             literal_len.push(lowered.literal_len);
             per_pattern.push(tris);
+            per_pattern_tokens.push(lowered.tokens);
         }
         report.compiled = patterns.len();
 
@@ -444,6 +963,12 @@ impl Scanner {
             .dfa_size_limit(1 << 30)
             .build()?;
 
+        // The specialized matcher. Its automaton build only fails on absurd
+        // inputs (limits far beyond any catalog); the regexes above compiled,
+        // so the literals are all sane strings.
+        let matcher =
+            SpecMatcher::build(&per_pattern_tokens).expect("anchor automaton build failed");
+
         Ok((
             Scanner {
                 set,
@@ -452,6 +977,7 @@ impl Scanner {
                 literal_len,
                 buckets,
                 always_check,
+                matcher,
             },
             report,
         ))
@@ -468,11 +994,19 @@ impl Scanner {
         self.always_check.len()
     }
 
-    /// How many candidate patterns the prefilter would verify for `line` — the
-    /// prefilter's selectivity (a diagnostic for benchmarking; the smaller
-    /// relative to `pattern_count`, the more the prefilter narrows).
+    /// How many candidate patterns the trigram prefilter would verify for
+    /// `line` — that prefilter's selectivity (a diagnostic for benchmarking;
+    /// the smaller relative to `pattern_count`, the more it narrows).
     pub fn candidate_count(&self, line: &str) -> usize {
         self.candidate_indices(line).len()
+    }
+
+    /// How many candidate patterns the specialized matcher (the default
+    /// [`Self::scan_line`] path) would verify for `line` — the anchored
+    /// Aho-Corasick candidate step's selectivity, comparable against
+    /// [`Self::candidate_count`].
+    pub fn candidate_count_spec(&self, line: &str) -> usize {
+        self.matcher.candidates(line).len()
     }
 
     /// Union of candidate pattern indices for `line`: every prefilter bucket that
@@ -528,18 +1062,44 @@ impl Scanner {
     }
 
     /// Resolve one rendered log line to every catalog site whose pattern
-    /// matches it, most-specific (longest literal) first, via the **trigram
-    /// prefilter**. An empty result means no site matched; more than one means
-    /// the line is ambiguous.
+    /// matches it, most-specific (longest literal) first. An empty result means
+    /// no site matched; more than one means the line is ambiguous.
     ///
-    /// The prefilter narrows the candidate patterns to those sharing a trigram
-    /// with the line (plus the always-check set); each candidate's real `Regex`
-    /// still verifies, so the result is identical to
-    /// [`Scanner::scan_line_regexset`] — this is a pure speed optimization.
+    /// This is the **specialized matcher** path (see [`SpecMatcher`]): one
+    /// anchored Aho-Corasick pass finds every candidate pattern, and each is
+    /// verified with direct byte loops — no regex runs at all. The result is
+    /// identical (site, literal_len, captures, order) to
+    /// [`Scanner::scan_line_regexset`], the retained oracle, and to
+    /// [`Scanner::scan_line_trigram`], the previous prefilter path.
     pub fn scan_line(&self, line: &str) -> Vec<MatchHit> {
         // Verify in ascending pattern-index order, then a *stable* sort by
         // descending literal_len — this reproduces the RegexSet path's ordering
         // exactly (RegexSet also yields ascending indices, ties preserved).
+        let mut hits: Vec<MatchHit> = self
+            .matcher
+            .candidates(line)
+            .into_iter()
+            .filter_map(|pi| {
+                self.matcher.verify(pi, line).map(|spans| MatchHit {
+                    site: self.site_idx[pi],
+                    literal_len: self.literal_len[pi],
+                    captures: spans
+                        .iter()
+                        .map(|&(start, end)| line[start..end].to_string())
+                        .collect(),
+                })
+            })
+            .collect();
+        hits.sort_by_key(|h| std::cmp::Reverse(h.literal_len));
+        hits
+    }
+
+    /// Resolve one rendered log line via the previous **trigram prefilter**
+    /// path: candidate patterns share a lowercased trigram with the line (plus
+    /// the always-check set), each verified with its compiled `Regex`. Retained
+    /// so benchmarks can compare it against the specialized [`Self::scan_line`]
+    /// default; the results are identical.
+    pub fn scan_line_trigram(&self, line: &str) -> Vec<MatchHit> {
         let mut hits: Vec<MatchHit> = self
             .candidate_indices(line)
             .iter()
@@ -586,6 +1146,29 @@ impl Scanner {
     ///
     /// [`scan_line`]: Scanner::scan_line
     pub fn scan_line_spans(&self, line: &str) -> Vec<MatchHitSpans> {
+        // The specialized matcher natively produces spans (its captures are
+        // never unmatched-optional, so `NO_SPAN` cannot occur on this path).
+        let mut hits: Vec<MatchHitSpans> = self
+            .matcher
+            .candidates(line)
+            .into_iter()
+            .filter_map(|pi| {
+                self.matcher.verify(pi, line).map(|captures| MatchHitSpans {
+                    site: self.site_idx[pi],
+                    literal_len: self.literal_len[pi],
+                    captures,
+                })
+            })
+            .collect();
+        hits.sort_by_key(|h| std::cmp::Reverse(h.literal_len));
+        hits
+    }
+
+    /// The span-valued twin of [`Scanner::scan_line_trigram`] — the previous
+    /// trigram + `Regex` path, kept callable so benchmarks can compare it
+    /// against the specialized default. Identical results to
+    /// [`Scanner::scan_line_spans`].
+    pub fn scan_line_spans_trigram(&self, line: &str) -> Vec<MatchHitSpans> {
         let mut hits: Vec<MatchHitSpans> = self
             .candidate_indices(line)
             .iter()
@@ -842,6 +1425,190 @@ mod tests {
                 hits_eq(&tri, &rs),
                 "trigram vs regexset differ on {line:?}:\n  trigram={tri:?}\n  regexset={rs:?}"
             );
+        }
+    }
+
+    /// Adversarial oracle test for the specialized matcher: an index of edge
+    /// patterns (adjacent specs, greedy-class/literal ambiguity, `%p` arms,
+    /// overlapping literal occurrences, unicode, `%c` at EOL, bare catch-alls)
+    /// scanned over edge lines (empty gaps, embedded newlines, near-misses).
+    /// Every line must produce IDENTICAL hits on all three paths — specialized
+    /// ([`Scanner::scan_line`]), trigram ([`Scanner::scan_line_trigram`]), and
+    /// the regex oracle ([`Scanner::scan_line_regexset`]) — and identical
+    /// capture SPANS (not just strings) on both span paths.
+    #[test]
+    fn specialized_matcher_equals_regex_oracle_on_adversarial_corpus() {
+        let formats = [
+            // Bare catch-alls: no literal at all — always candidates.
+            "%s",
+            "%m",
+            "%d",
+            "%c",
+            // Adjacent specs (lazy/greedy interplay with no literal separator).
+            "%s%d",
+            "%s%s",
+            "%d%d",
+            "%s%c",
+            "%c%c%c",
+            // Greedy class followed by a literal that starts inside the class.
+            "%d1x",
+            "%x file",
+            "%fe2",
+            // Overlapping-occurrence backtracking for lazy gaps.
+            "%saa",
+            "[]%s[]",
+            "%s at %s",
+            // %p's two arms, mid-line.
+            "ptr %p!",
+            "%p%d",
+            // %m (min one char) with a literal prefix.
+            "err: %m",
+            // Literal contains another pattern's literal.
+            "xyz %s",
+            "wxyz %s",
+            // Short literals (the trigram path's always-check bucket).
+            "a%db",
+            // Unicode literals around a capture; %c at end of line.
+            "héllo %s wörld",
+            "grade %c",
+            // Escaped percent + numeric capture.
+            "disk is %d%% full",
+            // Classic quoted-string shapes.
+            r#"database "%s" does not exist"#,
+            "%d of %d tuples",
+            r#"could not open file "%s": %m"#,
+        ];
+        let jsonl: String = formats
+            .iter()
+            .enumerate()
+            .map(|(i, f)| {
+                serde_json::json!({
+                    "api": "elog", "kind": "backend",
+                    "message": {"text": f},
+                    "path": "adv.c", "line": i + 1,
+                })
+                .to_string()
+                    + "\n"
+            })
+            .collect();
+        let index = Index::from_jsonl(&jsonl).unwrap();
+        let (scanner, report) = Scanner::build(&index).unwrap();
+        assert_eq!(report.compiled, formats.len());
+
+        let lines = [
+            // Empty and trivial.
+            "",
+            "x",
+            "42",
+            "-42",
+            "-0",
+            "421x",
+            "42x",
+            "1x",
+            "-1x",
+            // Adjacent-spec fodder.
+            "abc123",
+            "123",
+            "abc",
+            "ab",
+            "aA",
+            "aaa",
+            "aa",
+            "aaaa",
+            // Greedy-class/literal ambiguity.
+            "deadbeef file",
+            "0 file",
+            "f file",
+            " file",
+            "1.5e2",
+            "e2",
+            ".e2",
+            "1e2e2",
+            // Overlapping/lazy backtracking.
+            "[][]",
+            "[][][]",
+            "[]x[]",
+            "a at b at c",
+            " at ",
+            // %p arms.
+            "ptr 0xDEAD!",
+            "ptr 0xdead!",
+            "ptr (nil)!",
+            "ptr 0x!",
+            "ptr 0xZ!",
+            "ptr (nil) !",
+            "0xff7",
+            "(nil)42",
+            "(nil)",
+            // %m minimum-one-char.
+            "err: ",
+            "err: x",
+            "err: No such file or directory",
+            // Literal-contains-literal.
+            "xyz hello",
+            "wxyz hello",
+            "xyz",
+            "awxyz hello",
+            // Short literals.
+            "a5b",
+            "a-5b",
+            "ab",
+            "a5",
+            // Unicode: multibyte in captures, literals, and %c.
+            "héllo wörld wörld",
+            "héllo  wörld",
+            "héllo é wörld",
+            "grade A",
+            "grade é",
+            "grade 字",
+            "grade ",
+            "grade AB",
+            // Embedded newline: `.` must not cross it anywhere.
+            "a\nb",
+            "err: a\nb",
+            "héllo \n wörld",
+            // Quoted-string classics, including case-mismatch near-misses.
+            r#"database "orders" does not exist"#,
+            r#"database "" does not exist"#,
+            "DATABASE \"X\" DOES NOT EXIST",
+            "7 of 512 tuples",
+            "-7 of -512 tuples",
+            r#"could not open file "pg_wal/1": No such file or directory"#,
+            r#"could not open file "": "#,
+            "disk is 90% full",
+            "disk is -90% full",
+            "disk is % full",
+        ];
+
+        for line in lines {
+            let spec = scanner.scan_line(line);
+            let tri = scanner.scan_line_trigram(line);
+            let rs = scanner.scan_line_regexset(line);
+            assert!(
+                hits_eq(&spec, &rs),
+                "specialized vs regexset differ on {line:?}:\n  spec={spec:?}\n  regexset={rs:?}"
+            );
+            assert!(
+                hits_eq(&tri, &rs),
+                "trigram vs regexset differ on {line:?}:\n  trigram={tri:?}\n  regexset={rs:?}"
+            );
+            // Span paths: identical spans (positions, not just the sliced text)
+            // between the specialized matcher and the regex-derived spans.
+            let spans_spec = scanner.scan_line_spans(line);
+            let spans_re = scanner.scan_line_spans_trigram(line);
+            assert_eq!(
+                spans_spec.len(),
+                spans_re.len(),
+                "span hit count differs on {line:?}"
+            );
+            for (a, b) in spans_spec.iter().zip(&spans_re) {
+                assert_eq!(a.site, b.site, "span site differs on {line:?}");
+                assert_eq!(
+                    a.captures, b.captures,
+                    "capture spans differ on {line:?} (site {})",
+                    a.site
+                );
+            }
         }
     }
 

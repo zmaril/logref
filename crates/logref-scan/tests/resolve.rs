@@ -79,15 +79,17 @@ fn resolves_sample_log_against_fixture_index() {
     );
 }
 
-/// The critical guarantee: the trigram-prefiltered `scan_line` returns EXACTLY
-/// the same `Vec<MatchHit>` (site, literal_len, captures, order) as the
-/// exhaustive `RegexSet` path — the prefilter is a pure speed optimization and
-/// must never drop a real match. Cross-checked over:
+/// The critical guarantee: BOTH fast paths — the specialized matcher behind
+/// `scan_line` (anchored Aho-Corasick candidates + regex-free verification) and
+/// the retained trigram-prefiltered `scan_line_trigram` — return EXACTLY the
+/// same `Vec<MatchHit>` (site, literal_len, captures, order) as the exhaustive
+/// `RegexSet` oracle. The fast paths are pure speed optimizations and must
+/// never drop, add, or reorder a match. Cross-checked over:
 ///   * every rendered line in the `resolve` fixture cases, plus a few misses, and
 ///   * a line synthesized (via `render_sample`) from every site in the real
 ///     `snippets/pg-catalog-sample.jsonl` catalog.
 #[test]
-fn trigram_scan_line_matches_regexset_over_fixtures_and_pg_catalog() {
+fn fast_paths_match_regexset_over_fixtures_and_pg_catalog() {
     let mut checked = 0usize;
 
     // ── 1. the small resolve fixture index ──
@@ -113,8 +115,13 @@ fn trigram_scan_line_matches_regexset_over_fixtures_and_pg_catalog() {
         }
     }
     for line in &lines {
-        let tri = scanner.scan_line(line);
+        let spec = scanner.scan_line(line);
+        let tri = scanner.scan_line_trigram(line);
         let rs = scanner.scan_line_regexset(line);
+        assert!(
+            hits_eq(&spec, &rs),
+            "fixture index diverged on {line:?}:\n  specialized={spec:?}\n  regexset={rs:?}"
+        );
         assert!(
             hits_eq(&tri, &rs),
             "fixture index diverged on {line:?}:\n  trigram={tri:?}\n  regexset={rs:?}"
@@ -146,8 +153,13 @@ fn trigram_scan_line_matches_regexset_over_fixtures_and_pg_catalog() {
         // render_sample may emit embedded newlines for multi-line formats; scan
         // each physical line, exactly as a real log reader would.
         for phys in line.split('\n') {
-            let tri = cscan.scan_line(phys);
+            let spec = cscan.scan_line(phys);
+            let tri = cscan.scan_line_trigram(phys);
             let rs = cscan.scan_line_regexset(phys);
+            assert!(
+                hits_eq(&spec, &rs),
+                "pg-catalog diverged on {phys:?}:\n  specialized={spec:?}\n  regexset={rs:?}"
+            );
             assert!(
                 hits_eq(&tri, &rs),
                 "pg-catalog diverged on {phys:?}:\n  trigram={tri:?}\n  regexset={rs:?}"
@@ -194,8 +206,13 @@ fn trigram_scan_line_matches_regexset_over_fixtures_and_pg_catalog() {
             continue;
         };
         for phys in line.split('\n') {
-            let tri = bscan.scan_line(phys);
+            let spec = bscan.scan_line(phys);
+            let tri = bscan.scan_line_trigram(phys);
             let rs = bscan.scan_line_regexset(phys);
+            assert!(
+                hits_eq(&spec, &rs),
+                "4k corpus diverged on {phys:?}:\n  specialized={spec:?}\n  regexset={rs:?}"
+            );
             assert!(
                 hits_eq(&tri, &rs),
                 "4k corpus diverged on {phys:?}:\n  trigram={tri:?}\n  regexset={rs:?}"
@@ -208,5 +225,5 @@ fn trigram_scan_line_matches_regexset_over_fixtures_and_pg_catalog() {
         checked >= 50,
         "expected to cross-check many lines, got {checked}"
     );
-    eprintln!("equivalence cross-check: {checked} lines, trigram == regexset");
+    eprintln!("equivalence cross-check: {checked} lines, specialized == trigram == regexset");
 }
