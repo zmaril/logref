@@ -1,0 +1,6 @@
+# Built/copied runtime artifacts — regenerate with build.sh. Source only is committed.
+logref_wasm.js
+logref_wasm_bg.wasm
+site-bundle.js
+corpus.jsonl
+corpus-large.jsonl

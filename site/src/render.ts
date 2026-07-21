@@ -4,9 +4,10 @@
 // rendered by markdown.ts; everything else here is derived from the frontmatter
 // facts so the same truth drives both the card and the index.
 
-import { escapeHtml, renderInline, renderMarkdown } from "./markdown.ts";
 import type { MessageDoc } from "./frontmatter.ts";
+import { escapeHtml, renderInline, renderMarkdown } from "./markdown.ts";
 import type { MessageEntry } from "./search.ts";
+import { severityTier } from "./severity.ts";
 
 /** Postgres SQLSTATE error classes (first two chars of a code → class name),
  * per the standard errcodes appendix. Drives the `## SQLSTATE` section's class
@@ -58,13 +59,6 @@ const SQLSTATE_CLASSES: Record<string, string> = {
   XX: "Internal Error",
 };
 
-/** Severity tiers drive badge colour: hard failures, warnings, everything else. */
-function severityTier(level: string): "error" | "warn" | "info" {
-  if (["ERROR", "FATAL", "PANIC", "COMMERROR"].includes(level)) return "error";
-  if (level === "WARNING") return "warn";
-  return "info";
-}
-
 function badge(level: string): string {
   return `<span class="badge badge-${severityTier(level)}">${escapeAttr(level)}</span>`;
 }
@@ -102,6 +96,10 @@ export function layout(opts: {
     <header class="site-header">
       <a class="brand" href="${root}index.html">LogRef</a>
       <span class="tagline">a reference for Postgres log &amp; error messages</span>
+      <nav class="site-nav">
+        <a href="${root}index.html">Search</a>
+        <a href="${root}scan.html">Scan</a>
+      </nav>
     </header>
     <main>
 ${opts.content}
@@ -125,7 +123,12 @@ function factsCard(doc: MessageDoc): string {
 
   // SQLSTATE is rendered once, in its own `## SQLSTATE` section (with the error
   // class), not here — keeping each derived fact to a single surface.
-  rows.push(fact("Logging API", doc.api.map((a) => `<code>${escapeAttr(a)}</code>`).join(" ")));
+  rows.push(
+    fact(
+      "Logging API",
+      doc.api.map((a) => `<code>${escapeAttr(a)}</code>`).join(" "),
+    ),
+  );
   rows.push(fact("Call sites", `${doc.callSites.length}`));
   rows.push(
     fact(
@@ -230,6 +233,30 @@ export function entryRow(entry: MessageEntry): string {
       ? ` <code class="sqlstate">${escapeAttr(entry.sqlstate.join(" "))}</code>`
       : "";
   return `<li><a href="messages/${escapeAttr(entry.slug)}.html"><span class="msg">${renderInline(entry.message)}</span></a> ${badges}${state}</li>`;
+}
+
+/** The Scan page shell. The client script (scan.ts) fetches patterns.json,
+ * compiles the index, and drives #scan-results — matching runs entirely in the
+ * browser, so the pasted or uploaded log never leaves the machine. */
+export function scanPage(patternCount: number): string {
+  const content = `      <p class="lede">Resolve your own Postgres logs back to their source message. Paste log lines or upload a <code>.log</code>/<code>.txt</code> file — everything runs in your browser, nothing is uploaded.</p>
+      <div class="scan-controls">
+        <textarea id="scan-input" rows="8" placeholder="Paste log lines, e.g.&#10;ERROR:  relation &quot;orders&quot; does not exist&#10;FATAL:  database &quot;shop&quot; does not exist"></textarea>
+        <div class="scan-actions">
+          <label class="file-btn">Upload log file<input id="scan-file" type="file" accept=".log,.txt,text/plain" /></label>
+          <button id="scan-run" type="button">Scan lines</button>
+          <button id="scan-clear" type="button" class="secondary">Clear</button>
+        </div>
+      </div>
+      <p id="scan-status" class="count">Matching against ${patternCount} lowered patterns.</p>
+      <section id="scan-results"></section>`;
+  return layout({
+    title: "Scan your logs — LogRef",
+    bodyClass: "page-scan",
+    content,
+    depth: 0,
+    script: "scan.js",
+  });
 }
 
 /** The search landing page. The client script (index.ts) filters #results. */

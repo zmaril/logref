@@ -25,26 +25,7 @@ import json
 import os
 import sys
 
-
-def basename(path):
-    return path.rsplit("/", 1)[-1]
-
-
-def load_catalog(path):
-    """Return (records, by_key) where by_key maps (basename, line) -> [record]."""
-    records = []
-    by_key = collections.defaultdict(list)
-    with open(path, encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line:
-                continue
-            rec = json.loads(line)
-            if "path" not in rec or "line" not in rec:
-                continue
-            records.append(rec)
-            by_key[(basename(rec["path"]), int(rec["line"]))].append(rec)
-    return records, by_key
+from catalog_join import basename, load_catalog
 
 
 def load_captures(paths):

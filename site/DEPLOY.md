@@ -3,19 +3,25 @@
 The site is a pile of static files. `bun run build` reads every markdown page in
 `reference/messages/` and writes a self-contained bundle into `dist/`: one HTML
 page per message, a search landing page, the client search bundle, a JSON index,
-and the stylesheet.
+the wasm scanner module (`logref_wasm_bg.wasm` + `scan-index.json`, which the
+Scan page runs client-side), and the stylesheet.
 
 Fly.io runs containers rather than a static-file host, so the bundle ships
-inside an image: the [`Dockerfile`](./Dockerfile) builds `dist/` with Bun in one
-stage and serves it with nginx in the next. [`fly.toml`](./fly.toml) wires that
-image to a machine that listens on port 80 and scales to zero when idle.
+inside an image: the [`Dockerfile`](./Dockerfile) compiles the Rust scanner to
+wasm in one stage, builds `dist/` with Bun in the next, and serves it with
+nginx in the last. Because the wasm stage needs `crates/` + `Cargo.lock`, the
+Docker build context is the REPO ROOT, not `site/` (the root `.dockerignore`
+keeps the context small). [`fly.toml`](./fly.toml) wires that image to a machine
+that listens on port 80 and scales to zero when idle.
 
 ## Build the bundle
 
 ```sh
 cd site
+bun run build:wasm   # compile the scanner to src/wasm/ (needs cargo + wasm32
+                     # target + wasm-bindgen; see scripts/build-wasm-web.sh)
 bun install
-bun run build   # writes dist/
+bun run build        # writes dist/
 ```
 
 `dist/` is gitignored — it is regenerated from source inside the image on every
@@ -27,8 +33,8 @@ locally; `fly deploy` runs the same build inside the container.
 If you have Docker, you can run exactly what Fly will run:
 
 ```sh
-cd site
-docker build -t logref-site .
+# from the REPO ROOT (the context must include crates/):
+docker build -f site/Dockerfile -t logref-site .
 docker run --rm -p 8080:80 logref-site
 # then open http://localhost:8080
 ```
@@ -51,10 +57,10 @@ then `fly auth login`.
 
 ## Deploy
 
-From `site/`:
+From the REPO ROOT (the build context must include `crates/`):
 
 ```sh
-fly deploy
+fly deploy . --config site/fly.toml --dockerfile site/Dockerfile
 ```
 
 Fly builds the image, pushes it, and starts the machine. When it finishes the
@@ -70,7 +76,7 @@ and expose it as `FLY_API_TOKEN`. `flyctl` reads that variable automatically:
 
 ```sh
 export FLY_API_TOKEN=your-fly-deploy-token
-fly deploy --app logref --remote-only
+fly deploy . --config site/fly.toml --dockerfile site/Dockerfile --app logref --remote-only
 ```
 
 `--remote-only` builds the image on Fly's builders, so the CI runner needs no

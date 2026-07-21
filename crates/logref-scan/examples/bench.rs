@@ -1,3 +1,6 @@
+// Deliberately parallel to examples/bench_trigram.rs — the two benches must stay
+// structurally identical so their numbers are comparable.
+// straitjacket-allow-file:duplication
 //! Honest end-to-end measurement of the lowering + `RegexSet` scanner.
 //!
 //! There is no captured production Postgres log to hand, and standing one up is
