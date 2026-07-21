@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/timestamp.c:747"
   - "postgres/src/backend/utils/adt/timestamp.c:759"
-reproduced: false
+reproduced: true
 ---
 
 # `timestamp out of range: "%g"`
@@ -29,10 +29,16 @@ Ensure the numeric input maps to a date within the supported range, and reject i
 
 ## Example
 
-*Illustrative* — converting an out-of-range float to timestamp.
+*Reproduced* — captured from `reproducers/scenarios/32_adt_arithmetic_overflow.sql`.
+
+```sql
+SELECT to_timestamp(1e300);
+```
+
+Produces:
 
 ```text
-ERROR:  timestamp out of range: "1e30"
+ERROR:  timestamp out of range: "1e+300"
 ```
 
 ## Related

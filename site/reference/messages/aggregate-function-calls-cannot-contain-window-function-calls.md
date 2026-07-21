@@ -9,7 +9,7 @@ sqlstate:
     code: "42803"
 call_sites:
   - "postgres/src/backend/parser/parse_agg.c:833"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate function calls cannot contain window function calls`
@@ -28,10 +28,16 @@ Compute the window function in a subquery first, then aggregate its result in an
 
 ## Example
 
-*Illustrative* — a window function inside an aggregate.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT sum(row_number() OVER ()) FROM t;  -- ERROR
+SELECT sum(rank() OVER ()) FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  aggregate function calls cannot contain window function calls
 ```
 
 ## Related

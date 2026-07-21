@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/repack.c:783"
   - "postgres/src/backend/commands/tablecmds.c:19234"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not an index for table "%s"`
@@ -29,10 +29,16 @@ Name an index that belongs to the target table. List a table's indexes with `\d 
 
 ## Example
 
-*Illustrative* — clustering a table on an unrelated index.
+*Reproduced* — captured from `reproducers/scenarios/53_vacuum_cluster_concurrency_ddl.sql`.
 
 ```sql
-CLUSTER t USING other_tables_idx;  -- not an index for t
+CLUSTER repro.churn USING child_amount_idx;
+```
+
+Produces:
+
+```text
+ERROR:  "child_amount_idx" is not an index for table "churn"
 ```
 
 ## Related

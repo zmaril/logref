@@ -8,7 +8,7 @@ call_sites:
   - "postgres/src/bin/pg_waldump/pg_waldump.c:1073"
   - "postgres/src/bin/pg_waldump/pg_waldump.c:1176"
   - "postgres/src/fe_utils/option_utils.c:69"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid value "%s" for option %s`
@@ -27,10 +27,10 @@ Consult the option's documentation for its accepted values and supply one that f
 
 ## Example
 
-*Illustrative* — an option given an unacceptable value.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__66_dump`); see the reproducer for the triggering workload. It emits:
 
 ```text
-ERROR:  invalid value "xyz" for option limit
+ERROR:  invalid value "%s" for option %s
 ```
 
 ## Related

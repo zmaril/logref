@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:865"
-reproduced: false
+reproduced: true
 ---
 
 # `DISTINCT is not implemented for window functions`
@@ -28,11 +28,16 @@ Remove `DISTINCT` from the windowed call. If you need distinct behaviour, dedupl
 
 ## Example
 
-*Illustrative* — `DISTINCT` in a window call.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT count(DISTINCT x) OVER () FROM t;
--- DISTINCT is not implemented for window functions
+SELECT count(DISTINCT id) OVER () FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  DISTINCT is not implemented for window functions
 ```
 
 ## Related

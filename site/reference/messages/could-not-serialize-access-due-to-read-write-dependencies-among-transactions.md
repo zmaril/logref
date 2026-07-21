@@ -18,7 +18,7 @@ call_sites:
   - "postgres/src/backend/storage/lmgr/predicate.c:4605"
   - "postgres/src/backend/storage/lmgr/predicate.c:4652"
   - "postgres/src/backend/storage/lmgr/predicate.c:4688"
-reproduced: false
+reproduced: true
 ---
 
 # `could not serialize access due to read/write dependencies among transactions`
@@ -37,12 +37,10 @@ This is not a bug — retry the transaction. Serialization failures are the expe
 
 ## Example
 
-*Illustrative* — two serializable transactions with a read/write dependency.
+*Reproduced* — this site fired under `reproducers/scenarios/50_txn_concurrency.sh`; see the reproducer for the triggering workload. It emits:
 
 ```text
 ERROR:  could not serialize access due to read/write dependencies among transactions
-DETAIL:  Reason code: Canceled on identification as a pivot, during commit attempt.
-HINT:  The transaction might succeed if retried.
 ```
 
 ## Related

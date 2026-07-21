@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:2698"
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:2749"
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:2820"
-reproduced: false
+reproduced: true
 ---
 
 # `%s format is not recognized: "%s"`
@@ -34,16 +34,16 @@ Make the template match the actual string format, or normalize the input strings
 
 ## Example
 
-*Illustrative* — a datetime string that does not match its template.
+*Reproduced* — captured from `reproducers/scenarios/19_json_sqljson.sql`.
 
 ```sql
-SELECT jsonb_path_query('"2024/01/01"', '$.datetime("YYYY-MM-DD")');
+SELECT jsonb_path_query('"abc"', '$.timestamp()');
 ```
 
 Produces:
 
 ```text
-ERROR:  date format is not recognized: "2024/01/01"
+ERROR:  timestamp format is not recognized: "abc"
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:20475"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use "list" partition strategy with more than one column`
@@ -28,11 +28,16 @@ Use a single column or expression for list partitioning. If you need to partitio
 
 ## Example
 
-*Illustrative* — list partitioning on two columns.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-CREATE TABLE t (a int, b int) PARTITION BY LIST (a, b);
--- ERROR:  cannot use "list" partition strategy with more than one column
+CREATE TABLE repro.ct17 (a int) PARTITION BY LIST (a, b);
+```
+
+Produces:
+
+```text
+ERROR:  cannot use "list" partition strategy with more than one column
 ```
 
 ## Related

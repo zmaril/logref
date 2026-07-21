@@ -14,7 +14,7 @@ call_sites:
   - "postgres/src/backend/replication/logical/logicalfuncs.c:175"
   - "postgres/src/backend/utils/adt/json.c:1396"
   - "postgres/src/backend/utils/adt/jsonb.c:1307"
-reproduced: false
+reproduced: true
 ---
 
 # `array must have even number of elements`
@@ -33,10 +33,16 @@ Ensure the array has an even number of elements, one value for each key. If you 
 
 ## Example
 
-*Illustrative* — an odd-length hstore array.
+*Reproduced* — captured from `reproducers/scenarios/62_contrib_type_input_deep.sql`.
 
 ```sql
-SELECT hstore(ARRAY['a','1','b']);
+SELECT hstore(ARRAY['a', 'b', 'c']);
+```
+
+Produces:
+
+```text
+ERROR:  array must have even number of elements
 ```
 
 ## Related

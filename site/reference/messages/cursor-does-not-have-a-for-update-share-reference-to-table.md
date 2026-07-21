@@ -9,7 +9,7 @@ sqlstate:
     code: "24000"
 call_sites:
   - "postgres/src/backend/executor/execCurrent.c:125"
-reproduced: false
+reproduced: true
 ---
 
 # `cursor "%s" does not have a FOR UPDATE/SHARE reference to table "%s"`
@@ -28,12 +28,16 @@ Declare the cursor with `FOR UPDATE` (or `FOR SHARE`) on the table you intend to
 
 ## Example
 
-*Illustrative* — a cursor without FOR UPDATE.
+*Reproduced* — captured from `reproducers/scenarios/39_cte_cursors_prepared_lock.sql`.
 
 ```sql
-DECLARE c CURSOR FOR SELECT * FROM t;
-UPDATE t SET x = 1 WHERE CURRENT OF c;
--- ERROR:  cursor "c" does not have a FOR UPDATE/SHARE reference to table "t"
+UPDATE repro.child SET amount=1 WHERE CURRENT OF cf;
+```
+
+Produces:
+
+```text
+ERROR:  cursor "cf" does not have a FOR UPDATE/SHARE reference to table "child"
 ```
 
 ## Related

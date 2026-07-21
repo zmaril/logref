@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:640"
   - "postgres/src/backend/parser/parse_func.c:2541"
-reproduced: false
+reproduced: true
 ---
 
 # `procedure %s does not exist`
@@ -29,10 +29,16 @@ Verify the procedure exists and its argument types with `\df proc` in psql or by
 
 ## Example
 
-*Illustrative* — calling a procedure that does not exist.
+*Reproduced* — captured from `reproducers/scenarios/26_roles_acl_plpgsql.sql`.
+
+```sql
+CALL repro.pr(1);
+```
+
+Produces:
 
 ```text
-ERROR:  procedure refresh_totals(integer) does not exist
+ERROR:  procedure repro.pr(integer) does not exist
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/copyto.c:983"
-reproduced: false
+reproduced: true
 ---
 
 # `COPY query must have a RETURNING clause`
@@ -28,11 +28,16 @@ Add a `RETURNING` clause to the data-modifying statement so `COPY` has rows to w
 
 ## Example
 
-*Illustrative* — COPY over a data-modifying query without RETURNING.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-COPY (DELETE FROM t WHERE a < 0) TO STDOUT;
--- ERROR:  COPY query must have a RETURNING clause
+COPY (UPDATE repro.parent SET id=id) TO STDOUT;
+```
+
+Produces:
+
+```text
+ERROR:  COPY query must have a RETURNING clause
 ```
 
 ## Related

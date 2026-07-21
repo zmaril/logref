@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/typecmds.c:1361"
   - "postgres/src/backend/utils/cache/typcache.c:2782"
-reproduced: false
+reproduced: true
 ---
 
 # `%s is not an enum`
@@ -29,10 +29,16 @@ Name an enum type for enum operations. Check a type's category with `\dT name` o
 
 ## Example
 
-*Illustrative* — an enum operation on a non-enum type.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-ALTER TYPE integer ADD VALUE 'x';  -- integer is not an enum
+ALTER TYPE s37.comp RENAME VALUE 'a' TO 'b';
+```
+
+Produces:
+
+```text
+ERROR:  s37.comp is not an enum
 ```
 
 ## Related

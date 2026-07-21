@@ -38,7 +38,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/timestamp.c:4878"
   - "postgres/src/backend/utils/adt/timestamp.c:4888"
   - "postgres/src/backend/utils/adt/timestamp.c:5246"
-reproduced: false
+reproduced: true
 ---
 
 # `interval out of range`
@@ -57,10 +57,10 @@ Keep interval magnitudes within range and check operands before arithmetic that 
 
 ## Example
 
-*Illustrative* — multiplying an interval past the limit.
+*Reproduced* — captured from `reproducers/scenarios/32_adt_arithmetic_overflow.sql`.
 
 ```sql
-SELECT interval '100000000 years' * 1000000;
+SELECT 'infinity'::timestamp - 'infinity'::timestamp;
 ```
 
 Produces:

@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/parser/parse_target.c:1265"
   - "postgres/src/bin/pg_dump/pg_dump.c:1907"
   - "postgres/src/bin/psql/describe.c:6461"
-reproduced: false
+reproduced: true
 ---
 
 # `cross-database references are not implemented: %s`
@@ -32,10 +32,16 @@ Connect directly to the target database instead of qualifying across databases. 
 
 ## Example
 
-*Illustrative* — a cross-database reference.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-SELECT * FROM otherdb.public.t;
+SELECT nodb.repro.addone(1);
+```
+
+Produces:
+
+```text
+ERROR:  cross-database references are not implemented: nodb.repro.addone
 ```
 
 ## Related

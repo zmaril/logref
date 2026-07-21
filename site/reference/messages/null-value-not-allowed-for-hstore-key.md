@@ -11,7 +11,7 @@ call_sites:
   - "postgres/contrib/hstore/hstore_io.c:534"
   - "postgres/contrib/hstore/hstore_io.c:682"
   - "postgres/contrib/hstore/hstore_io.c:776"
-reproduced: false
+reproduced: true
 ---
 
 # `null value not allowed for hstore key`
@@ -30,10 +30,16 @@ Ensure every key is non-null before constructing the hstore. Filter out or repla
 
 ## Example
 
-*Illustrative* — a null key in an hstore constructor.
+*Reproduced* — captured from `reproducers/scenarios/62_contrib_type_input_deep.sql`.
 
 ```sql
-SELECT hstore(ARRAY['a', NULL], ARRAY['1','2']);  -- null key not allowed
+SELECT hstore(ARRAY[NULL]::text[], ARRAY['1']);
+```
+
+Produces:
+
+```text
+ERROR:  null value not allowed for hstore key
 ```
 
 ## Related

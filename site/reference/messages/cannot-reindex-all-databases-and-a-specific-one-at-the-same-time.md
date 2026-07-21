@@ -6,7 +6,7 @@ api: [pg_fatal]
 level: [FATAL]
 call_sites:
   - "postgres/src/bin/scripts/reindexdb.c:222"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot reindex all databases and a specific one at the same time`
@@ -25,10 +25,10 @@ Choose one target: use `--all` to reindex every database, or name a single datab
 
 ## Example
 
-*Illustrative* — conflicting reindexdb targets.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-reindexdb: error: cannot reindex all databases and a specific one at the same time
+FATAL:  cannot reindex all databases and a specific one at the same time
 ```
 
 ## Related

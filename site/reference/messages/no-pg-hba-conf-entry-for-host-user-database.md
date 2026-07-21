@@ -9,7 +9,7 @@ sqlstate:
     code: "28000"
 call_sites:
   - "postgres/src/backend/libpq/auth.c:536"
-reproduced: false
+reproduced: true
 ---
 
 # `no pg_hba.conf entry for host "%s", user "%s", database "%s", %s`
@@ -28,18 +28,10 @@ Add a matching line to `pg_hba.conf` — for example `host  app  appuser  10.0.0
 
 ## Example
 
-*Illustrative* — a host not covered by any rule.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier3__auth_ssl`). The site emits a background log record; the captured line was:
 
 ```text
-# pg_hba.conf has only:
-#   host  all  all  127.0.0.1/32  scram-sha-256
-# a client at 10.0.0.5 connects:
-```
-
-Produces:
-
-```text
-FATAL:  no pg_hba.conf entry for host "10.0.0.5", user "appuser", database "app", no encryption
+FATAL:  no pg_hba.conf entry for host "127.0.0.1", user "nomatch", database "postgres", SSL encryption
 ```
 
 ## Related

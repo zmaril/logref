@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:21068"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot attach a typed table as partition`
@@ -28,7 +28,13 @@ Use an ordinary table as the partition, with a matching column layout. A typed t
 
 ## Example
 
-*Illustrative* — attaching a typed table.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
+
+```sql
+ALTER TABLE s36.p ATTACH PARTITION s36.typedchild FOR VALUES FROM (30) TO (40);
+```
+
+Produces:
 
 ```text
 ERROR:  cannot attach a typed table as partition

@@ -12,7 +12,7 @@ sqlstate:
 call_sites:
   - "postgres/contrib/pg_visibility/pg_visibility.c:928"
   - "postgres/contrib/pgstattuple/pgstatapprox.c:342"
-reproduced: false
+reproduced: true
 ---
 
 # `relation "%s" is of wrong relation kind`
@@ -31,11 +31,16 @@ Use a relation of the kind the command expects, or use the command appropriate t
 
 ## Example
 
-*Illustrative* — a table-only command applied to a view.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT pg_visibility('repro.child_v');
+```
+
+Produces:
 
 ```text
-ERROR:  relation "orders_view" is of wrong relation kind
-DETAIL:  This operation is not supported for views.
+ERROR:  relation "child_v" is of wrong relation kind
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_agg.c:217"
   - "postgres/src/backend/parser/parse_oper.c:216"
-reproduced: false
+reproduced: true
 ---
 
 # `could not identify an ordering operator for type %s`
@@ -29,10 +29,16 @@ Cast the values to a comparable type, or provide an explicit operator (for examp
 
 ## Example
 
-*Illustrative* — ordering by an xml column.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
+
+```sql
+SELECT array_agg(x ORDER BY x) FROM (SELECT '(1,2)'::point AS x) s;
+```
+
+Produces:
 
 ```text
-ERROR:  could not identify an ordering operator for type xml
+ERROR:  could not identify an ordering operator for type point
 ```
 
 ## Related

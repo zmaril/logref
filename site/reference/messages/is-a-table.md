@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/trigger.c:227"
   - "postgres/src/backend/commands/trigger.c:238"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is a table`
@@ -29,10 +29,16 @@ Pass an object of the kind the command expects. Check the object type with `\d n
 
 ## Example
 
-*Illustrative* — using a table where an index is required.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-ALTER INDEX my_table SET (fillfactor = 90);  -- my_table is a table
+CREATE TRIGGER trg INSTEAD OF INSERT ON repro.parent FOR EACH ROW EXECUTE FUNCTION repro.addone();
+```
+
+Produces:
+
+```text
+ERROR:  "parent" is a table
 ```
 
 ## Related

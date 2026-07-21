@@ -9,7 +9,7 @@ sqlstate:
     code: "08P01"
 call_sites:
   - "postgres/src/backend/replication/libpqwalreceiver/libpqwalreceiver.c:645"
-reproduced: false
+reproduced: true
 ---
 
 # `could not start WAL streaming: %s`
@@ -28,10 +28,10 @@ Check the primary's log for why it rejected the stream. Common causes are a requ
 
 ## Example
 
-*Illustrative* — the primary refused to start streaming.
+*Reproduced* — this site fired under `reproducers/scenarios/58_repl_physical.sh`; see the reproducer for the triggering workload. It emits:
 
 ```text
-ERROR:  could not start WAL streaming: ERROR:  requested WAL segment has already been removed
+ERROR:  could not start WAL streaming: %s
 ```
 
 ## Related

@@ -9,7 +9,7 @@ call_sites:
   - "postgres/src/backend/replication/logical/snapbuild.c:1316"
   - "postgres/src/backend/replication/logical/snapbuild.c:1413"
   - "postgres/src/backend/replication/logical/snapbuild.c:1919"
-reproduced: false
+reproduced: true
 ---
 
 # `logical decoding found consistent point at %X/%08X`
@@ -28,10 +28,16 @@ No action is needed. It records normal, healthy progress of logical decoding. Th
 
 ## Example
 
-*Illustrative* — decoding reaching a consistent point.
+*Reproduced* — captured from `reproducers/env-run.sh` (scenario `tier4__logical_publisher`).
+
+```sql
+CREATE_REPLICATION_SLOT "s" LOGICAL pgoutput (SNAPSHOT 'nothing')
+```
+
+Produces:
 
 ```text
-LOG:  logical decoding found consistent point at 0/1A2B3C4D
+LOG:  logical decoding found consistent point at 0/0175AB88
 ```
 
 ## Related

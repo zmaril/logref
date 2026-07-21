@@ -9,7 +9,7 @@ sqlstate:
     code: "42P16"
 call_sites:
   - "postgres/src/backend/commands/view.c:301"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot change data type of view column "%s" from %s to %s`
@@ -28,10 +28,16 @@ Keep the existing column types in the replacement, adding explicit casts if the 
 
 ## Example
 
-*Illustrative* — a changed view-column type.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
+
+```sql
+CREATE OR REPLACE VIEW repro.child_v AS SELECT id::bigint, amount FROM repro.child;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot change data type of view column "c" from integer to text
+ERROR:  cannot change data type of view column "id" from integer to bigint
 ```
 
 ## Related

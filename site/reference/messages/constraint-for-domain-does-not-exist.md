@@ -9,7 +9,7 @@ sqlstate:
     code: "42704"
 call_sites:
   - "postgres/src/backend/catalog/pg_constraint.c:1427"
-reproduced: false
+reproduced: true
 ---
 
 # `constraint "%s" for domain %s does not exist`
@@ -28,11 +28,16 @@ Use the correct constraint name, or add `IF EXISTS` to a drop to tolerate its ab
 
 ## Example
 
-*Illustrative* — dropping a nonexistent domain constraint.
+*Reproduced* — captured from `reproducers/scenarios/28_typecmds_domain_comment.sql`.
 
 ```sql
-ALTER DOMAIN d DROP CONSTRAINT missing;
--- ERROR:  constraint "missing" for domain d does not exist
+ALTER DOMAIN repro.posint RENAME CONSTRAINT nonexistent TO x;
+```
+
+Produces:
+
+```text
+ERROR:  constraint "nonexistent" for domain repro.posint does not exist
 ```
 
 ## Related

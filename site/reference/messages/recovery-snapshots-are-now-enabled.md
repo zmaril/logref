@@ -7,7 +7,7 @@ level: [DEBUG1]
 call_sites:
   - "postgres/src/backend/storage/ipc/procarray.c:1115"
   - "postgres/src/backend/storage/ipc/procarray.c:1295"
-reproduced: false
+reproduced: true
 ---
 
 # `recovery snapshots are now enabled`
@@ -26,7 +26,7 @@ This is a positive milestone, not a problem. It confirms the standby is now quer
 
 ## Example
 
-*Illustrative* — a standby opening for read queries.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier4__replication_standby`). The site emits a background log record; the captured line was:
 
 ```text
 DEBUG:  recovery snapshots are now enabled

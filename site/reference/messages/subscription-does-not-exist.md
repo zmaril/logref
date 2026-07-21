@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/subscriptioncmds.c:2964"
   - "postgres/src/backend/replication/logical/worker.c:6186"
   - "postgres/src/backend/utils/cache/lsyscache.c:4043"
-reproduced: false
+reproduced: true
 ---
 
 # `subscription "%s" does not exist`
@@ -32,10 +32,16 @@ List subscriptions with `\dRs` in psql or `SELECT subname FROM pg_subscription` 
 
 ## Example
 
-*Illustrative* — altering a nonexistent subscription.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-ALTER SUBSCRIPTION missing_sub ENABLE;
+DROP SUBSCRIPTION nosuchsub;
+```
+
+Produces:
+
+```text
+ERROR:  subscription "nosuchsub" does not exist
 ```
 
 ## Related

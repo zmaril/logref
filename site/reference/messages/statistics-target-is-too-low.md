@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/statscmds.c:696"
   - "postgres/src/backend/commands/tablecmds.c:9082"
-reproduced: false
+reproduced: true
 ---
 
 # `statistics target %d is too low`
@@ -29,7 +29,13 @@ Use a value within the allowed range (the minimum is small but positive; the spe
 
 ## Example
 
-*Illustrative* — a statistics target below the minimum.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
+
+```sql
+ALTER TABLE repro.at ALTER COLUMN a SET STATISTICS -5;
+```
+
+Produces:
 
 ```text
 ERROR:  statistics target -5 is too low

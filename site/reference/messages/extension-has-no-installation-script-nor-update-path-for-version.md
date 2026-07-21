@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/commands/extension.c:1909"
-reproduced: false
+reproduced: true
 ---
 
 # `extension "%s" has no installation script nor update path for version "%s"`
@@ -28,10 +28,16 @@ List the versions the installed files support by checking `pg_available_extensio
 
 ## Example
 
-*Illustrative* — list what versions are installable.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-SELECT version FROM pg_available_extension_versions WHERE name = 'myext';
+CREATE EXTENSION amcheck VERSION 'nonexistent_version';
+```
+
+Produces:
+
+```text
+ERROR:  extension "amcheck" has no installation script nor update path for version "nonexistent_version"
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:14934"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot alter column type of typed table`
@@ -28,10 +28,16 @@ Change the attribute's type on the underlying composite type with `ALTER TYPE so
 
 ## Example
 
-*Illustrative* — altering a typed-table column type.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-ALTER TABLE my_typed_table ALTER COLUMN a TYPE bigint;
+ALTER TABLE s37.typed ALTER COLUMN a TYPE bigint;
+```
+
+Produces:
+
+```text
+ERROR:  cannot alter column type of typed table
 ```
 
 ## Related

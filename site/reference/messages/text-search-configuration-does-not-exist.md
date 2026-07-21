@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/catalog/namespace.c:3267"
   - "postgres/src/backend/commands/tsearchcmds.c:1166"
   - "postgres/src/backend/utils/cache/ts_cache.c:636"
-reproduced: false
+reproduced: true
 ---
 
 # `text search configuration "%s" does not exist`
@@ -30,10 +30,16 @@ Use an existing configuration name, schema-qualifying it if needed. List availab
 
 ## Example
 
-*Illustrative* — an unknown text-search configuration.
+*Reproduced* — captured from `reproducers/scenarios/28_typecmds_domain_comment.sql`.
 
 ```sql
-SELECT to_tsvector('englsh', 'hello');  -- no such configuration
+COMMENT ON TEXT SEARCH CONFIGURATION nonexistent_cfg IS 'x';
+```
+
+Produces:
+
+```text
+ERROR:  text search configuration "nonexistent_cfg" does not exist
 ```
 
 ## Related

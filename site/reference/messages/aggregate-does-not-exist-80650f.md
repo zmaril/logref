@@ -9,7 +9,7 @@ sqlstate:
     code: "42883"
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:2555"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate %s(*) does not exist`
@@ -28,10 +28,16 @@ Check the aggregate name and that it supports the `(*)` form. Only certain aggre
 
 ## Example
 
-*Illustrative* — a nonexistent aggregate used with (*).
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-SELECT tally(*) FROM t;  -- ERROR:  aggregate tally(*) does not exist
+DROP AGGREGATE nosuchagg(*);
+```
+
+Produces:
+
+```text
+ERROR:  aggregate nosuchagg(*) does not exist
 ```
 
 ## Related

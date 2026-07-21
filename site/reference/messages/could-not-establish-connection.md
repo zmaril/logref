@@ -12,7 +12,7 @@ call_sites:
   - "postgres/contrib/dblink/dblink.c:337"
   - "postgres/src/include/libpq/libpq-be-fe-helpers.h:161"
   - "postgres/src/include/libpq/libpq-be-fe-helpers.h:167"
-reproduced: false
+reproduced: true
 ---
 
 # `could not establish connection`
@@ -31,7 +31,13 @@ Read the included libpq error text for the exact cause. Verify the connection st
 
 ## Example
 
-*Illustrative* — a dblink connection that fails.
+*Reproduced* — captured from `reproducers/scenarios/43_contrib_fdw_indexam.sql`.
+
+```sql
+SELECT dblink_exec('nonexistent_conn', 'SELECT 1');
+```
+
+Produces:
 
 ```text
 ERROR:  could not establish connection

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/bytea.c:649"
   - "postgres/src/backend/utils/adt/bytea.c:716"
-reproduced: false
+reproduced: true
 ---
 
 # `index %d out of valid range, 0..%d`
@@ -29,10 +29,16 @@ Pass a position within `0..N`, where `N` is the reported bound. Validate the ind
 
 ## Example
 
-*Illustrative* — a position past the end.
+*Reproduced* — captured from `reproducers/scenarios/15_types_extended.sql`.
+
+```sql
+SELECT get_byte('\x1234'::bytea, 99);
+```
+
+Produces:
 
 ```text
-ERROR:  index 9 out of valid range, 0..4
+ERROR:  index 99 out of valid range, 0..1
 ```
 
 ## Related

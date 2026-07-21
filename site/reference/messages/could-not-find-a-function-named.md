@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:2297"
   - "postgres/src/backend/parser/parse_func.c:2570"
-reproduced: false
+reproduced: true
 ---
 
 # `could not find a function named "%s"`
@@ -29,10 +29,16 @@ Check the function name and schema, and confirm the function exists (`\df name` 
 
 ## Example
 
-*Illustrative* — referencing a missing function.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+DROP FUNCTION nosuchfn;
+```
+
+Produces:
 
 ```text
-ERROR:  could not find a function named "do_thing"
+ERROR:  could not find a function named "nosuchfn"
 ```
 
 ## Related

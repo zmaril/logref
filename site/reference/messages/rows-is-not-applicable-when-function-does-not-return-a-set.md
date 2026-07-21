@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:1269"
   - "postgres/src/backend/commands/functioncmds.c:1458"
-reproduced: false
+reproduced: true
 ---
 
 # `ROWS is not applicable when function does not return a set`
@@ -29,7 +29,13 @@ Remove the `ROWS` clause for a scalar function. If the function is meant to retu
 
 ## Example
 
-*Illustrative* — ROWS on a non-set-returning function.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+ALTER FUNCTION repro.altfn() ROWS 100;
+```
+
+Produces:
 
 ```text
 ERROR:  ROWS is not applicable when function does not return a set

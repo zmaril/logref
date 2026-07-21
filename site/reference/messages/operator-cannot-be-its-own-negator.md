@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/pg_operator.c:443"
   - "postgres/src/backend/commands/operatorcmds.c:631"
-reproduced: false
+reproduced: true
 ---
 
 # `operator cannot be its own negator`
@@ -29,10 +29,16 @@ Point `NEGATOR` at a distinct operator whose result is the logical negation of t
 
 ## Example
 
-*Illustrative* — an operator listing itself as its negator.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-CREATE OPERATOR === (LEFTARG=int, RIGHTARG=int, FUNCTION=f, NEGATOR = ===);  -- not allowed
+CREATE OPERATOR repro.=?= (LEFTARG = int, RIGHTARG = int, PROCEDURE = int4eq, NEGATOR = OPERATOR(repro.=?=));
+```
+
+Produces:
+
+```text
+ERROR:  operator cannot be its own negator
 ```
 
 ## Related

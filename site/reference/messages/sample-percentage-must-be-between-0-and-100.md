@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/access/tablesample/bernoulli.c:146"
   - "postgres/src/backend/access/tablesample/system.c:149"
-reproduced: false
+reproduced: true
 ---
 
 # `sample percentage must be between 0 and 100`
@@ -29,7 +29,13 @@ Use a percentage in the `0`–`100` range. For example `TABLESAMPLE SYSTEM (10)`
 
 ## Example
 
-*Illustrative* — a TABLESAMPLE percentage out of range.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
+
+```sql
+SELECT * FROM repro.parent TABLESAMPLE system(-1);
+```
+
+Produces:
 
 ```text
 ERROR:  sample percentage must be between 0 and 100

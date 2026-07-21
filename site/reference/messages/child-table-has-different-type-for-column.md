@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:7418"
   - "postgres/src/backend/commands/tablecmds.c:18234"
-reproduced: false
+reproduced: true
 ---
 
 # `child table "%s" has different type for column "%s"`
@@ -29,10 +29,16 @@ Define the child column with exactly the parent's type, then create or attach it
 
 ## Example
 
-*Illustrative* — mismatched column types.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
+
+```sql
+ALTER TABLE s36.cdiff INHERIT s36.parent1;
+```
+
+Produces:
 
 ```text
-ERROR:  child table "c" has different type for column "amount"
+ERROR:  child table "cdiff" has different type for column "a"
 ```
 
 ## Related

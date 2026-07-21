@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/utils/time/snapmgr.c:1420"
-reproduced: false
+reproduced: true
 ---
 
 # `a snapshot-importing transaction must have isolation level SERIALIZABLE or REPEATABLE READ`
@@ -28,11 +28,16 @@ Raise the importing transaction's isolation level before importing: begin it wit
 
 ## Example
 
-*Illustrative* — importing a snapshot at READ COMMITTED.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-BEGIN;  -- defaults to READ COMMITTED
-SET TRANSACTION SNAPSHOT '00000003-...';  -- ERROR
+SET TRANSACTION SNAPSHOT 'FFFFFFFF-1-1';
+```
+
+Produces:
+
+```text
+ERROR:  a snapshot-importing transaction must have isolation level SERIALIZABLE or REPEATABLE READ
 ```
 
 ## Related

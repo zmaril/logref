@@ -6,7 +6,7 @@ api: [ereport]
 level: [ERROR]
 call_sites:
   - "postgres/src/backend/libpq/be-fsstubs.c:442"
-reproduced: false
+reproduced: true
 ---
 
 # `could not open server file "%s": %m`
@@ -25,11 +25,16 @@ Use a path that exists and is accessible to the server's operating-system accoun
 
 ## Example
 
-*Illustrative* — a server-side file could not be opened.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
 
 ```sql
-SELECT lo_import('/root/secret.dat');
--- ERROR:  could not open server file "/root/secret.dat": Permission denied
+SELECT lo_import('/nonexistent');
+```
+
+Produces:
+
+```text
+ERROR:  could not open server file "/nonexistent": No such file or directory
 ```
 
 ## Related

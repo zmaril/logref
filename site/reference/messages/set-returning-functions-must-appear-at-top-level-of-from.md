@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/parser/parse_clause.c:571"
   - "postgres/src/backend/parser/parse_clause.c:599"
   - "postgres/src/backend/parser/parse_func.c:2683"
-reproduced: false
+reproduced: true
 ---
 
 # `set-returning functions must appear at top level of FROM`
@@ -30,10 +30,16 @@ List the set-returning function as its own `FROM` item, optionally with `LATERAL
 
 ## Example
 
-*Illustrative* — a set-returning function nested in FROM.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT * FROM (generate_series(1,3) + 1);  -- list the SRF as its own FROM item
+SELECT * FROM abs(generate_series(1, 3));
+```
+
+Produces:
+
+```text
+ERROR:  set-returning functions must appear at top level of FROM
 ```
 
 ## Related

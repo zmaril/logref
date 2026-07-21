@@ -14,7 +14,7 @@ call_sites:
   - "postgres/src/backend/commands/tablespace.c:1123"
   - "postgres/src/backend/commands/tablespace.c:1269"
   - "postgres/src/backend/commands/tablespace.c:1472"
-reproduced: false
+reproduced: true
 ---
 
 # `tablespace "%s" does not exist`
@@ -33,10 +33,16 @@ List existing tablespaces with `\db` in psql or `SELECT spcname FROM pg_tablespa
 
 ## Example
 
-*Illustrative* — placing a table in a missing tablespace.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-CREATE TABLE t (id int) TABLESPACE nowhere;
+DROP TABLESPACE nonexistent_ts;
+```
+
+Produces:
+
+```text
+ERROR:  tablespace "nonexistent_ts" does not exist
 ```
 
 ## Related

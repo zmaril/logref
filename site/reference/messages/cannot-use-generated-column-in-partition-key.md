@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:20563"
   - "postgres/src/backend/commands/tablecmds.c:20645"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use generated column in partition key`
@@ -29,11 +29,16 @@ Partition on the underlying columns the generated column is computed from, or on
 
 ## Example
 
-*Illustrative* — a generated column in the partition key.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-CREATE TABLE t (a int, b int GENERATED ALWAYS AS (a*2) STORED) PARTITION BY RANGE (b);
--- ERROR:  cannot use generated column in partition key
+CREATE TABLE s36.pk_gen (a int, b int GENERATED ALWAYS AS (a) STORED) PARTITION BY RANGE (b);
+```
+
+Produces:
+
+```text
+ERROR:  cannot use generated column in partition key
 ```
 
 ## Related

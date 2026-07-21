@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/user.c:1158"
   - "postgres/src/backend/commands/user.c:1162"
-reproduced: false
+reproduced: true
 ---
 
 # `current user cannot be dropped`
@@ -29,7 +29,13 @@ Connect as a different superuser or role-administering role to drop the target, 
 
 ## Example
 
-*Illustrative* — dropping the session's own role.
+*Reproduced* — captured from `reproducers/scenarios/33_grant_roles_coerce_dml.sql`.
+
+```sql
+DROP ROLE postgres;
+```
+
+Produces:
 
 ```text
 ERROR:  current user cannot be dropped

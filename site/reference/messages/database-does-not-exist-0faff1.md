@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/utils/init/postinit.c:1065"
   - "postgres/src/backend/utils/init/postinit.c:1129"
   - "postgres/src/backend/utils/init/postinit.c:1202"
-reproduced: false
+reproduced: true
 ---
 
 # `database "%s" does not exist`
@@ -31,10 +31,16 @@ List databases with `\l` in psql or `SELECT datname FROM pg_database`. Correct t
 
 ## Example
 
-*Illustrative* — connecting to a missing database.
+*Reproduced* — captured from `reproducers/scenarios/28_typecmds_domain_comment.sql`.
+
+```sql
+COMMENT ON DATABASE nonexistent_db IS 'x';
+```
+
+Produces:
 
 ```text
-FATAL:  database "typo_db" does not exist
+WARNING:  database "nonexistent_db" does not exist
 ```
 
 ## Related

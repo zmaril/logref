@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/analyze.c:3107"
   - "postgres/src/backend/parser/parse_relation.c:467"
-reproduced: false
+reproduced: true
 ---
 
 # `table name "%s" specified more than once`
@@ -29,10 +29,16 @@ Give each occurrence a distinct alias (`FROM orders o1, orders o2`), or remove t
 
 ## Example
 
-*Illustrative* — the same table listed twice without aliases.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
+
+```sql
+WITH t AS (SELECT 1) SELECT * FROM t, t;
+```
+
+Produces:
 
 ```text
-ERROR:  table name "orders" specified more than once
+ERROR:  table name "t" specified more than once
 ```
 
 ## Related

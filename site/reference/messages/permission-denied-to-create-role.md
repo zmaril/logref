@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/user.c:335"
   - "postgres/src/backend/commands/user.c:341"
   - "postgres/src/backend/commands/user.c:347"
-reproduced: false
+reproduced: true
 ---
 
 # `permission denied to create role`
@@ -32,10 +32,16 @@ Perform the creation as a superuser, or grant the acting role `CREATEROLE` (`ALT
 
 ## Example
 
-*Illustrative* — creating a role without CREATEROLE.
+*Reproduced* — captured from `reproducers/scenarios/48_roles_membership_reserved.sql`.
 
 ```sql
-CREATE ROLE app LOGIN;
+CREATE ROLE acl_x48;
+```
+
+Produces:
+
+```text
+ERROR:  permission denied to create role
 ```
 
 ## Related

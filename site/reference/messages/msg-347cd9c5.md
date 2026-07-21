@@ -99,7 +99,7 @@ call_sites:
   - "postgres/src/pl/plpython/plpy_plpymodule.c:497"
   - "postgres/src/pl/tcl/pltcl.c:1404"
   - "postgres/src/pl/tcl/pltcl.c:1898"
-reproduced: false
+reproduced: true
 ---
 
 # `%s`

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:290"
   - "postgres/src/backend/parser/parse_func.c:2498"
-reproduced: false
+reproduced: true
 ---
 
 # `%s is not a procedure`
@@ -29,10 +29,16 @@ Invoke functions with `SELECT function(...)` and procedures with `CALL procedure
 
 ## Example
 
-*Illustrative* — calling a function as a procedure.
+*Reproduced* — captured from `reproducers/scenarios/26_roles_acl_plpgsql.sql`.
 
 ```sql
-CALL now();  -- now() is a function; use SELECT now()
+CALL repro.addone(1);
+```
+
+Produces:
+
+```text
+ERROR:  repro.addone(integer) is not a procedure
 ```
 
 ## Related

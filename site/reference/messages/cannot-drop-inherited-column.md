@@ -9,7 +9,7 @@ sqlstate:
     code: "42P16"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:9483"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot drop inherited column "%s"`
@@ -28,10 +28,16 @@ Drop the column on the parent table, which removes it from all children, or deta
 
 ## Example
 
-*Illustrative* — dropping an inherited column.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
+
+```sql
+ALTER TABLE s36.inhchild DROP COLUMN a;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot drop inherited column "c"
+ERROR:  cannot drop inherited column "a"
 ```
 
 ## Related

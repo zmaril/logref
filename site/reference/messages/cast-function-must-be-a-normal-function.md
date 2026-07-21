@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:1663"
-reproduced: false
+reproduced: true
 ---
 
 # `cast function must be a normal function`
@@ -28,7 +28,13 @@ Use a plain function that takes the source type and returns the target type as t
 
 ## Example
 
-*Illustrative* — an aggregate as a cast function.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE CAST (int AS int) WITH FUNCTION max(int);
+```
+
+Produces:
 
 ```text
 ERROR:  cast function must be a normal function

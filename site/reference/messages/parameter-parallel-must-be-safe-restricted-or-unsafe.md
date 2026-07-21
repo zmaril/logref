@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/aggregatecmds.c:432"
   - "postgres/src/backend/commands/functioncmds.c:650"
-reproduced: false
+reproduced: true
 ---
 
 # `parameter "parallel" must be SAFE, RESTRICTED, or UNSAFE`
@@ -29,7 +29,13 @@ Use one of `PARALLEL SAFE`, `PARALLEL RESTRICTED`, or `PARALLEL UNSAFE`. Choose 
 
 ## Example
 
-*Illustrative* — an invalid parallel-safety keyword.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE AGGREGATE repro.agg_par(int) (SFUNC = int4pl, STYPE = int, PARALLEL = bogus);
+```
+
+Produces:
 
 ```text
 ERROR:  parameter "parallel" must be SAFE, RESTRICTED, or UNSAFE

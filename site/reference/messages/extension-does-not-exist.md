@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/extension.c:237"
   - "postgres/src/backend/commands/extension.c:3515"
-reproduced: false
+reproduced: true
 ---
 
 # `extension "%s" does not exist`
@@ -29,10 +29,16 @@ Install it with `CREATE EXTENSION name` (in the right database), or correct the 
 
 ## Example
 
-*Illustrative* — referencing a missing extension.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
+
+```sql
+DROP EXTENSION nonexistent_ext;
+```
+
+Produces:
 
 ```text
-ERROR:  extension "hstore" does not exist
+ERROR:  extension "nonexistent_ext" does not exist
 ```
 
 ## Related

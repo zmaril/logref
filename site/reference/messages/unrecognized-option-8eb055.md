@@ -14,7 +14,7 @@ call_sites:
   - "postgres/src/backend/commands/vacuum.c:234"
   - "postgres/src/backend/commands/vacuum.c:297"
   - "postgres/src/backend/postmaster/checkpointer.c:1024"
-reproduced: false
+reproduced: true
 ---
 
 # `unrecognized %s option "%s"`
@@ -33,10 +33,16 @@ Check the spelling and the server version's documentation for the command's opti
 
 ## Example
 
-*Illustrative* — a misspelled EXPLAIN option.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-EXPLAIN (ANALYZ) SELECT 1;
+ANALYZE (nonexistent_option) repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  unrecognized ANALYZE option "nonexistent_option"
 ```
 
 ## Related

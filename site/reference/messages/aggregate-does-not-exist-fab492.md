@@ -9,7 +9,7 @@ sqlstate:
     code: "42883"
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:2560"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate %s does not exist`
@@ -28,10 +28,16 @@ Verify the aggregate name and the argument types you pass. List available aggreg
 
 ## Example
 
-*Illustrative* — a call that matches no aggregate signature.
+*Reproduced* — captured from `reproducers/scenarios/28_typecmds_domain_comment.sql`.
 
 ```sql
-SELECT median(name) FROM t;  -- ERROR:  aggregate median(text) does not exist
+COMMENT ON AGGREGATE repro.nonexistent(int) IS 'x';
+```
+
+Produces:
+
+```text
+ERROR:  aggregate repro.nonexistent(integer) does not exist
 ```
 
 ## Related

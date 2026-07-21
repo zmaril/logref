@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/commands/tablecmds.c:976"
   - "postgres/src/backend/commands/tablecmds.c:3797"
   - "postgres/src/backend/commands/tablecmds.c:23293"
-reproduced: false
+reproduced: true
 ---
 
 # `only shared relations can be placed in pg_global tablespace`
@@ -31,10 +31,16 @@ Choose a different tablespace: use `pg_default`, omit the `TABLESPACE` clause, o
 
 ## Example
 
-*Illustrative* — a user table aimed at pg_global.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-CREATE TABLE t (id int) TABLESPACE pg_global;
+ALTER TABLE s37.dep SET TABLESPACE pg_global;
+```
+
+Produces:
+
+```text
+ERROR:  only shared relations can be placed in pg_global tablespace
 ```
 
 ## Related

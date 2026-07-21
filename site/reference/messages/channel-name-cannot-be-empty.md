@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/commands/async.c:913"
-reproduced: false
+reproduced: true
 ---
 
 # `channel name cannot be empty`
@@ -28,11 +28,16 @@ Supply a non-empty channel name. Check the value that feeds the channel argument
 
 ## Example
 
-*Illustrative* — an empty channel name.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-NOTIFY "";
--- ERROR:  channel name cannot be empty
+SELECT pg_notify('', 'x');
+```
+
+Produces:
+
+```text
+ERROR:  channel name cannot be empty
 ```
 
 ## Related

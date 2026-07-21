@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/like_match.c:450"
   - "postgres/src/backend/utils/adt/regexp.c:802"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid escape string`
@@ -29,10 +29,16 @@ Give `ESCAPE` a single character, such as `ESCAPE '\'`, or an empty string `ESCA
 
 ## Example
 
-*Illustrative* — a multi-character escape.
+*Reproduced* — captured from `reproducers/scenarios/17_strings_format_regex.sql`.
 
 ```sql
-SELECT 'a' LIKE 'a' ESCAPE '//';  -- ESCAPE must be one character
+SELECT 'a' LIKE 'a' ESCAPE 'aa';
+```
+
+Produces:
+
+```text
+ERROR:  invalid escape string
 ```
 
 ## Related

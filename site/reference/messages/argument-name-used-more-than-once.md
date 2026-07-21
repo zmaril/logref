@@ -9,7 +9,7 @@ sqlstate:
     code: "42601"
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:196"
-reproduced: false
+reproduced: true
 ---
 
 # `argument name "%s" used more than once`
@@ -28,10 +28,16 @@ Rename the duplicated parameter so each name is unique. Distinct names are requi
 
 ## Example
 
-*Illustrative* — a repeated parameter name.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-CREATE FUNCTION f(x int, x int) ...;  -- ERROR:  argument name "x" used more than once
+SELECT length(str => 'a', str => 'b');
+```
+
+Produces:
+
+```text
+ERROR:  argument name "str" used more than once
 ```
 
 ## Related

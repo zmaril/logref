@@ -41,7 +41,7 @@ call_sites:
   - "postgres/src/fe_utils/astreamer_file.c:124"
   - "postgres/src/fe_utils/astreamer_file.c:273"
   - "postgres/src/fe_utils/recovery_gen.c:144"
-reproduced: false
+reproduced: true
 ---
 
 # `could not write to file "%s": %m`
@@ -60,10 +60,16 @@ Read `%m`. `No space left on device` means free up space (or move `pg_wal`/temp 
 
 ## Example
 
-*Illustrative* — a temp file spill onto a full filesystem.
+*Reproduced* — captured from `reproducers/env-run.sh` (scenario `tier4__disk_full`).
+
+```sql
+INSERT INTO fill SELECT repeat('x',1000) FROM generate_series(1,10000000);
+```
+
+Produces:
 
 ```text
-ERROR:  could not write to file "base/pgsql_tmp/pgsql_tmp12345.0": No space left on device
+ERROR:  could not write to file "base/pgsql_tmp/pgsql_tmp12555.0": No space left on device
 ```
 
 ## Related

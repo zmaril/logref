@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/jsonfuncs.c:4912"
   - "postgres/src/backend/utils/adt/jsonfuncs.c:4954"
-reproduced: false
+reproduced: true
 ---
 
 # `null_value_treatment must be "delete_key", "return_target", "use_json_null", or "raise_exception"`
@@ -29,10 +29,16 @@ Pass one of the four allowed values exactly: `'delete_key'`, `'return_target'`, 
 
 ## Example
 
-*Illustrative* — an invalid null-treatment keyword.
+*Reproduced* — captured from `reproducers/scenarios/19_json_sqljson.sql`.
 
 ```sql
-SELECT jsonb_set_lax('{}', '{a}', NULL, true, 'ignore');  -- invalid keyword
+SELECT jsonb_set_lax('1', '{a}', NULL, true, 'nonsense');
+```
+
+Produces:
+
+```text
+ERROR:  null_value_treatment must be "delete_key", "return_target", "use_json_null", or "raise_exception"
 ```
 
 ## Related

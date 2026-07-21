@@ -14,7 +14,7 @@ call_sites:
   - "postgres/src/backend/commands/copy.c:801"
   - "postgres/src/backend/commands/copy.c:810"
   - "postgres/src/backend/commands/copy.c:883"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot specify %s in BINARY mode`
@@ -33,10 +33,16 @@ Remove the incompatible option when using binary format, or switch to text/CSV f
 
 ## Example
 
-*Illustrative* — a delimiter in binary COPY.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-COPY t FROM STDIN WITH (FORMAT binary, DELIMITER ',');
+COPY repro.parent TO STDOUT (FORMAT binary, DELIMITER ',');
+```
+
+Produces:
+
+```text
+ERROR:  cannot specify DELIMITER in BINARY mode
 ```
 
 ## Related

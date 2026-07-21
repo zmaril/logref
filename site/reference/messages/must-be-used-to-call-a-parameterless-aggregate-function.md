@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:809"
   - "postgres/src/backend/parser/parse_func.c:875"
-reproduced: false
+reproduced: true
 ---
 
 # `%s(*) must be used to call a parameterless aggregate function`
@@ -29,10 +29,16 @@ Call the aggregate with `(*)`, for example `count(*)`. The star form is how a pa
 
 ## Example
 
-*Illustrative* — a parameterless aggregate without the star.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT count() FROM t;  -- use count(*)
+SELECT count() FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  count(*) must be used to call a parameterless aggregate function
 ```
 
 ## Related

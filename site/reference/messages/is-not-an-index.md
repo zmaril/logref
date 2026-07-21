@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/commands/indexcmds.c:3162"
   - "postgres/src/backend/commands/tablecmds.c:20406"
   - "postgres/src/backend/commands/tablecmds.c:22350"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not an index`
@@ -34,10 +34,16 @@ Check the object's kind with `\d name`. Use the table-oriented command (`ALTER T
 
 ## Example
 
-*Illustrative* — a table passed to an index command.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-ALTER INDEX my_table SET (fillfactor = 70);
+COMMENT ON INDEX s35.base IS 'x';
+```
+
+Produces:
+
+```text
+ERROR:  "base" is not an index
 ```
 
 ## Related

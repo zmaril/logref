@@ -6,7 +6,7 @@ api: [ereport]
 level: [LOG]
 call_sites:
   - "postgres/src/backend/tcop/backend_startup.c:225"
-reproduced: false
+reproduced: true
 ---
 
 # `connection received: host=%s port=%s`
@@ -22,6 +22,14 @@ Emitted for each new connection when `log_connections` is enabled. A matching `c
 ## Is this a problem?
 
 Informational — no action required. It is valuable for auditing and for diagnosing connection storms: a flood of `connection received` lines without matching authorizations can indicate a scanner, a health check hammering the port, or an application opening and dropping connections. Correlate the host and port with `pg_stat_activity` when tracing a specific client.
+
+## Example
+
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier4__replication_standby`). The site emits a background log record; the captured line was:
+
+```text
+LOG:  connection received: host=127.0.0.1 port=59746
+```
 
 ## Related
 

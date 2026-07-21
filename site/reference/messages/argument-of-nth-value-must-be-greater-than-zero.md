@@ -9,7 +9,7 @@ sqlstate:
     code: "22016"
 call_sites:
   - "postgres/src/backend/utils/adt/windowfuncs.c:715"
-reproduced: false
+reproduced: true
 ---
 
 # `argument of nth_value must be greater than zero`
@@ -28,10 +28,16 @@ Pass a positive integer for the position, counting from 1. If the position comes
 
 ## Example
 
-*Illustrative* — nth_value with a zero position.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
 
 ```sql
-SELECT nth_value(x, 0) OVER () FROM t;  -- ERROR
+SELECT nth_value(id, 0) OVER () FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  argument of nth_value must be greater than zero
 ```
 
 ## Related

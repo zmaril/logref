@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/date.c:580"
   - "postgres/src/backend/utils/adt/date.c:605"
   - "postgres/src/backend/utils/adt/xml.c:2594"
-reproduced: false
+reproduced: true
 ---
 
 # `date out of range`
@@ -31,10 +31,16 @@ Keep dates within the representable range. Validate inputs before conversion, an
 
 ## Example
 
-*Illustrative* — date arithmetic that overflows.
+*Reproduced* — captured from `reproducers/scenarios/32_adt_arithmetic_overflow.sql`.
 
 ```sql
-SELECT 'infinity'::date + 1;  -- or a computation past the supported range
+SELECT '2000-01-01'::date + 2147483647;
+```
+
+Produces:
+
+```text
+ERROR:  date out of range
 ```
 
 ## Related

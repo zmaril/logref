@@ -9,7 +9,7 @@ sqlstate:
     code: "42P13"
 call_sites:
   - "postgres/src/backend/commands/aggregatecmds.c:302"
-reproduced: false
+reproduced: true
 ---
 
 # `basetype is redundant with aggregate input type specification`
@@ -28,10 +28,16 @@ Use one form. Prefer the modern syntax that lists the input types in the argumen
 
 ## Example
 
-*Illustrative* — both forms in one command.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-CREATE AGGREGATE myagg (int) (SFUNC = ..., STYPE = ..., BASETYPE = int);
+CREATE AGGREGATE repro.agg_bt(int) (BASETYPE = int, SFUNC = int4pl, STYPE = int);
+```
+
+Produces:
+
+```text
+ERROR:  basetype is redundant with aggregate input type specification
 ```
 
 ## Related

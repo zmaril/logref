@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/contrib/tablefunc/tablefunc.c:422"
   - "postgres/contrib/tablefunc/tablefunc.c:851"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid crosstab source data query`
@@ -29,10 +29,16 @@ Shape the source query to return `(row_name, category, value)` — and for the t
 
 ## Example
 
-*Illustrative* — a crosstab source query with the wrong columns.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
 
 ```sql
-SELECT * FROM crosstab('SELECT a, b FROM t');  -- needs three columns
+SELECT * FROM crosstab('SELECT 1') AS ct(a int, b int);
+```
+
+Produces:
+
+```text
+ERROR:  invalid crosstab source data query
 ```
 
 ## Related

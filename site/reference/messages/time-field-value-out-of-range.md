@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/date.c:1691"
   - "postgres/src/backend/utils/adt/timestamp.c:609"
-reproduced: false
+reproduced: true
 ---
 
 # `time field value out of range: %d:%02d:%02g`
@@ -29,7 +29,13 @@ Provide field values within range: hours 0–23, minutes 0–59, seconds 0–59 
 
 ## Example
 
-*Illustrative* — a time with an out-of-range hour.
+*Reproduced* — captured from `reproducers/scenarios/16_datetime_extended.sql`.
+
+```sql
+SELECT make_timestamptz(2024, 1, 1, 25, 0, 0);
+```
+
+Produces:
 
 ```text
 ERROR:  time field value out of range: 25:00:00

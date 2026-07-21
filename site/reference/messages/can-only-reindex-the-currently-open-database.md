@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/indexcmds.c:3314"
-reproduced: false
+reproduced: true
 ---
 
 # `can only reindex the currently open database`
@@ -28,10 +28,16 @@ Connect to the database you want to reindex and run `REINDEX DATABASE` naming th
 
 ## Example
 
-*Illustrative* — reindexing a different database.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-REINDEX DATABASE other_db;  -- while connected elsewhere
+REINDEX DATABASE nonexistent_db;
+```
+
+Produces:
+
+```text
+ERROR:  can only reindex the currently open database
 ```
 
 ## Related

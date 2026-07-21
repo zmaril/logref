@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/commands/tablecmds.c:2458"
   - "postgres/src/backend/commands/tablecmds.c:15080"
   - "postgres/src/backend/parser/parse_utilcmd.c:3535"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not a table`
@@ -34,16 +34,16 @@ Point the operation at an actual table, or use the command appropriate to the ob
 
 ## Example
 
-*Illustrative* — a table-only operation on a view.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-SELECT * FROM pgrowlocks('myview');
+TRUNCATE repro.child_v;
 ```
 
 Produces:
 
 ```text
-ERROR:  "myview" is not a table
+ERROR:  "child_v" is not a table
 ```
 
 ## Related

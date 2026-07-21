@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/vacuum.c:335"
-reproduced: false
+reproduced: true
 ---
 
 # `BUFFER_USAGE_LIMIT cannot be specified for VACUUM FULL`
@@ -28,10 +28,16 @@ Drop `BUFFER_USAGE_LIMIT` when using `FULL`, or drop `FULL` if you want to bound
 
 ## Example
 
-*Illustrative* — the option combined with FULL.
+*Reproduced* — captured from `reproducers/scenarios/53_vacuum_cluster_concurrency_ddl.sql`.
 
 ```sql
-VACUUM (FULL, BUFFER_USAGE_LIMIT '256MB') t;
+VACUUM (FULL, BUFFER_USAGE_LIMIT '256kB') repro.churn;
+```
+
+Produces:
+
+```text
+ERROR:  BUFFER_USAGE_LIMIT cannot be specified for VACUUM FULL
 ```
 
 ## Related

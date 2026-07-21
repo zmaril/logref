@@ -22,7 +22,7 @@ call_sites:
   - "postgres/src/backend/commands/tablecmds.c:14952"
   - "postgres/src/backend/commands/tablecmds.c:16711"
   - "postgres/src/backend/commands/tablecmds.c:19476"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot alter system column "%s"`
@@ -41,10 +41,10 @@ Do not alter system columns — they are part of the row storage machinery. If y
 
 ## Example
 
-*Illustrative* — altering a hidden system column.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-ALTER TABLE t ALTER COLUMN xmin SET NOT NULL;
+ALTER TABLE s37.dep ALTER COLUMN xmin TYPE text;
 ```
 
 Produces:

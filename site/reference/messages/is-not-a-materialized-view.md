@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/catalog/objectaddress.c:1489"
   - "postgres/src/backend/commands/matview.c:198"
   - "postgres/src/backend/commands/tablecmds.c:20384"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not a materialized view`
@@ -32,10 +32,16 @@ Confirm the object is actually a materialized view (`\dm` in psql lists them). I
 
 ## Example
 
-*Illustrative* — refreshing something that is not a materialized view.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-REFRESH MATERIALIZED VIEW plain_view;  -- "plain_view" is not a materialized view
+COMMENT ON MATERIALIZED VIEW s35.base_v IS 'x';
+```
+
+Produces:
+
+```text
+ERROR:  "base_v" is not a materialized view
 ```
 
 ## Related

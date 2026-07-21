@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/utils/adt/tsquery_op.c:123"
-reproduced: false
+reproduced: true
 ---
 
 # `distance in phrase operator must be an integer value between zero and %d inclusive`
@@ -28,11 +28,16 @@ Use a distance between 0 and the stated maximum. `<1>` (equivalent to `<->`) mea
 
 ## Example
 
-*Illustrative* — an out-of-range phrase distance.
+*Reproduced* — captured from `reproducers/scenarios/20_network_geo_enum_ts_xml.sql`.
 
 ```sql
-SELECT to_tsquery('a <100000> b');
--- distance in phrase operator must be an integer value between zero and 16384 inclusive
+SELECT tsquery_phrase('a'::tsquery, 'b'::tsquery, -1);
+```
+
+Produces:
+
+```text
+ERROR:  distance in phrase operator must be an integer value between zero and 16384 inclusive
 ```
 
 ## Related

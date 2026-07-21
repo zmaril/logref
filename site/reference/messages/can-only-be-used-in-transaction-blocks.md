@@ -16,7 +16,7 @@ call_sites:
   - "postgres/src/backend/access/transam/xact.c:4474"
   - "postgres/src/backend/access/transam/xact.c:4543"
   - "postgres/src/backend/access/transam/xact.c:4654"
-reproduced: false
+reproduced: true
 ---
 
 # `%s can only be used in transaction blocks`
@@ -35,16 +35,16 @@ Wrap the command in an explicit transaction: `BEGIN; ... SAVEPOINT sp; ... COMMI
 
 ## Example
 
-*Illustrative* — a savepoint outside a transaction.
+*Reproduced* — captured from `reproducers/scenarios/50_txn_control_savepoints.sql`.
 
 ```sql
-SAVEPOINT sp1;
+END AND CHAIN;
 ```
 
 Produces:
 
 ```text
-ERROR:  SAVEPOINT can only be used in transaction blocks
+ERROR:  COMMIT AND CHAIN can only be used in transaction blocks
 ```
 
 ## Related

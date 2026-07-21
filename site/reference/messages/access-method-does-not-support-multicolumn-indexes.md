@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/indexcmds.c:894"
-reproduced: false
+reproduced: true
 ---
 
 # `access method "%s" does not support multicolumn indexes`
@@ -28,10 +28,16 @@ Create separate single-column indexes, or use an access method that supports mul
 
 ## Example
 
-*Illustrative* — a multicolumn index on a single-column method.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-CREATE INDEX ON t USING hash (a, b);  -- hash indexes are single-column
+CREATE INDEX ON repro.child USING hash (amount, id);
+```
+
+Produces:
+
+```text
+ERROR:  access method "hash" does not support multicolumn indexes
 ```
 
 ## Related

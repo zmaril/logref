@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/dbsize.c:780"
   - "postgres/src/backend/utils/adt/dbsize.c:856"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid size: "%s"`
@@ -29,10 +29,16 @@ Write the size as a number optionally followed by a supported unit, for example 
 
 ## Example
 
-*Illustrative* — an unparseable size string.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
+
+```sql
+SELECT pg_size_bytes('not a size');
+```
+
+Produces:
 
 ```text
-ERROR:  invalid size: "10 gigs"
+ERROR:  invalid size: "not a size"
 ```
 
 ## Related

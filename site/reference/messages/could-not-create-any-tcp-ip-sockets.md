@@ -6,7 +6,7 @@ api: [ereport]
 level: [FATAL]
 call_sites:
   - "postgres/src/backend/postmaster/postmaster.c:1185"
-reproduced: false
+reproduced: true
 ---
 
 # `could not create any TCP/IP sockets`
@@ -25,7 +25,7 @@ Check that the configured `port` is free (another PostgreSQL instance or process
 
 ## Example
 
-*Illustrative* — no listen address could be bound.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier4__crash_recovery`). The site emits a background log record; the captured line was:
 
 ```text
 FATAL:  could not create any TCP/IP sockets

@@ -12,7 +12,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/copy.c:968"
   - "postgres/src/backend/commands/copy.c:1015"
-reproduced: false
+reproduced: true
 ---
 
 # `COPY delimiter character must not appear in the %s specification`
@@ -31,11 +31,16 @@ Choose a delimiter that does not occur in the null string, quote, or escape sett
 
 ## Example
 
-*Illustrative* — a delimiter that appears in the null string.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-COPY t TO STDOUT WITH (DELIMITER ',', NULL 'a,b');
--- ERROR:  COPY delimiter character must not appear in the NULL specification
+COPY repro.parent TO STDOUT WITH (FORMAT csv, DELIMITER E'\t', NULL E'\t');
+```
+
+Produces:
+
+```text
+ERROR:  COPY delimiter character must not appear in the NULL specification
 ```
 
 ## Related

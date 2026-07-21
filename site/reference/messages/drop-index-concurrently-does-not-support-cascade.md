@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:1620"
-reproduced: false
+reproduced: true
 ---
 
 # `DROP INDEX CONCURRENTLY does not support CASCADE`
@@ -28,11 +28,16 @@ Drop the index concurrently without `CASCADE` (concurrent drop is only for plain
 
 ## Example
 
-*Illustrative* — CASCADE with a concurrent drop.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-DROP INDEX CONCURRENTLY my_idx CASCADE;
--- DROP INDEX CONCURRENTLY does not support CASCADE
+DROP INDEX CONCURRENTLY s35.pidx_idx CASCADE;
+```
+
+Produces:
+
+```text
+ERROR:  DROP INDEX CONCURRENTLY does not support CASCADE
 ```
 
 ## Related

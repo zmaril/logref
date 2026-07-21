@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/commands/tablecmds.c:3188"
   - "postgres/src/backend/commands/tablecmds.c:4030"
   - "postgres/src/backend/utils/adt/tsvector_op.c:2829"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" does not exist`
@@ -34,17 +34,16 @@ List the table's columns to confirm the name and spelling: `\d schema.table` in 
 
 ## Example
 
-*Illustrative* — selecting a column that is not on the table (`05_catalog.sql`).
+*Reproduced* — captured from `reproducers/scenarios/21_ddl_objects.sql`.
 
 ```sql
-CREATE TABLE t (id int);
-SELECT nope FROM t;
+CREATE INDEX ON repro.child (nosuchcol);
 ```
 
 Produces:
 
 ```text
-ERROR:  column "nope" does not exist
+ERROR:  column "nosuchcol" does not exist
 ```
 
 ## Related

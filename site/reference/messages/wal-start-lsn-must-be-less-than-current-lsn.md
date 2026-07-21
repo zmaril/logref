@@ -11,7 +11,7 @@ call_sites:
   - "postgres/contrib/pg_walinspect/pg_walinspect.c:531"
   - "postgres/contrib/pg_walinspect/pg_walinspect.c:837"
   - "postgres/contrib/pg_walinspect/pg_walinspect.c:856"
-reproduced: false
+reproduced: true
 ---
 
 # `WAL start LSN must be less than current LSN`
@@ -30,10 +30,16 @@ Use a start position earlier than the current WAL position, which you can read w
 
 ## Example
 
-*Illustrative* — a start position past the WAL frontier.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
 
 ```sql
-SELECT * FROM pg_get_wal_records_info('FFFFFFFF/FFFFFFFF', 'FFFFFFFF/FFFFFFFF');
+SELECT * FROM pg_get_wal_records_info('FFFFFFFF/FFFFFFFF', '0/0');
+```
+
+Produces:
+
+```text
+ERROR:  WAL start LSN must be less than current LSN
 ```
 
 ## Related

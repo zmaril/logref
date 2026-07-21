@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_expr.c:3988"
   - "postgres/src/backend/parser/parse_func.c:885"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate ORDER BY is not implemented for window functions`
@@ -29,10 +29,16 @@ Remove the `ORDER BY` from inside the aggregate's arguments. Order the window it
 
 ## Example
 
-*Illustrative* — ordered aggregate used as a window function.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
 
 ```sql
-SELECT array_agg(x ORDER BY y) OVER (PARTITION BY g) FROM t;  -- not supported
+SELECT array_agg(id ORDER BY id) OVER () FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  aggregate ORDER BY is not implemented for window functions
 ```
 
 ## Related

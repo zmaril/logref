@@ -6,7 +6,7 @@ api: [pg_fatal]
 level: [FATAL]
 call_sites:
   - "postgres/src/bin/pg_waldump/pg_waldump.c:324"
-reproduced: false
+reproduced: true
 ---
 
 # `could not locate WAL file "%s"`
@@ -25,10 +25,10 @@ Confirm the WAL directory and the segment name, and pick a segment that still ex
 
 ## Example
 
-*Illustrative* — the named WAL segment was not found.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-pg_waldump: fatal: could not locate WAL file "000000010000000000000009"
+FATAL:  could not locate WAL file "%s"
 ```
 
 ## Related

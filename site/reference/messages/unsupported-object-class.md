@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/catalog/objectaddress.c:6443"
   - "postgres/src/backend/commands/alter.c:101"
   - "postgres/src/backend/commands/alter.c:138"
-reproduced: false
+reproduced: true
 ---
 
 # `unsupported object class: %u`
@@ -30,10 +30,16 @@ Treat it as an internal bug. If it is tied to a specific extension's objects, su
 
 ## Example
 
-*Illustrative* — emitted internally during dependency processing.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
+
+```sql
+SELECT pg_identify_object(0, 0, 0);
+```
+
+Produces:
 
 ```text
-ERROR:  unsupported object class: 1259
+ERROR:  unsupported object class: 0
 ```
 
 ## Related

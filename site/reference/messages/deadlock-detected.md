@@ -9,7 +9,7 @@ sqlstate:
     code: "40P01"
 call_sites:
   - "postgres/src/backend/storage/lmgr/deadlock.c:1133"
-reproduced: false
+reproduced: true
 ---
 
 # `deadlock detected`
@@ -28,11 +28,10 @@ Retry the aborted transaction; deadlocks are expected under concurrency and are 
 
 ## Example
 
-*Illustrative* — two transactions locking rows in opposite order.
+*Reproduced* — this site fired under `reproducers/scenarios/50_txn_concurrency.sh`; see the reproducer for the triggering workload. It emits:
 
 ```text
 ERROR:  deadlock detected
-DETAIL:  Process 101 waits for ShareLock on transaction 500; blocked by process 102.
 ```
 
 ## Related
