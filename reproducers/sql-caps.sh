@@ -47,7 +47,7 @@ done
 
 log "capturing Tier 2 scenarios (15-43) one at a time"
 for f in "$HERE"/scenarios/1[5-9]_*.sql "$HERE"/scenarios/[2-3][0-9]_*.sql \
-         "$HERE"/scenarios/4[0-3]_*.sql; do
+         "$HERE"/scenarios/4[0-9]_*.sql "$HERE"/scenarios/[5-9][0-9]_*.sql; do
     [ -e "$f" ] || continue
     name="$(basename "$f" .sql)"
     : > "$logfile"                       # isolate this scenario's emissions
