@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 549,
-  "combined_total": 794,
+  "new_sites": 602,
+  "combined_total": 847,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -5539,7 +5539,8 @@
       "message": "WAL input LSN must be less than current LSN",
       "scenarios": [
         "tier4__wal_control_states",
-        "tier4__walctl_sql"
+        "tier4__walctl_sql",
+        "tier2__64_contrib_inspect_deep"
       ]
     },
     {
@@ -5552,7 +5553,8 @@
       "message": "WAL start LSN must be less than end LSN",
       "scenarios": [
         "tier4__wal_control_states",
-        "tier4__walctl_sql"
+        "tier4__walctl_sql",
+        "tier2__64_contrib_inspect_deep"
       ]
     },
     {
@@ -6559,6 +6561,622 @@
         "tier4__59_repl_slots_standby",
         "tier4__60_logical_decoding_primary",
         "tier4__61_pub_sub_publisher"
+      ]
+    },
+    {
+      "path": "postgres/contrib/amcheck/verify_common.c",
+      "line": 170,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "expected \"%s\" index as targets for verification",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/amcheck/verify_nbtree.c",
+      "line": 391,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "verifying consistency of tree structure for index \"%s\"",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/amcheck/verify_nbtree.c",
+      "line": 394,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "verifying consistency of tree structure for index \"%s\" with cross-level checks",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/amcheck/verify_nbtree.c",
+      "line": 586,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "verifying that tuples from index \"%s\" are present in \"%s\"",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/amcheck/verify_nbtree.c",
+      "line": 593,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/amcheck/verify_nbtree.c",
+      "line": 645,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "verifying level %u%s",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/amcheck/verify_nbtree.c",
+      "line": 1253,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "verifying %u items on %s block %u",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/dblink/dblink.c",
+      "line": 2845,
+      "level": "level",
+      "sqlstates": [
+        "sqlstate"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/dict_int/dict_int.c",
+      "line": 55,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "maxlen value has to be >= 1",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/dict_int/dict_int.c",
+      "line": 69,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unrecognized intdict parameter: \"%s\"",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/hstore/hstore_io.c",
+      "line": 682,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NULL_VALUE_NOT_ALLOWED"
+      ],
+      "message": "null value not allowed for hstore key",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/hstore/hstore_io.c",
+      "line": 742,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "array must have even number of elements",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/hstore/hstore_io.c",
+      "line": 749,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "array must have two columns",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/hstore/hstore_io.c",
+      "line": 755,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "wrong number of array subscripts",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/hstore/hstore_subs.c",
+      "line": 54,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "hstore allows only one subscript",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/hstore/hstore_subs.c",
+      "line": 155,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NULL_VALUE_NOT_ALLOWED"
+      ],
+      "message": "hstore subscript in assignment must not be null",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/intarray/_int_bool.c",
+      "line": 713,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "querytree is no longer implemented",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/intarray/_int_gist.c",
+      "line": 185,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_PROGRAM_LIMIT_EXCEEDED"
+      ],
+      "message": "input array is too big (%d maximum allowed, %d current), use gist__intbig_ops opclass instead",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/isn/isn.c",
+      "line": 409,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TEXT_REPRESENTATION"
+      ],
+      "message": "cannot cast EAN13(%s) to %s for number: \"%s\"",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/lo/lo.c",
+      "line": 39,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "lo_manage: not fired by trigger manager",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/lo/lo.c",
+      "line": 42,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "%s: must be fired for row",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/ltree/_ltree_op.c",
+      "line": 44,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "array must be one-dimensional",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/ltree/_ltree_op.c",
+      "line": 48,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NULL_VALUE_NOT_ALLOWED"
+      ],
+      "message": "array must not contain nulls",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/ltree/lquery_op.c",
+      "line": 296,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "array must be one-dimensional",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/ltree/lquery_op.c",
+      "line": 300,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NULL_VALUE_NOT_ALLOWED"
+      ],
+      "message": "array must not contain nulls",
+      "scenarios": [
+        "tier2__62_contrib_type_input_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/brinfuncs.c",
+      "line": 103,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "input page is not a valid %s page",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/btreefuncs.c",
+      "line": 275,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "must be superuser to use pageinspect functions",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/btreefuncs.c",
+      "line": 634,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "must be superuser to use pageinspect functions",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/btreefuncs.c",
+      "line": 854,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "must be superuser to use pageinspect functions",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/rawpage.c",
+      "line": 56,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid block number",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/rawpage.c",
+      "line": 154,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "must be superuser to use raw page functions",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/crypt-blowfish.c",
+      "line": 615,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid salt",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/crypt-des.c",
+      "line": 695,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid salt",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/crypt-sha.c",
+      "line": 220,
+      "level": "NOTICE",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "rounds=%d is below supported value (%d), using %d instead",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/crypt-sha.c",
+      "line": 351,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "using salt \"%s\", salt len = %d, rounds = %u",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/pgcrypto.c",
+      "line": 288,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_EXTERNAL_ROUTINE_INVOCATION_EXCEPTION"
+      ],
+      "message": "encrypt error: %s",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/pgcrypto.c",
+      "line": 439,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_EXTERNAL_ROUTINE_INVOCATION_EXCEPTION"
+      ],
+      "message": "decrypt_iv error: %s",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgstattuple/pgstatindex.c",
+      "line": 545,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "relation \"%s\" is not a GIN index",
+      "scenarios": [
+        "tier2__64_contrib_inspect_deep"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 145,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid value for floating point option \"%s\": %s",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 151,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "\"%s\" must be a floating point value greater than or equal to zero",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 172,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid value for integer option \"%s\": %s",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 178,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "\"%s\" must be an integer value greater than zero",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 195,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "password_required=false is superuser-only",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 205,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "sslcert and sslkey are superuser-only",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 222,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid value for string option \"%s\": %s",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 477,
+      "level": "WARNING",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "extension \"%s\" is not installed",
+      "scenarios": [
+        "tier2__65_contrib_fdw_dblink_crypto"
+      ]
+    },
+    {
+      "path": "postgres/contrib/tcn/tcn.c",
+      "line": 78,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_E_R_I_E_TRIGGER_PROTOCOL_VIOLATED"
+      ],
+      "message": "triggered_change_notification: must be called as trigger",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/tcn/tcn.c",
+      "line": 84,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_E_R_I_E_TRIGGER_PROTOCOL_VIOLATED"
+      ],
+      "message": "triggered_change_notification: must be called after the change",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/tcn/tcn.c",
+      "line": 90,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_E_R_I_E_TRIGGER_PROTOCOL_VIOLATED"
+      ],
+      "message": "triggered_change_notification: must be called for each row",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/tcn/tcn.c",
+      "line": 179,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_E_R_I_E_TRIGGER_PROTOCOL_VIOLATED"
+      ],
+      "message": "triggered_change_notification: must be called on a table with a primary key",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/unaccent/unaccent.c",
+      "line": 106,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "could not open unaccent file \"%s\": %m",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/unaccent/unaccent.c",
+      "line": 360,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unrecognized Unaccent parameter: \"%s\"",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/contrib/unaccent/unaccent.c",
+      "line": 369,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "missing Rules parameter",
+      "scenarios": [
+        "tier2__63_contrib_dict_trigger"
       ]
     }
   ]
