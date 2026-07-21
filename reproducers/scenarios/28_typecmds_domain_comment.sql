@@ -1,0 +1,64 @@
+-- CREATE/ALTER TYPE, DOMAIN, CREATE TYPE variants (typecmds.c).
+CREATE TYPE repro.rng AS RANGE (subtype = int, subtype = text);
+CREATE TYPE repro.rng2 AS RANGE (subtype = nonexistent_type);
+CREATE TYPE repro.rng3 AS RANGE (subtype = int, subtype_opclass = nonexistent_opc);
+CREATE TYPE repro.rng4 AS RANGE (subtype = int, multirange_type_name = int);
+CREATE TYPE repro.base_t (INPUT = nonexistent_in, OUTPUT = nonexistent_out);
+CREATE TYPE repro.base_t2 (INPUT = int4in);
+CREATE TYPE repro.base_t3 (INTERNALLENGTH = -5, INPUT = int4in, OUTPUT = int4out);
+CREATE TYPE repro.base_t4 (INPUT = int4in, OUTPUT = int4out, ALIGNMENT = nonsense);
+CREATE TYPE repro.base_t5 (INPUT = int4in, OUTPUT = int4out, STORAGE = nonsense);
+CREATE TYPE repro.enum_dup AS ENUM ('a', 'a');
+ALTER TYPE repro.mood RENAME TO parent;
+ALTER TYPE repro.mood SET SCHEMA nonexistent_schema;
+ALTER TYPE repro.mood OWNER TO nonexistent_role;
+ALTER TYPE repro.mood ADD ATTRIBUTE x int;             -- not composite
+ALTER TYPE repro.comp2 ALTER ATTRIBUTE nonexistent TYPE int;
+ALTER TYPE repro.comp2 DROP ATTRIBUTE nonexistent;
+ALTER TYPE repro.comp2 RENAME ATTRIBUTE a TO a;
+CREATE DOMAIN repro.d1 AS nonexistent_type;
+CREATE DOMAIN repro.d2 AS int DEFAULT 'notanint';
+CREATE DOMAIN repro.d3 AS int CONSTRAINT c CHECK (VALUE > nosuchcol);
+CREATE DOMAIN repro.d4 AS int[] CHECK (VALUE IS NOT NULL);
+CREATE DOMAIN repro.d5 AS repro.parent;                -- composite domain limits
+ALTER DOMAIN repro.posint SET DEFAULT 'x';
+ALTER DOMAIN repro.posint ADD CONSTRAINT c1 CHECK (VALUE > 0) NOT VALID;
+ALTER DOMAIN repro.posint VALIDATE CONSTRAINT nonexistent;
+ALTER DOMAIN repro.posint DROP CONSTRAINT nonexistent;
+ALTER DOMAIN repro.posint RENAME CONSTRAINT nonexistent TO x;
+ALTER DOMAIN repro.posint SET NOT NULL;
+ALTER DOMAIN repro.nonexistent SET DEFAULT 1;
+CREATE TYPE repro.shell;
+CREATE TYPE repro.shell AS (a int);                     -- redefine shell as composite ok; then dup
+CREATE TYPE repro.shell AS ENUM ('x');
+-- objectaddress: COMMENT ON / SECURITY LABEL for many object types
+COMMENT ON SCHEMA nonexistent_schema IS 'x';
+COMMENT ON TYPE repro.nonexistent_type IS 'x';
+COMMENT ON DOMAIN repro.nonexistent IS 'x';
+COMMENT ON FUNCTION repro.nonexistent() IS 'x';
+COMMENT ON AGGREGATE repro.nonexistent(int) IS 'x';
+COMMENT ON OPERATOR repro.===(int,int) IS 'x';
+COMMENT ON COLLATION "nonexistent_coll" IS 'x';
+COMMENT ON EXTENSION nonexistent_ext IS 'x';
+COMMENT ON SEQUENCE repro.nonexistent_seq IS 'x';
+COMMENT ON INDEX repro.nonexistent_idx IS 'x';
+COMMENT ON TRIGGER nope ON repro.parent IS 'x';
+COMMENT ON RULE nope ON repro.parent IS 'x';
+COMMENT ON CONSTRAINT nope ON repro.parent IS 'x';
+COMMENT ON POLICY nope ON repro.parent IS 'x';
+COMMENT ON PUBLICATION nonexistent_pub IS 'x';
+COMMENT ON SUBSCRIPTION nonexistent_sub IS 'x';
+COMMENT ON STATISTICS repro.nonexistent_stat IS 'x';
+COMMENT ON TEXT SEARCH CONFIGURATION nonexistent_cfg IS 'x';
+COMMENT ON TEXT SEARCH DICTIONARY nonexistent_dict IS 'x';
+COMMENT ON FOREIGN DATA WRAPPER nonexistent_fdw IS 'x';
+COMMENT ON SERVER nonexistent_srv IS 'x';
+COMMENT ON LANGUAGE nonexistent_lang IS 'x';
+COMMENT ON CAST (int AS nonexistent_type) IS 'x';
+COMMENT ON TABLESPACE nonexistent_ts IS 'x';
+COMMENT ON DATABASE nonexistent_db IS 'x';
+COMMENT ON ROLE nonexistent_role IS 'x';
+COMMENT ON LARGE OBJECT 999999999 IS 'x';
+COMMENT ON COLUMN repro.parent.nonexistent IS 'x';
+SECURITY LABEL FOR nonexistent_provider ON TABLE repro.parent IS 'x';
+SECURITY LABEL ON ROLE nonexistent_role IS 'x';

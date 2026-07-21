@@ -1,0 +1,5533 @@
+{
+  "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
+  "catalog_total": 14806,
+  "baseline_sites": 245,
+  "new_sites": 473,
+  "combined_total": 718,
+  "sites": [
+    {
+      "path": "postgres/contrib/amcheck/verify_heapam.c",
+      "line": 337,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot check relation \"%s\"",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/contrib/amcheck/verify_heapam.c",
+      "line": 389,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "starting block number must be between 0 and %u",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/contrib/dblink/dblink.c",
+      "line": 187,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CONNECTION_DOES_NOT_EXIST"
+      ],
+      "message": "connection \"%s\" not available",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/contrib/dblink/dblink.c",
+      "line": 235,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQLCLIENT_UNABLE_TO_ESTABLISH_SQLCONNECTION"
+      ],
+      "message": "could not establish connection",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/contrib/dblink/dblink.c",
+      "line": 337,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQLCLIENT_UNABLE_TO_ESTABLISH_SQLCONNECTION"
+      ],
+      "message": "could not establish connection",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/contrib/fuzzystrmatch/fuzzystrmatch.c",
+      "line": 292,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ZERO_LENGTH_CHARACTER_STRING"
+      ],
+      "message": "output cannot be empty string",
+      "scenarios": [
+        "tier2__41_contrib_input_errors"
+      ]
+    },
+    {
+      "path": "postgres/contrib/hstore/hstore_io.c",
+      "line": 668,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "arrays must have same bounds",
+      "scenarios": [
+        "tier2__41_contrib_input_errors"
+      ]
+    },
+    {
+      "path": "postgres/contrib/hstore/hstore_io.c",
+      "line": 1013,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "first argument must be a rowtype",
+      "scenarios": [
+        "tier2__41_contrib_input_errors"
+      ]
+    },
+    {
+      "path": "postgres/contrib/intarray/_int_op.c",
+      "line": 223,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "second parameter must be \"ASC\" or \"DESC\"",
+      "scenarios": [
+        "tier2__41_contrib_input_errors"
+      ]
+    },
+    {
+      "path": "postgres/contrib/ltree/ltree_op.c",
+      "line": 308,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid positions",
+      "scenarios": [
+        "tier2__41_contrib_input_errors"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/btreefuncs.c",
+      "line": 229,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a %s index",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/btreefuncs.c",
+      "line": 862,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a %s index",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/heapfuncs.c",
+      "line": 411,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATA_CORRUPTED"
+      ],
+      "message": "end of tuple reached without looking at all its data",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/rawpage.c",
+      "line": 162,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot get raw page from relation \"%s\"",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/rawpage.c",
+      "line": 179,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "block number %u is out of range for relation \"%s\"",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pageinspect/rawpage.c",
+      "line": 223,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid page size",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_prewarm/pg_prewarm.c",
+      "line": 99,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid prewarm type",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_prewarm/pg_prewarm.c",
+      "line": 155,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "relation \"%s\" does not have storage",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_surgery/heap_surgery.c",
+      "line": 112,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot operate on relation \"%s\"",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_surgery/heap_surgery.c",
+      "line": 171,
+      "level": "NOTICE",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "skipping block %u for relation \"%s\" because the block number is out of range",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_surgery/heap_surgery.c",
+      "line": 376,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NULL_VALUE_NOT_ALLOWED"
+      ],
+      "message": "array must not contain nulls",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_visibility/pg_visibility.c",
+      "line": 928,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "relation \"%s\" is of wrong relation kind",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_walinspect/pg_walinspect.c",
+      "line": 110,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "could not read WAL at LSN %X/%08X",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_walinspect/pg_walinspect.c",
+      "line": 531,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "WAL start LSN must be less than current LSN",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/pgcrypto.c",
+      "line": 177,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "gen_salt: %s",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/pgcrypto.c",
+      "line": 200,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "gen_salt: %s",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/pgcrypto.c",
+      "line": 332,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_EXTERNAL_ROUTINE_INVOCATION_EXCEPTION"
+      ],
+      "message": "decrypt error: %s",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/pgcrypto.c",
+      "line": 511,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "Cannot use \"%s\": %s",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgcrypto/px.c",
+      "line": 105,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_EXTERNAL_ROUTINE_INVOCATION_EXCEPTION"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgrowlocks/pgrowlocks.c",
+      "line": 95,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a table",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgstattuple/pgstatapprox.c",
+      "line": 342,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "relation \"%s\" is of wrong relation kind",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgstattuple/pgstatindex.c",
+      "line": 226,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "relation \"%s\" is not a btree index",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pgstattuple/pgstattuple.c",
+      "line": 302,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot get tuple-level statistics for relation \"%s\"",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/connection.c",
+      "line": 659,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQLCLIENT_UNABLE_TO_ESTABLISH_SQLCONNECTION"
+      ],
+      "message": "could not connect to server \"%s\"",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/contrib/postgres_fdw/option.c",
+      "line": 105,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FDW_INVALID_OPTION_NAME"
+      ],
+      "message": "invalid option \"%s\"",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/contrib/tablefunc/tablefunc.c",
+      "line": 206,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "number of rows cannot be negative",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/tablefunc/tablefunc.c",
+      "line": 422,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid crosstab source data query",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/contrib/tablefunc/tablefunc.c",
+      "line": 1422,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "invalid connectby return type",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/common/relation.c",
+      "line": 62,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not open relation with OID %u",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/common/reloptions.c",
+      "line": 1585,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unrecognized parameter \"%s\"",
+      "scenarios": [
+        "tier2__27_alter_table",
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/common/reloptions.c",
+      "line": 1713,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid value for boolean option \"%s\": %s",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/common/reloptions.c",
+      "line": 1745,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "value %s out of bounds for option \"%s\"",
+      "scenarios": [
+        "tier2__27_alter_table",
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/common/reloptions.c",
+      "line": 1759,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid value for floating point option \"%s\": %s",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/index/indexam.c",
+      "line": 202,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not an index",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/sequence/sequence.c",
+      "line": 73,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a sequence",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/tablesample/system.c",
+      "line": 149,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLESAMPLE_ARGUMENT"
+      ],
+      "message": "sample percentage must be between 0 and 100",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/twophase.c",
+      "line": 379,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "prepared transactions are disabled",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/twophase.c",
+      "line": 620,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "prepared transaction with identifier \"%s\" does not exist",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 2784,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "updated min recovery point to %X/%08X on timeline %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 3887,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "removing all temporary WAL segments",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 4012,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "attempting to remove WAL segments newer than log file %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 4083,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "recycled write-ahead log file \"%s\"",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml",
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 4225,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "removing WAL backup history file \"%s\"",
+      "scenarios": [
+        "tier4__replication_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 5928,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was interrupted; last known up at %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 6217,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "initializing for hot standby",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 6380,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "selected new timeline ID: %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 6413,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "archive recovery complete",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogfuncs.c",
+      "line": 284,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "value too long for restore point (maximum %d characters)",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 561,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "starting backup recovery with redo LSN %X/%08X, checkpoint LSN %X/%08X, on timeline ID %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 577,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "checkpoint record is at %X/%08X",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 760,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "entering standby mode",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1259,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "backup time %s in file \"%s\"",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1264,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "backup label %s in file \"%s\"",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1281,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "backup timeline %u in file \"%s\"",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1699,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "redo starts at %X/%08X",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1848,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "redo done at %X/%08X system usage: %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1854,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "last completed transaction was at log time %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2093,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "end of backup record reached",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2181,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "end of backup reached",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2192,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "completed backup recovery with redo LSN %X/%08X and end LSN %X/%08X",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2223,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "consistent recovery state reached at %X/%08X",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 3165,
+      "level": "emode_for_corrupt_record(emode, xlogreader->EndRecPtr)",
+      "sqlstates": [],
+      "message": "%s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 3749,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "switched WAL source from %s to %s after %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 4375,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "could not open file \"%s\": %m",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 4451,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "received promote request",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogutils.c",
+      "line": 822,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "switched to timeline %u valid until %X/%08X",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/backup/basebackup.c",
+      "line": 1298,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "file \"%s\" excluded from backup",
+      "scenarios": [
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/backup/basebackup.c",
+      "line": 1373,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "contents of directory \"%s\" excluded from backup",
+      "scenarios": [
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/heap.c",
+      "line": 2220,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "cannot add NO INHERIT constraint to partitioned table \"%s\"",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/heap.c",
+      "line": 3222,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot use generated column \"%s\" in column generation expression",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/heap.c",
+      "line": 3763,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot truncate a table referenced in a foreign key constraint",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/index.c",
+      "line": 3485,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "validate_index found %.0f heap tuples, %.0f index tuples; inserted %.0f missing tuples",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 859,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "cannot create temporary relation in non-temporary schema",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 2686,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "statistics object \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 2831,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "text search parser \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 2976,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "text search dictionary \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 3122,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "text search template \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 3267,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "text search configuration \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1147,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "large object %u does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment",
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1627,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql",
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 2721,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unrecognized object type \"%s\"",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 4948,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "unsupported object class: %u",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_aggregate.c",
+      "line": 859,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "function %s does not exist",
+      "scenarios": [
+        "tier2__21_ddl_objects",
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_constraint.c",
+      "line": 1234,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "constraint \"%s\" for table \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_constraint.c",
+      "line": 1427,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "constraint \"%s\" for domain %s does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_enum.c",
+      "line": 185,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "enum label \"%s\" used more than once",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_enum.c",
+      "line": 361,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "enum label \"%s\" already exists",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_enum.c",
+      "line": 674,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "\"%s\" is not an existing enum label",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_publication.c",
+      "line": 83,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_publication.c",
+      "line": 697,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_type.c",
+      "line": 801,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "type \"%s\" already exists",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 227,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate msfunc must not be specified without mstype",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/amcmds.c",
+      "line": 152,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "access method \"%s\" does not exist",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/analyze.c",
+      "line": 262,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "skipping \"%s\" --- cannot analyze non-tables or special system tables",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/analyze.c",
+      "line": 1059,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/async.c",
+      "line": 913,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "channel name cannot be empty",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 113,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "collation attribute \"%s\" not recognized",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/comment.c",
+      "line": 60,
+      "level": "WARNING",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_DATABASE"
+      ],
+      "message": "database \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/conversioncmds.c",
+      "line": 61,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "source encoding \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 435,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot use \"%s\" with HEADER in COPY TO",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 498,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "COPY %s \"%s\" not recognized",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 529,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 556,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "COPY %s \"%s\" not recognized",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 743,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "argument to option \"%s\" must be a valid encoding name",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 792,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "cannot specify %s in BINARY mode",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 898,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "COPY quote must be a single one-byte character",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 903,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "COPY delimiter and quote must be different",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 915,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "COPY escape must be a single one-byte character",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 942,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "COPY %s cannot be used with %s",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 968,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "COPY delimiter character must not appear in the %s specification",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copy.c",
+      "line": 1126,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" does not exist",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copyto.c",
+      "line": 815,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot copy from view \"%s\"",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copyto.c",
+      "line": 983,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "COPY query must have a RETURNING clause",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/copyto.c",
+      "line": 1204,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not open file \"%s\" for writing: %m",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/createas.c",
+      "line": 406,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_TABLE"
+      ],
+      "message": "relation \"%s\" already exists",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/define.c",
+      "line": 137,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "%s requires a Boolean value",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/define.c",
+      "line": 372,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "conflicting or redundant options",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql",
+        "tier2__28_typecmds_domain_comment",
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/event_trigger.c",
+      "line": 153,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unrecognized event name \"%s\"",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/explain_state.c",
+      "line": 159,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unrecognized value for %s option \"%s\": \"%s\"",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/explain_state.c",
+      "line": 168,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unrecognized %s option \"%s\"",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/explain_state.c",
+      "line": 201,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "EXPLAIN option %s requires ANALYZE",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/explain_state.c",
+      "line": 207,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "%s options %s and %s cannot be used together",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/extension.c",
+      "line": 237,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "extension \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment",
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/extension.c",
+      "line": 1293,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "executing extension script for \"%s\" version '%s'",
+      "scenarios": [
+        "tier2__40_extensions_setup",
+        "tier4__corruption"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/extension.c",
+      "line": 1295,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "executing extension script for \"%s\" update from version '%s' to '%s'",
+      "scenarios": [
+        "tier2__40_extensions_setup",
+        "tier4__corruption"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/extension.c",
+      "line": 1909,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "extension \"%s\" has no installation script nor update path for version \"%s\"",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/extension.c",
+      "line": 2112,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "installing required extension \"%s\"",
+      "scenarios": [
+        "tier2__40_extensions_setup"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/extension.c",
+      "line": 3515,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "extension \"%s\" does not exist",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/foreigncmds.c",
+      "line": 166,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "option \"%s\" not found",
+      "scenarios": [
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 131,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "type \"%s\" does not exist",
+      "scenarios": [
+        "tier2__21_ddl_objects",
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 352,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "VARIADIC parameter must be an array",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 398,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "parameter name \"%s\" used more than once",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 458,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "input parameters after one with a default value must also have defaults",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 840,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "COST must be positive",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1116,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "language \"%s\" does not exist",
+      "scenarios": [
+        "tier2__21_ddl_objects",
+        "tier2__30_plpgsql_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1269,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "ROWS is not applicable when function does not return a set",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1748,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "enum data types are not binary-compatible",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1775,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "source data type and target data type are the same",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 2136,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "language \"%s\" does not exist",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql",
+        "tier2__30_plpgsql_runtime",
+        "tier2__40_extensions_setup"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 871,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "access method \"%s\" does not exist",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 884,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "access method \"%s\" does not support unique indexes",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 889,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "access method \"%s\" does not support included columns",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 894,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "access method \"%s\" does not support multicolumn indexes",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 1974,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" named in key does not exist",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 1980,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" does not exist",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 2311,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "data type %s has no default operator class for access method \"%s\"",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 2342,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "operator class \"%s\" does not exist for access method \"%s\"",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 2997,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unrecognized %s option \"%s\"",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 3290,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot reindex system catalogs concurrently",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 3314,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "can only reindex the currently open database",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/matview.c",
+      "line": 205,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "CONCURRENTLY cannot be used when the materialized view is not populated",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/opclasscmds.c",
+      "line": 122,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "operator family \"%s\" does not exist for access method \"%s\"",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/opclasscmds.c",
+      "line": 203,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "operator class \"%s\" does not exist for access method \"%s\"",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/opclasscmds.c",
+      "line": 374,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "access method \"%s\" does not exist",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/operatorcmds.c",
+      "line": 152,
+      "level": "WARNING",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "operator attribute \"%s\" not recognized",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/operatorcmds.c",
+      "line": 181,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "operator argument types must be specified",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 1247,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "policy \"%s\" for table \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/proclang.c",
+      "line": 234,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "language \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment",
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/publicationcmds.c",
+      "line": 151,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unrecognized value for publication option \"%s\": \"%s\"",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/publicationcmds.c",
+      "line": 1669,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "publication \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/repack.c",
+      "line": 2508,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "index \"%s\" for table \"%s\" does not exist",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/schemacmds.c",
+      "line": 132,
+      "level": "NOTICE",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_SCHEMA"
+      ],
+      "message": "schema \"%s\" already exists, skipping",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/seclabel.c",
+      "line": 131,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "no security label providers have been loaded",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql",
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/seclabel.c",
+      "line": 153,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "security label provider \"%s\" is not loaded",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/sequence.c",
+      "line": 885,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "currval of sequence \"%s\" is not yet defined in this session",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/sequence.c",
+      "line": 990,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/sequence.c",
+      "line": 1385,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "identity column type must be smallint, integer, or bigint",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/sequence.c",
+      "line": 1421,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "INCREMENT must not be zero",
+      "scenarios": [
+        "tier2__21_ddl_objects",
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/sequence.c",
+      "line": 1509,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/sequence.c",
+      "line": 1530,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/statscmds.c",
+      "line": 275,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/statscmds.c",
+      "line": 411,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot create extended statistics on a single non-virtual column",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/statscmds.c",
+      "line": 448,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unrecognized statistics kind \"%s\"",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 463,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unrecognized subscription parameter: \"%s\"",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 485,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "%s and %s are mutually exclusive options",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 1050,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "created replication slot \"%s\" on publisher",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 1600,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "subscription \"%s\" does not exist",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 2542,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "subscription \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 2829,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "dropped replication slot \"%s\" on publisher",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 855,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "ON COMMIT can only be used on temporary tables",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 872,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "partitioned tables cannot be unlogged",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1188,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "\"%s\" is not partitioned",
+      "scenarios": [
+        "tier2__21_ddl_objects",
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 2458,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a table",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 8673,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "column \"%s\" of relation \"%s\" is not an identity column",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 9082,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "statistics target %d is too low",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 9090,
+      "level": "WARNING",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "lowering statistics target to %d",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 9104,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 13474,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "constraint \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 13879,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" referenced in foreign key constraint does not exist",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14155,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FOREIGN_KEY"
+      ],
+      "message": "there is no unique constraint matching given keys for referenced table \"%s\"",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14592,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "constraint \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 15038,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "result of USING clause for column \"%s\" cannot be cast automatically to type %s",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 15045,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "column \"%s\" cannot be cast automatically to type %s",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 17161,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "index \"%s\" for table \"%s\" does not exist",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 18675,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_TABLE"
+      ],
+      "message": "relation \"%s\" is not a partition of relation \"%s\"",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 18681,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_TABLE"
+      ],
+      "message": "relation \"%s\" is not a parent of relation \"%s\"",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 19224,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "index \"%s\" for table \"%s\" does not exist",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20217,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a table or materialized view",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl",
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20384,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a materialized view",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20389,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a foreign table",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20475,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot use \"list\" partition strategy with more than one column",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20541,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" named in partition key does not exist",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 21220,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "table \"%s\" contains column \"%s\" not found in parent \"%s\"",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 22810,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "column data type %s does not support compression",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 22843,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid storage type \"%s\"",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 22853,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "column data type %s can only have storage PLAIN",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablespace.c",
+      "line": 431,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "tablespace \"%s\" does not exist",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablespace.c",
+      "line": 617,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FILE"
+      ],
+      "message": "directory \"%s\" does not exist",
+      "scenarios": [
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/trigger.c",
+      "line": 227,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is a table",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/trigger.c",
+      "line": 275,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is a view",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/trigger.c",
+      "line": 394,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "TRUNCATE FOR EACH ROW triggers are not supported",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/trigger.c",
+      "line": 551,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "OLD TABLE can only be specified for a DELETE or UPDATE trigger",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/trigger.c",
+      "line": 635,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "INSERT trigger's WHEN condition cannot reference OLD values",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/trigger.c",
+      "line": 1862,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "trigger \"%s\" for table \"%s\" does not exist",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tsearchcmds.c",
+      "line": 1166,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "text search configuration \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 278,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "type \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1213,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "type \"%s\" already exists",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1631,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "type \"%s\" already exists",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2936,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "constraint \"%s\" of domain \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 3121,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "constraint \"%s\" of domain \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 304,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid connection limit: %d",
+      "scenarios": [
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 1158,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_IN_USE"
+      ],
+      "message": "current user cannot be dropped",
+      "scenarios": [
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 1384,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "session user cannot be renamed",
+      "scenarios": [
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/vacuum.c",
+      "line": 223,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "%s option must be 0 or between %d kB and %d kB",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/vacuum.c",
+      "line": 234,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unrecognized %s option \"%s\"",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/vacuum.c",
+      "line": 276,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "%s option must be between 0 and %d",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/vacuum.c",
+      "line": 324,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "VACUUM FULL cannot be performed in parallel",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/vacuum.c",
+      "line": 360,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "VACUUM option DISABLE_PAGE_SKIPPING cannot be used with FULL",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/vacuum.c",
+      "line": 376,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "ONLY_DATABASE_STATS cannot be specified with a list of tables",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/view.c",
+      "line": 301,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "cannot change data type of view column \"%s\" from %s to %s",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execUtils.c",
+      "line": 782,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "materialized view \"%s\" has not been populated",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/functions.c",
+      "line": 2275,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "return type mismatch in function declared to return %s",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeLimit.c",
+      "line": 371,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ROW_COUNT_IN_RESULT_OFFSET_CLAUSE"
+      ],
+      "message": "OFFSET must not be negative",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeModifyTable.c",
+      "line": 3794,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CARDINALITY_VIOLATION"
+      ],
+      "message": "%s command cannot affect row a second time",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/foreign/foreign.c",
+      "line": 721,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "foreign-data wrapper \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__28_typecmds_domain_comment",
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/foreign/foreign.c",
+      "line": 743,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "server \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__28_typecmds_domain_comment",
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth-sasl.c",
+      "line": 111,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "processing received SASL response of length %d",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth-sasl.c",
+      "line": 182,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "sending SASL challenge of length %d",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth.c",
+      "line": 313,
+      "level": "elevel",
+      "sqlstates": [
+        "errcode_return"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth.c",
+      "line": 468,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_INVALID_AUTHORIZATION_SPECIFICATION"
+      ],
+      "message": "pg_hba.conf rejects connection for host \"%s\", user \"%s\", database \"%s\", %s",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/auth.c",
+      "line": 536,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_INVALID_AUTHORIZATION_SPECIFICATION"
+      ],
+      "message": "no pg_hba.conf entry for host \"%s\", user \"%s\", database \"%s\", %s",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-fsstubs.c",
+      "line": 160,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "invalid large-object descriptor: %d",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-fsstubs.c",
+      "line": 214,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "invalid large-object descriptor: %d",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-fsstubs.c",
+      "line": 321,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "large object %u does not exist",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-fsstubs.c",
+      "line": 442,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not open server file \"%s\": %m",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1734,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: handshake start: \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1738,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: handshake done: \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1742,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: accept loop: \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1746,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: accept exit (%d): \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/be-secure-openssl.c",
+      "line": 1762,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "SSL: write alert (0x%04x): \"%s\"",
+      "scenarios": [
+        "tier3__auth_ssl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 323,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_REGULAR_EXPRESSION"
+      ],
+      "message": "invalid regular expression \"%s\": %s",
+      "scenarios": [
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 1487,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "end-of-line before IP address specification",
+      "scenarios": [
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 1591,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "invalid CIDR mask in address \"%s\"",
+      "scenarios": [
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 1750,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "invalid authentication method \"%s\"",
+      "scenarios": [
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/hba.c",
+      "line": 2320,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "unrecognized authentication option name: \"%s\"",
+      "scenarios": [
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/libpq/pqcomm.c",
+      "line": 614,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "could not bind %s address \"%s\": %m",
+      "scenarios": [
+        "tier4__crash_recovery"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 910,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "VALUES lists must all be the same length",
+      "scenarios": [
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 1965,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "VALUES lists must all be the same length",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 2979,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 3761,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with GROUP BY clause",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 1067,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "tablesample method %s does not exist",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 1288,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "TABLESAMPLE clause can only be applied to tables and materialized views",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3130,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "RANGE with offset PRECEDING/FOLLOWING requires exactly one ORDER BY column",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_coerce.c",
+      "line": 1084,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CANNOT_COERCE"
+      ],
+      "message": "cannot cast type %s to %s",
+      "scenarios": [
+        "tier2__18_arrays_ranges_composite"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_coerce.c",
+      "line": 1174,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "argument of %s must be type %s, not type %s",
+      "scenarios": [
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_coerce.c",
+      "line": 1414,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "%s types %s and %s cannot be matched",
+      "scenarios": [
+        "tier2__23_query_semantics_extended",
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 940,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_RECURSION"
+      ],
+      "message": "recursive query \"%s\" does not have the form non-recursive-term UNION [ALL] recursive-term",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 1543,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "number of columns does not match number of values",
+      "scenarios": [
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 1944,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "subquery must return only one column",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 2877,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unequal number of entries in row expressions",
+      "scenarios": [
+        "tier2__18_arrays_ranges_composite",
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 3688,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CANNOT_COERCE"
+      ],
+      "message": "cannot cast type %s to %s",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 290,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not a procedure",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 300,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is a procedure",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 640,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "procedure %s does not exist",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 885,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "aggregate ORDER BY is not implemented for window functions",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2302,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "function %s does not exist",
+      "scenarios": [
+        "tier2__21_ddl_objects",
+        "tier2__25_ddl_objects_more",
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2560,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "aggregate %s does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_merge.c",
+      "line": 174,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unreachable WHEN clause specified after unconditional WHEN clause",
+      "scenarios": [
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 120,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "operator does not exist: %s",
+      "scenarios": [
+        "tier2__21_ddl_objects",
+        "tier2__28_typecmds_domain_comment",
+        "tier2__29_func_index_extension_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_relation.c",
+      "line": 467,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_ALIAS"
+      ],
+      "message": "table name \"%s\" specified more than once",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_target.c",
+      "line": 1089,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_COLUMN"
+      ],
+      "message": "column \"%s\" specified more than once",
+      "scenarios": [
+        "tier2__33_grant_roles_coerce_dml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_type.c",
+      "line": 241,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "type \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 743,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "conflicting NULL/NOT NULL declarations for column \"%s\" of table \"%s\"",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 847,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "multiple identity specifications for column \"%s\" of table \"%s\"",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 975,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "both default and generation expression specified for column \"%s\" of table \"%s\"",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 2356,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "multiple primary keys for table \"%s\" are not allowed",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 2739,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" named in key does not exist",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 2757,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_COLUMN"
+      ],
+      "message": "column \"%s\" appears twice in unique constraint",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/partitioning/partbounds.c",
+      "line": 2911,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "partition \"%s\" conflicts with existing default partition \"%s\"",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/partitioning/partbounds.c",
+      "line": 3118,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "empty range bound specified for partition \"%s\"",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/autovacuum.c",
+      "line": 1735,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "Autovacuum VacuumUpdateCosts(db=%u, rel=%u, dobalance=%s, cost_limit=%d, cost_delay=%g active=%s failsafe=%s)",
+      "scenarios": [
+        "tier2__17_strings_format_regex",
+        "tier2__31_createtable_view_trigger",
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba",
+        "tier4__corruption",
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber",
+        "tier4__replication_primary",
+        "tier4__resource_timeouts"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/bgworker.c",
+      "line": 436,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "registering background worker \"%s\"",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/bgworker.c",
+      "line": 473,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "unregistering background worker \"%s\"",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 1179,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "could not create listen socket for \"%s\"",
+      "scenarios": [
+        "tier4__crash_recovery"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 1185,
+      "level": "FATAL",
+      "sqlstates": [],
+      "message": "could not create any TCP/IP sockets",
+      "scenarios": [
+        "tier4__crash_recovery"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2027,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "postmaster received reload request signal",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2032,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "received SIGHUP, reloading configuration files",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2039,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "%s was not reloaded",
+      "scenarios": [
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2044,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "%s was not reloaded",
+      "scenarios": [
+        "tier3__bad_hba"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2223,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "received immediate shutdown request",
+      "scenarios": [
+        "tier4__disk_full"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 3784,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system is ready to accept read-only connections",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/launcher.c",
+      "line": 365,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "starting logical replication worker for subscription \"%s\"",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 603,
+      "level": "LogicalDecodingLogLevel()",
+      "sqlstates": [],
+      "message": "starting logical decoding for slot \"%s\"",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 633,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "searching for logical decoding starting point, starting at %X/%08X",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 1897,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "updated xmin: %u restart: %u",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 1961,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logicalctl.c",
+      "line": 412,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical decoding is enabled upon creating a new logical replication slot",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logicalctl.c",
+      "line": 440,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "requested disabling logical decoding",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logicalctl.c",
+      "line": 536,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical decoding is disabled because there are no valid logical replication slots",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logicalctl.c",
+      "line": 612,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "update logical decoding status to %d at the end of recovery",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/origin.c",
+      "line": 260,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "replication origin \"%s\" does not exist",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/origin.c",
+      "line": 290,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_PROGRAM_LIMIT_EXCEEDED"
+      ],
+      "message": "replication origin name is too long",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 780,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "adding a new snapshot and invalidations to %u at %X/%08X",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 896,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "purged committed transactions from %u to %u, xmin: %u, xmax: %u",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 1024,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "found top level transaction %u, with catalog changes",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 1188,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "xmin: %u, xmax: %u, oldest running: %u, oldest xmin: %u",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 1316,
+      "level": "LogicalDecodingLogLevel()",
+      "sqlstates": [],
+      "message": "logical decoding found consistent point at %X/%08X",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 1577,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "serializing snapshot to %s",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/snapbuild.c",
+      "line": 2038,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "removing snapbuild snapshot %s",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/syncutils.c",
+      "line": 82,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication table synchronization worker for subscription \"%s\", table \"%s\" has finished",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/tablesync.c",
+      "line": 1513,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "LogicalRepSyncTableStart: '%s' origin_startpos lsn %X/%08X",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 4386,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sending feedback (force %d) to recv %X/%08X, write %X/%08X, flush %X/%08X",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5775,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "logical replication apply worker for subscription \"%s\" two_phase is %s",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5834,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication worker for subscription %u will not start because the subscription was removed during startup",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5917,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication table synchronization worker for subscription \"%s\", table \"%s\" has started",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5926,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication apply worker for subscription \"%s\" has started",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5989,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "connecting to publisher using connection string \"%s\"",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/pgoutput/pgoutput.c",
+      "line": 651,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "skipped replication of an empty transaction with XID: %u",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 281,
+      "level": "elevel",
+      "sqlstates": [
+        "err_code"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 648,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "replication slot \"%s\" does not exist",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 753,
+      "level": "log_replication_commands ? LOG : DEBUG1",
+      "sqlstates": [],
+      "message": "acquired logical replication slot \"%s\"",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 840,
+      "level": "log_replication_commands ? LOG : DEBUG1",
+      "sqlstates": [],
+      "message": "released logical replication slot \"%s\"",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walreceiver.c",
+      "line": 400,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "started streaming WAL from primary at %X/%08X on timeline %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walreceiver.c",
+      "line": 1190,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sending write %X/%08X flush %X/%08X apply %X/%08X%s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walreceiver.c",
+      "line": 1281,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sending hot standby feedback xmin %u epoch %u catalog_xmin %u catalog_xmin_epoch %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walreceiver.c",
+      "line": 1338,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sendtime %s receipttime %s replication apply delay %d ms transfer latency %d ms",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 2203,
+      "level": "log_replication_commands ? LOG : DEBUG1",
+      "sqlstates": [],
+      "message": "received replication command: %s",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 2564,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "write %X/%08X flush %X/%08X apply %X/%08X%s reply_time %s",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 2747,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "hot standby feedback xmin %u epoch %u, catalog_xmin %u epoch %u reply_time %s",
+      "scenarios": [
+        "tier4__replication_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 3101,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "\"%s\" has now caught up with upstream server",
+      "scenarios": [
+        "tier4__logical_publisher",
+        "tier4__replication_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/walsender.c",
+      "line": 4410,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "sending replication keepalive",
+      "scenarios": [
+        "tier4__logical_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/rewrite/rewriteDefine.c",
+      "line": 322,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "relation \"%s\" cannot have ON SELECT rules",
+      "scenarios": [
+        "tier2__25_ddl_objects_more"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/rewrite/rewriteDefine.c",
+      "line": 706,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "rule \"%s\" for relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__27_alter_table"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/rewrite/rewriteHandler.c",
+      "line": 3230,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "cannot update view \"%s\"",
+      "scenarios": [
+        "tier2__31_createtable_view_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/rewrite/rewriteSupport.c",
+      "line": 106,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "rule \"%s\" for relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/file/buffile.c",
+      "line": 544,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not write to file \"%s\": %m",
+      "scenarios": [
+        "tier4__disk_full"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/file/fd.c",
+      "line": 877,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "could not remove file \"%s\": %m",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/file/fd.c",
+      "line": 2979,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "could not open directory \"%s\": %m",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/file/reinit.c",
+      "line": 56,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "resetting unlogged relations: cleanup %d init %d",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 1295,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "recovery snapshots are now enabled",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 4449,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "record known xact %u latestObservedXid %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 5031,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "remove KnownAssignedXid %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 5085,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "removing all KnownAssignedXids",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 5091,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "prune KnownAssignedXids to %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/procarray.c",
+      "line": 5281,
+      "level": "trace_level",
+      "sqlstates": [],
+      "message": "%d KnownAssignedXids (num=%d tail=%d head=%d) %s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/signalfuncs.c",
+      "line": 74,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "PID %d is not a PostgreSQL backend process",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/signalfuncs.c",
+      "line": 245,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "\"timeout\" must not be negative",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/sinval.c",
+      "line": 138,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "sinval catchup complete, cleaning queue",
+      "scenarios": [
+        "tier2__40_extensions_setup",
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/sinval.c",
+      "line": 197,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "ProcessCatchupEvent outside transaction",
+      "scenarios": [
+        "tier2__40_extensions_setup"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/sinvaladt.c",
+      "line": 675,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "sending sinval catchup signal to PID %d",
+      "scenarios": [
+        "tier2__40_extensions_setup",
+        "tier2__43_contrib_fdw_indexam"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/standby.c",
+      "line": 1113,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "release all standby locks",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/large_object/inv_api.c",
+      "line": 245,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "large object %u does not exist",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/lock.c",
+      "line": 2150,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "you don't own a lock of type %s",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/proc.c",
+      "line": 458,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_TOO_MANY_CONNECTIONS"
+      ],
+      "message": "sorry, too many clients already",
+      "scenarios": [
+        "tier4__resource_timeouts"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/proc.c",
+      "line": 1711,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "process %d still waiting for %s on %s after %ld.%03d ms",
+      "scenarios": [
+        "tier4__resource_timeouts"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/proc.c",
+      "line": 1721,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "process %d acquired %s on %s after %ld.%03d ms",
+      "scenarios": [
+        "tier4__resource_timeouts"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/page/bufpage.c",
+      "line": 161,
+      "level": "flags & PIV_LOG_WARNING ? WARNING : LOG",
+      "sqlstates": [
+        "ERRCODE_DATA_CORRUPTED"
+      ],
+      "message": "page verification failed, calculated checksum %u but expected %u%s",
+      "scenarios": [
+        "tier4__corruption"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/backend_startup.c",
+      "line": 225,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "connection received: host=%s port=%s",
+      "scenarios": [
+        "tier3__auth_ssl",
+        "tier3__bad_hba",
+        "tier4__logical_publisher",
+        "tier4__replication_primary",
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3482,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_ADMIN_SHUTDOWN"
+      ],
+      "message": "terminating autovacuum process due to administrator command",
+      "scenarios": [
+        "tier4__logical_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/utility.c",
+      "line": 412,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_READ_ONLY_SQL_TRANSACTION"
+      ],
+      "message": "cannot execute %s in a read-only transaction",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/activity/pgstat.c",
+      "line": 549,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "didn't need to unlink permanent stats file \"%s\" - didn't exist",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/acl.c",
+      "line": 1754,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unrecognized privilege type: \"%s\"",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/acl.c",
+      "line": 2967,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/array_typanalyze.c",
+      "line": 488,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier2__17_strings_format_regex",
+        "tier2__31_createtable_view_trigger",
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba",
+        "tier4__corruption",
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber",
+        "tier4__replication_primary",
+        "tier4__resource_timeouts"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/array_userfuncs.c",
+      "line": 258,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATA_EXCEPTION"
+      ],
+      "message": "argument must be empty or one-dimensional array",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/array_userfuncs.c",
+      "line": 1355,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "searching for elements in multidimensional arrays is not supported",
+      "scenarios": [
+        "tier2__18_arrays_ranges_composite"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/array_userfuncs.c",
+      "line": 1757,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "sample size must be between 0 and %d",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/arrayfuncs.c",
+      "line": 5656,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "cannot accumulate arrays of different dimensionality",
+      "scenarios": [
+        "tier2__18_arrays_ranges_composite"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/arrayfuncs.c",
+      "line": 6965,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_ELEMENT_ERROR"
+      ],
+      "message": "number of elements to trim must be between 0 and %d",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/bytea.c",
+      "line": 649,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "index %d out of valid range, 0..%d",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/bytea.c",
+      "line": 716,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "index %d out of valid range, 0..%d",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 580,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "date out of range",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 605,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "date out of range",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/dbsize.c",
+      "line": 780,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid size: \"%s\"",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/dbsize.c",
+      "line": 856,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid size: \"%s\"",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/encode.c",
+      "line": 600,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid %s end sequence",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/formatting.c",
+      "line": 1259,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "cannot use \"S\" twice",
+      "scenarios": [
+        "tier2__17_strings_format_regex"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/genfile.c",
+      "line": 121,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not open file \"%s\" for reading: %m",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/genfile.c",
+      "line": 195,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not read file \"%s\": %m",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/genfile.c",
+      "line": 267,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "requested length cannot be negative",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/genfile.c",
+      "line": 435,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not stat file \"%s\": %m",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 970,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 995,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/json.c",
+      "line": 1265,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_JSON_OBJECT_KEY_VALUE"
+      ],
+      "message": "duplicate JSON object key value: %s",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/json.c",
+      "line": 1488,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "mismatched array dimensions",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonb.c",
+      "line": 1415,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "mismatched array dimensions",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonb.c",
+      "line": 1637,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "field name must not be null",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonfuncs.c",
+      "line": 1883,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot get array length of a scalar",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonfuncs.c",
+      "line": 1887,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot get array length of a non-array",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonfuncs.c",
+      "line": 4173,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot call %s on a non-array",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonfuncs.c",
+      "line": 4954,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "null_value_treatment must be \"delete_key\", \"return_target\", \"use_json_null\", or \"raise_exception\"",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1338,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NON_NUMERIC_SQL_JSON_ITEM"
+      ],
+      "message": "argument \"%s\" of jsonpath item method .%s() is invalid for type %s",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1470,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NON_NUMERIC_SQL_JSON_ITEM"
+      ],
+      "message": "argument \"%s\" of jsonpath item method .%s() is invalid for type %s",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1547,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NON_NUMERIC_SQL_JSON_ITEM"
+      ],
+      "message": "argument \"%s\" of jsonpath item method .%s() is invalid for type %s",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1603,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NON_NUMERIC_SQL_JSON_ITEM"
+      ],
+      "message": "argument \"%s\" of jsonpath item method .%s() is invalid for type %s",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 2590,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ARGUMENT_FOR_SQL_JSON_DATETIME_FUNCTION"
+      ],
+      "message": "%s format is not recognized: \"%s\"",
+      "scenarios": [
+        "tier2__19_json_sqljson"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/like_match.c",
+      "line": 450,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ESCAPE_SEQUENCE"
+      ],
+      "message": "invalid escape string",
+      "scenarios": [
+        "tier2__17_strings_format_regex"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/network.c",
+      "line": 330,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid mask length: %d",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/network.c",
+      "line": 1416,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot merge addresses from different families",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/network.c",
+      "line": 1824,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot AND inet values of different sizes",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/network.c",
+      "line": 1917,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "result is out of range",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/numeric.c",
+      "line": 4736,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "pg_lsn out of range",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/numeric.c",
+      "line": 10474,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "value overflows numeric format",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/numeric.c",
+      "line": 11043,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "value overflows numeric format",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/oracle_compat.c",
+      "line": 302,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_PROGRAM_LIMIT_EXCEEDED"
+      ],
+      "message": "requested length too large",
+      "scenarios": [
+        "tier2__17_strings_format_regex"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/orderedsetaggs.c",
+      "line": 550,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "percentile value %g is not between 0 and 1",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/pg_locale_libc.c",
+      "line": 1184,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "could not create locale \"%s\": %m",
+      "scenarios": [
+        "tier2__21_ddl_objects"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/rangetypes.c",
+      "line": 1086,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATA_EXCEPTION"
+      ],
+      "message": "result of range union would not be contiguous",
+      "scenarios": [
+        "tier2__18_arrays_ranges_composite"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/regexp.c",
+      "line": 802,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ESCAPE_SEQUENCE"
+      ],
+      "message": "invalid escape string",
+      "scenarios": [
+        "tier2__17_strings_format_regex"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/rowtypes.c",
+      "line": 1263,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "cannot compare record types with different numbers of columns",
+      "scenarios": [
+        "tier2__18_arrays_ranges_composite"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 609,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_FIELD_OVERFLOW"
+      ],
+      "message": "time field value out of range: %d:%02d:%02g",
+      "scenarios": [
+        "tier2__16_datetime_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 747,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "timestamp out of range: \"%g\"",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 2868,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "interval out of range",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 3150,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "timestamp out of range",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 3169,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "timestamp out of range",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 3210,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "timestamp out of range",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 3771,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DIVISION_BY_ZERO"
+      ],
+      "message": "division by zero",
+      "scenarios": [
+        "tier2__32_adt_arithmetic_overflow"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 4883,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "stride must be greater than zero",
+      "scenarios": [
+        "tier2__16_datetime_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 6309,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unit \"%s\" not recognized for type %s",
+      "scenarios": [
+        "tier2__16_datetime_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/tsquery_op.c",
+      "line": 123,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "distance in phrase operator must be an integer value between zero and %d inclusive",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/tsrank.c",
+      "line": 441,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "array of weight is too short",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/tsvector_op.c",
+      "line": 236,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unrecognized weight: \"%c\"",
+      "scenarios": [
+        "tier2__20_network_geo_enum_ts_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/varbit.c",
+      "line": 1189,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SUBSTRING_ERROR"
+      ],
+      "message": "negative substring length not allowed",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/varbit.c",
+      "line": 1259,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_STRING_DATA_LENGTH_MISMATCH"
+      ],
+      "message": "cannot AND bit strings of different sizes",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/varbit.c",
+      "line": 1340,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_STRING_DATA_LENGTH_MISMATCH"
+      ],
+      "message": "cannot XOR bit strings of different sizes",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/varbit.c",
+      "line": 1822,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "bit index %d out of valid range (0..%d)",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/varbit.c",
+      "line": 1880,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ARRAY_SUBSCRIPT_ERROR"
+      ],
+      "message": "bit index %d out of valid range (0..%d)",
+      "scenarios": [
+        "tier2__15_types_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/varlena.c",
+      "line": 5202,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NULL_VALUE_NOT_ALLOWED"
+      ],
+      "message": "null values cannot be formatted as an SQL identifier",
+      "scenarios": [
+        "tier2__17_strings_format_regex"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/windowfuncs.c",
+      "line": 447,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ARGUMENT_FOR_NTILE"
+      ],
+      "message": "argument of ntile must be greater than zero",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/windowfuncs.c",
+      "line": 715,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ARGUMENT_FOR_NTH_VALUE"
+      ],
+      "message": "argument of nth_value must be greater than zero",
+      "scenarios": [
+        "tier2__23_query_semantics_extended"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/xml.c",
+      "line": 2978,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_CURSOR"
+      ],
+      "message": "cursor \"%s\" does not exist",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/catcache.c",
+      "line": 1009,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "rehashing catalog cache id %d for %s; %d tups, %d buckets",
+      "scenarios": [
+        "tier2__17_strings_format_regex",
+        "tier2__43_contrib_fdw_indexam",
+        "tier3__auth_ssl",
+        "tier3__bad_config",
+        "tier3__bad_hba",
+        "tier4__corruption",
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber",
+        "tier4__replication_primary",
+        "tier4__resource_timeouts"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/catcache.c",
+      "line": 1054,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "rehashing catalog cache id %d for %s; %d lists, %d buckets",
+      "scenarios": [
+        "tier2__22_system_admin_funcs",
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/inval.c",
+      "line": 1142,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "replaying commit with %d messages%s",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/inval.c",
+      "line": 1147,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "removing relcache init files for database %u",
+      "scenarios": [
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/lsyscache.c",
+      "line": 3993,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "publication \"%s\" does not exist",
+      "scenarios": [
+        "tier2__25_ddl_objects_more",
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/cache/lsyscache.c",
+      "line": 4043,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "subscription \"%s\" does not exist",
+      "scenarios": [
+        "tier2__28_typecmds_domain_comment"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/fmgr/dfmgr.c",
+      "line": 212,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "could not access file \"%s\": %m",
+      "scenarios": [
+        "tier2__22_system_admin_funcs"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/fmgr/dfmgr.c",
+      "line": 631,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "%s: trying \"%s\"",
+      "scenarios": [
+        "tier2__22_system_admin_funcs",
+        "tier2__26_roles_acl_plpgsql",
+        "tier2__41_contrib_input_errors",
+        "tier2__42_contrib_inspection",
+        "tier2__43_contrib_fdw_indexam",
+        "tier4__corruption",
+        "tier4__logical_publisher",
+        "tier4__logical_subscriber",
+        "tier4__replication_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 613,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "configuration file \"%s\" contains errors; unaffected changes were applied",
+      "scenarios": [
+        "tier3__bad_config"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3039,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "parameter \"%s\" requires a Boolean value",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3077,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "%d%s%s is outside the valid range for parameter \"%s\" (%d%s%s .. %d%s%s)",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql",
+        "tier2__34_guc_vacuum_copy_xml",
+        "tier3__bad_config"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3100,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid value for parameter \"%s\": \"%s\"",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3118,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "%g%s%s is outside the valid range for parameter \"%s\" (%g%s%s .. %g%s%s)",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml",
+        "tier2__41_contrib_input_errors",
+        "tier3__bad_config"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3184,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid value for parameter \"%s\": \"%s\"",
+      "scenarios": [
+        "tier2__34_guc_vacuum_copy_xml",
+        "tier3__bad_config"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3411,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CANT_CHANGE_RUNTIME_PARAM"
+      ],
+      "message": "parameter \"%s\" cannot be changed without restarting the server",
+      "scenarios": [
+        "tier2__22_system_admin_funcs",
+        "tier3__bad_config"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 3751,
+      "level": "elevel",
+      "sqlstates": [
+        "ERRCODE_CANT_CHANGE_RUNTIME_PARAM"
+      ],
+      "message": "parameter \"%s\" cannot be changed without restarting the server",
+      "scenarios": [
+        "tier3__bad_config"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/mmgr/mcxt.c",
+      "line": 1224,
+      "level": "ERROR",
+      "sqlstates": [],
+      "message": "invalid memory alloc request size %zu",
+      "scenarios": [
+        "tier2__17_strings_format_regex"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/time/snapmgr.c",
+      "line": 1420,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "a snapshot-importing transaction must have isolation level SERIALIZABLE or REPEATABLE READ",
+      "scenarios": [
+        "tier2__24_txn_copy_cursor"
+      ]
+    },
+    {
+      "path": "postgres/src/common/relpath.c",
+      "line": 59,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid fork name",
+      "scenarios": [
+        "tier2__42_contrib_inspection"
+      ]
+    },
+    {
+      "path": "postgres/src/pl/plpgsql/src/pl_comp.c",
+      "line": 2161,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "unrecognized exception condition \"%s\"",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql"
+      ]
+    },
+    {
+      "path": "postgres/src/pl/plpgsql/src/pl_exec.c",
+      "line": 3942,
+      "level": "stmt->elog_level",
+      "sqlstates": [
+        "err_code"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql"
+      ]
+    },
+    {
+      "path": "postgres/src/pl/plpgsql/src/pl_exec.c",
+      "line": 3998,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ASSERT_FAILURE"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__26_roles_acl_plpgsql"
+      ]
+    }
+  ]
+}
