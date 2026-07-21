@@ -26,6 +26,17 @@
 //!    ([`Scanner::scan_line_regexset`]) as the ground-truth oracle — all three
 //!    return identical results (the equivalence tests prove it).
 //!
+//! The two retained oracle paths need every pattern compiled as a real `Regex`
+//! (plus the `RegexSet` and the trigram buckets), which is by far the most
+//! expensive part of building a scanner (~1.3s for a ~4k-pattern catalog under
+//! wasm). The default path needs none of it, so [`Scanner::build`] compiles
+//! only the specialized matcher and the oracle side is built **lazily** on
+//! first use of an oracle/trigram method (`OnceLock`) — a production consumer
+//! that only calls [`Scanner::scan_line`]/[`Scanner::scan_line_spans`] never
+//! pays for it. Lowered patterns are valid regexes by construction (escaped
+//! literals + fixed class fragments), so deferring compilation loses no
+//! build-time error reporting; see [`BuildReport::compile_failed`].
+//!
 //! Unlike the TS scanner, the Rust `Scanner` stays *ground truth*: it does NOT
 //! exclude bare catch-alls or strip a log prefix — those are TS-side product
 //! choices. Catch-alls land in the always-check set and are reported like any
@@ -36,6 +47,7 @@
 //! with a plausible concrete value, producing a line the lowering must match.
 
 use std::collections::HashMap;
+use std::sync::OnceLock;
 
 use aho_corasick::AhoCorasick;
 use memchr::memmem;
@@ -421,7 +433,11 @@ pub struct BuildReport {
     pub no_text: usize,
     /// Had text, but lowering rejected it.
     pub lower_failed: usize,
-    /// Lowered, but the regex failed to compile.
+    /// Lowered, but the regex failed to compile. Always 0 since the oracle-side
+    /// regex compilation became lazy: a lowered pattern (escaped literals +
+    /// fixed class fragments) is a valid regex by construction, so nothing can
+    /// fail here. The field is kept so the report shape (and its consumers)
+    /// stay stable.
     pub compile_failed: usize,
     /// Sites that produced a live pattern in the set.
     pub compiled: usize,
@@ -846,48 +862,64 @@ impl SpecMatcher {
     }
 }
 
-/// A trigram-prefiltered scanner over every lowered catalog pattern.
-///
-/// Each pattern keeps its compiled [`Regex`] (for capture extraction) plus its
-/// site provenance and literal length. The prefilter maps each pattern to the
-/// *rarest* trigram of its literal runs (the `pg_trgm` trick — smaller, more
-/// balanced buckets); patterns with no literal run ≥3 chars (short literals and
-/// bare catch-alls) go in an `always_check` set. A [`RegexSet`] over the same
-/// patterns is retained so [`Scanner::scan_line_regexset`] can cross-check the
-/// prefilter against the exhaustive path.
-pub struct Scanner {
+/// The lazily-built oracle side of a [`Scanner`]: the compiled per-pattern
+/// [`Regex`]es (capture extraction on the retained paths), the exhaustive
+/// [`RegexSet`], and the trigram prefilter. Only the retained cross-check paths
+/// ([`Scanner::scan_line_regexset`], [`Scanner::scan_line_trigram`], and their
+/// span/diagnostic twins) need any of this, and compiling ~4k regexes is the
+/// dominant build cost — so it is built on first oracle use, not in
+/// [`Scanner::build`].
+struct Oracle {
     set: RegexSet,
     regexes: Vec<Regex>,
-    site_idx: Vec<usize>,
-    literal_len: Vec<usize>,
     /// trigram → indices of patterns anchored on it (each in exactly one bucket).
     buckets: HashMap<String, Vec<usize>>,
     /// Patterns with no usable trigram (literal runs all <3 chars, or none) —
     /// checked against every line. Includes bare `%s`-style catch-alls.
     always_check: Vec<usize>,
+}
+
+/// A scanner over every lowered catalog pattern.
+///
+/// The default paths ([`Scanner::scan_line`] / [`Scanner::scan_line_spans`])
+/// run the specialized printf matcher ([`SpecMatcher`]) — no regexes at all —
+/// so [`Scanner::build`] compiles only that. The retained oracle/trigram paths
+/// live in a lazily-built [`Oracle`] (per-pattern [`Regex`]es, the [`RegexSet`],
+/// the trigram buckets): a consumer that never calls them never pays the
+/// regex-compilation cost, which is what made scanner construction slow.
+pub struct Scanner {
+    site_idx: Vec<usize>,
+    literal_len: Vec<usize>,
     /// The specialized printf-pattern matcher — the default [`Self::scan_line`]
     /// path (anchored Aho-Corasick candidates + regex-free verification).
     matcher: SpecMatcher,
+    /// Each pattern's anchored regex source, retained for the lazy oracle build.
+    patterns: Vec<String>,
+    /// Each pattern's literal runs, retained for the lazy trigram-bucket build.
+    per_pattern_literals: Vec<Vec<String>>,
+    /// The oracle side, built on first use of an oracle/trigram method.
+    oracle: OnceLock<Oracle>,
 }
 
 impl Scanner {
-    /// Lower every site with a literal message, compile the patterns, and build
-    /// the trigram prefilter (and the `RegexSet` retained for cross-check).
-    /// Returns the scanner and a [`BuildReport`] tallying what was lowered,
-    /// skipped, or failed.
+    /// Lower every site with a literal message and compile the specialized
+    /// matcher. Returns the scanner and a [`BuildReport`] tallying what was
+    /// lowered, skipped, or failed.
+    ///
+    /// The oracle side (per-pattern `Regex`es, the `RegexSet`, the trigram
+    /// buckets) is NOT built here — it is compiled lazily on first use of an
+    /// oracle/trigram method, so the default scan paths never pay for it. The
+    /// `regex::Error` in the signature is retained for API stability; with the
+    /// oracle deferred, nothing in the build itself can fail with it.
     pub fn build(index: &Index) -> Result<(Scanner, BuildReport), regex::Error> {
         let mut report = BuildReport {
             total: index.sites.len(),
             ..Default::default()
         };
         let mut patterns: Vec<String> = Vec::new();
-        let mut regexes: Vec<Regex> = Vec::new();
         let mut site_idx: Vec<usize> = Vec::new();
         let mut literal_len: Vec<usize> = Vec::new();
-        // The unique trigrams of each compiled pattern's literal runs, kept so we
-        // can pick each pattern's rarest anchor after the global freq is tallied.
-        let mut per_pattern: Vec<Vec<String>> = Vec::new();
-        let mut freq: HashMap<String, usize> = HashMap::new();
+        let mut per_pattern_literals: Vec<Vec<String>> = Vec::new();
         // Each compiled pattern's token sequence, for the specialized matcher.
         let mut per_pattern_tokens: Vec<Vec<FmtTok>> = Vec::new();
 
@@ -906,97 +938,124 @@ impl Scanner {
                     continue;
                 }
             };
-            let re = match Regex::new(&lowered.regex) {
-                Ok(re) => re,
-                Err(_) => {
-                    report.compile_failed += 1;
-                    continue;
-                }
-            };
-
-            // Unique trigrams across this pattern's literal runs, tallied into
-            // the global frequency table for rarest-anchor selection.
-            let mut tris: Vec<String> = Vec::new();
-            for lit in &lowered.literals {
-                push_trigrams(lit, &mut tris);
-            }
-            tris.sort_unstable();
-            tris.dedup();
-            for t in &tris {
-                *freq.entry(t.clone()).or_insert(0) += 1;
-            }
 
             patterns.push(lowered.regex);
-            regexes.push(re);
             site_idx.push(idx);
             literal_len.push(lowered.literal_len);
-            per_pattern.push(tris);
+            per_pattern_literals.push(lowered.literals);
             per_pattern_tokens.push(lowered.tokens);
         }
         report.compiled = patterns.len();
 
-        // Anchor each pattern under its rarest trigram; patterns with none go in
-        // the always-check set (short-literal patterns and bare catch-alls).
-        let mut buckets: HashMap<String, Vec<usize>> = HashMap::new();
-        let mut always_check: Vec<usize> = Vec::new();
-        for (i, tris) in per_pattern.iter().enumerate() {
-            if tris.is_empty() {
-                always_check.push(i);
-                continue;
-            }
-            // Rarest trigram wins; ties broken by the smallest trigram so the
-            // choice is deterministic.
-            let best = tris
-                .iter()
-                .min_by(|a, b| {
-                    freq[*a]
-                        .cmp(&freq[*b])
-                        .then_with(|| a.as_str().cmp(b.as_str()))
-                })
-                .expect("non-empty");
-            buckets.entry(best.clone()).or_default().push(i);
-        }
-
-        // Generous limits: ~14k anchored patterns overflow the default budget.
-        let set = RegexSetBuilder::new(&patterns)
-            .size_limit(1 << 30)
-            .dfa_size_limit(1 << 30)
-            .build()?;
-
         // The specialized matcher. Its automaton build only fails on absurd
-        // inputs (limits far beyond any catalog); the regexes above compiled,
-        // so the literals are all sane strings.
+        // inputs (limits far beyond any catalog); the literals came out of a
+        // successful lowering, so they are all sane strings.
         let matcher =
             SpecMatcher::build(&per_pattern_tokens).expect("anchor automaton build failed");
 
         Ok((
             Scanner {
-                set,
-                regexes,
                 site_idx,
                 literal_len,
-                buckets,
-                always_check,
                 matcher,
+                patterns,
+                per_pattern_literals,
+                oracle: OnceLock::new(),
             },
             report,
         ))
     }
 
-    /// Number of live patterns in the scanner.
-    pub fn pattern_count(&self) -> usize {
-        self.regexes.len()
+    /// The lazily-built oracle side. First call compiles every pattern's
+    /// `Regex`, the exhaustive `RegexSet`, and the trigram buckets; later calls
+    /// return the cached build. Compilation cannot fail on real input — every
+    /// pattern is `lower_format` output, valid by construction — so a failure
+    /// here is a lowering bug and panics with the offending pattern.
+    fn oracle(&self) -> &Oracle {
+        self.oracle.get_or_init(|| {
+            let regexes: Vec<Regex> = self
+                .patterns
+                .iter()
+                .map(|p| {
+                    Regex::new(p)
+                        .unwrap_or_else(|e| panic!("lowered pattern failed to compile: {p:?}: {e}"))
+                })
+                .collect();
+
+            // Generous limits: ~14k anchored patterns overflow the default budget.
+            let set = RegexSetBuilder::new(&self.patterns)
+                .size_limit(1 << 30)
+                .dfa_size_limit(1 << 30)
+                .build()
+                .expect("lowered pattern set failed to compile");
+
+            // Unique trigrams across each pattern's literal runs, tallied into a
+            // global frequency table for rarest-anchor selection.
+            let mut freq: HashMap<String, usize> = HashMap::new();
+            let per_pattern: Vec<Vec<String>> = self
+                .per_pattern_literals
+                .iter()
+                .map(|lits| {
+                    let mut tris: Vec<String> = Vec::new();
+                    for lit in lits {
+                        push_trigrams(lit, &mut tris);
+                    }
+                    tris.sort_unstable();
+                    tris.dedup();
+                    for t in &tris {
+                        *freq.entry(t.clone()).or_insert(0) += 1;
+                    }
+                    tris
+                })
+                .collect();
+
+            // Anchor each pattern under its rarest trigram; patterns with none go
+            // in the always-check set (short-literal patterns and bare catch-alls).
+            let mut buckets: HashMap<String, Vec<usize>> = HashMap::new();
+            let mut always_check: Vec<usize> = Vec::new();
+            for (i, tris) in per_pattern.iter().enumerate() {
+                if tris.is_empty() {
+                    always_check.push(i);
+                    continue;
+                }
+                // Rarest trigram wins; ties broken by the smallest trigram so the
+                // choice is deterministic.
+                let best = tris
+                    .iter()
+                    .min_by(|a, b| {
+                        freq[*a]
+                            .cmp(&freq[*b])
+                            .then_with(|| a.as_str().cmp(b.as_str()))
+                    })
+                    .expect("non-empty");
+                buckets.entry(best.clone()).or_default().push(i);
+            }
+
+            Oracle {
+                set,
+                regexes,
+                buckets,
+                always_check,
+            }
+        })
     }
 
-    /// Number of patterns held in the always-check set (no usable trigram —
-    /// short-literal patterns and bare `%s`-style catch-alls).
+    /// Number of live patterns in the scanner.
+    pub fn pattern_count(&self) -> usize {
+        self.patterns.len()
+    }
+
+    /// Number of patterns held in the trigram path's always-check set (no
+    /// usable trigram — short-literal patterns and bare `%s`-style catch-alls).
+    /// Forces the lazy oracle build.
     pub fn always_check_count(&self) -> usize {
-        self.always_check.len()
+        self.oracle().always_check.len()
     }
 
     /// How many candidate patterns the trigram prefilter would verify for
     /// `line` — that prefilter's selectivity (a diagnostic for benchmarking;
-    /// the smaller relative to `pattern_count`, the more it narrows).
+    /// the smaller relative to `pattern_count`, the more it narrows). Forces
+    /// the lazy oracle build.
     pub fn candidate_count(&self, line: &str) -> usize {
         self.candidate_indices(line).len()
     }
@@ -1020,6 +1079,7 @@ impl Scanner {
     /// [`scan_line`]: Scanner::scan_line
     /// [`scan_line_spans`]: Scanner::scan_line_spans
     fn candidate_indices(&self, line: &str) -> Vec<usize> {
+        let oracle = self.oracle();
         let lower = line.to_lowercase();
         let mut candidates: Vec<usize> = Vec::new();
         // Byte offsets of each char boundary, plus the end, so a length-3 char
@@ -1031,12 +1091,12 @@ impl Scanner {
             .collect();
         if bounds.len() > 3 {
             for k in 0..bounds.len() - 3 {
-                if let Some(bucket) = self.buckets.get(&lower[bounds[k]..bounds[k + 3]]) {
+                if let Some(bucket) = oracle.buckets.get(&lower[bounds[k]..bounds[k + 3]]) {
                     candidates.extend_from_slice(bucket);
                 }
             }
         }
-        candidates.extend_from_slice(&self.always_check);
+        candidates.extend_from_slice(&oracle.always_check);
         // Ascending pattern-index order (then a *stable* literal_len sort by the
         // caller) reproduces the RegexSet path's ordering exactly.
         candidates.sort_unstable();
@@ -1048,7 +1108,7 @@ impl Scanner {
     /// (with captures) when it matches. Shared by both scan paths so their hit
     /// shape is byte-identical.
     fn verify(&self, pi: usize, line: &str) -> Option<MatchHit> {
-        let caps = self.regexes[pi].captures(line)?;
+        let caps = self.oracle().regexes[pi].captures(line)?;
         let captures = caps
             .iter()
             .skip(1)
@@ -1115,7 +1175,7 @@ impl Scanner {
     /// literal_len / group order, but each capture is the group's `(start, end)`
     /// byte range in `line` (an unmatched optional group is `(NO_SPAN, NO_SPAN)`).
     fn verify_spans(&self, pi: usize, line: &str) -> Option<MatchHitSpans> {
-        let caps = self.regexes[pi].captures(line)?;
+        let caps = self.oracle().regexes[pi].captures(line)?;
         let captures = caps
             .iter()
             .skip(1)
@@ -1185,6 +1245,7 @@ impl Scanner {
     /// [`scan_line`]: Scanner::scan_line
     pub fn scan_line_regexset(&self, line: &str) -> Vec<MatchHit> {
         let mut hits: Vec<MatchHit> = self
+            .oracle()
             .set
             .matches(line)
             .into_iter()
