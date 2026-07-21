@@ -5,6 +5,9 @@
 node_modules/
 site/dist/
 
+# The wasm scanner artifacts the site builds + bundles (scripts/build-wasm-web.sh)
+site/src/wasm/
+
 # vale downloads style packages here via `vale sync`; only styles/config is tracked
 styles/*
 !styles/config

@@ -34,6 +34,8 @@ RUN git clone --depth 1 --branch "${PG_REF}" "${PG_REPO}" /tmp/postgres \
     && ./configure --prefix="${PG_PREFIX}" --with-openssl \
     && make -j"$(nproc)" \
     && make install \
+    && make -C contrib -j"$(nproc)" -k \
+    && make -C contrib install -k \
     && rm -rf /tmp/postgres
 
 # ----------------------------------------------------------------------------

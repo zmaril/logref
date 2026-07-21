@@ -1,6 +1,20 @@
 [workspace]
 resolver = "2"
-members = ["crates/logref-core", "crates/logref-extract", "crates/logref-scan"]
+members = [
+    "crates/logref-core",
+    "crates/logref-extract",
+    "crates/logref-scan",
+    "crates/logref-wasm",
+]
+# logref-wasm is a wasm32 cdylib built via wasm-pack (`scripts/gen.sh` regenerates
+# its binding); keep it out of the default `cargo build` / `cargo test` set so the
+# host build doesn't pull in wasm-bindgen. It stays a workspace member so it shares
+# Cargo.lock and resolves the logref-core path dep.
+default-members = [
+    "crates/logref-core",
+    "crates/logref-extract",
+    "crates/logref-scan",
+]
 
 [workspace.package]
 version = "0.1.0"
@@ -15,6 +29,8 @@ serde_json = "1"
 anyhow = "1"
 clap = { version = "4", features = ["derive"] }
 regex = "1"
+aho-corasick = "1"
+memchr = "2"
 
 [profile.release]
 lto = "thin"

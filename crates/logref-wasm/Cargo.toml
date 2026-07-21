@@ -1,0 +1,21 @@
+[package]
+name = "logref-wasm"
+description = "wasm-bindgen binding for logref's Scan surface (format-string lowering), for the browser."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+logref-core = { workspace = true }
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+serde = { workspace = true }
+serde-wasm-bindgen = "0.6"
+anyhow = { workspace = true }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"

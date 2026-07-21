@@ -1,0 +1,291 @@
+<!doctype html>
+<!-- straitjacket-allow-file:color -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="data:," />
+<title>logref — WASM scanner throughput benchmark</title>
+<style>
+  :root { color-scheme: dark; }
+  body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         margin: 0; padding: 32px 40px; background: #0f1420; color: #e6edf3; }
+  h1 { font-size: 21px; margin: 0 0 4px; }
+  .sub { color: #8b98a9; margin: 0 0 26px; font-size: 13px; max-width: 820px; }
+  .scale { max-width: 820px; margin: 0 0 26px; }
+  .scale h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+              margin: 0 0 4px; color: #c9d3e0; }
+  .scale .desc { font-size: 12px; color: #8b98a9; margin: 0 0 12px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: #161b28; border: 1px solid #263041; border-radius: 12px; padding: 18px 20px; }
+  .card h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+             margin: 0 0 10px; color: #8b98a9; }
+  .num { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .num.wasm { color: #56d364; }
+  .num.packed { color: #d2a8ff; }
+  .num.trig { color: #e3b341; }
+  .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .unit { font-size: 12px; color: #8b98a9; font-weight: 400; }
+  .row { display: flex; justify-content: space-between; font-size: 12.5px;
+         padding: 3px 0; border-top: 1px solid #21283680; color: #b9c2cf; margin-top: 2px; }
+  .row span:last-child { font-variant-numeric: tabular-nums; color: #e6edf3; }
+  .verdict { margin-top: 14px; padding: 12px 16px; border-radius: 10px;
+             background: #12261a; border: 1px solid #1f6f36; font-size: 14px; }
+  .verdict.lose { background: #2a1616; border-color: #7a2c2c; }
+  .verdict b { font-size: 15px; }
+  .meta { max-width: 820px; margin-top: 8px; font-size: 12px; color: #6b7685; }
+  code { background: #21283680; padding: 1px 5px; border-radius: 4px; }
+  #status { color: #d29922; }
+</style>
+</head>
+<body>
+  <h1>logref scanner throughput — the specialized matcher vs the paths it replaced</h1>
+  <p class="sub">Same catalog, same rendered log lines, in the browser. All three paths run the REAL Rust scanner compiled to wasm
+     (the hand-ported TS mirror this page originally benchmarked against was retired once WASM won — its ~110k lines/sec at 4k patterns
+     is recorded in the bench README).
+     <span class="num packed" style="font-size:14px">Specialized</span> is the purpose-built printf matcher (anchored Aho-Corasick candidates + regex-free
+     byte-loop verification) via <code>scanBatchPacked(lines)</code> — the whole result as ONE flat <code>Int32Array</code>, reconstructed JS-side by slicing each
+     line by the returned byte spans (that decode cost is charged here).
+     <span class="num trig" style="font-size:14px">Trigram</span> is the PREVIOUS wasm path (trigram prefilter + <code>regex</code>-crate verify), same packed marshalling.
+     <span class="num wasm" style="font-size:14px">Nested</span> is the specialized matcher behind serde-marshalled <code>scanBatch</code>.</p>
+  <p id="status">booting…</p>
+  <div id="results" style="display:none"></div>
+  <div class="meta" id="meta"></div>
+
+<script type="module">
+import init, { Scanner as WasmScanner, renderSample } from "./logref_wasm.js";
+
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => Math.round(n).toLocaleString("en-US");
+const setStatus = (s) => { $("status").textContent = s; };
+
+function textsOf(jsonl) {
+  return jsonl.split("\n").filter((l) => l.trim())
+    .map((l) => { try { return JSON.parse(l).message?.text; } catch { return undefined; } });
+}
+
+// Decode the packed Int32Array back into the SAME nested shape scanBatch
+// returns — one `{ site, literalLen, captures[] }[]` per input line — by slicing
+// each line by the returned byte spans. Layout, read sequentially (we know N):
+//   per line: [ numHits, (site, literalLen, numCaps, (capStart, capEnd)*)* ]
+// An unmatched optional group is (-1,-1) → "". This JS cost is charged to the
+// packed WASM timing. (The production decoder, with exact non-ASCII handling +
+// tests, lives in site/src/packed.ts; this bench corpus is ASCII.)
+function decodePacked(arr, lines) {
+  const out = new Array(lines.length);
+  let p = 0;
+  for (let li = 0; li < lines.length; li++) {
+    const numHits = arr[p++];
+    const hits = new Array(numHits);
+    const line = lines[li];
+    for (let h = 0; h < numHits; h++) {
+      const site = arr[p++];
+      const literalLen = arr[p++];
+      const numCaps = arr[p++];
+      const captures = new Array(numCaps);
+      for (let c = 0; c < numCaps; c++) {
+        const s = arr[p++], e = arr[p++];
+        captures[c] = s < 0 ? "" : line.slice(s, e);
+      }
+      hits[h] = { site, literalLen, captures };
+    }
+    out[li] = hits;
+  }
+  return out;
+}
+
+// Deep-equal the nested scanBatch result against a decoded packed result, so we
+// PROVE the packed path reconstructs the identical {site, literalLen, captures}
+// the nested path returns before trusting its throughput.
+// Returns { ok, checked, firstDiff }.
+function crossCheck(nested, packed) {
+  if (nested.length !== packed.length)
+    return { ok: false, checked: 0, firstDiff: `line count ${nested.length} vs ${packed.length}` };
+  for (let i = 0; i < nested.length; i++) {
+    const a = nested[i], b = packed[i];
+    if (a.length !== b.length)
+      return { ok: false, checked: i, firstDiff: `line ${i}: hit count ${a.length} vs ${b.length}` };
+    for (let j = 0; j < a.length; j++) {
+      const ha = a[j], hb = b[j];
+      if (ha.site !== hb.site || ha.literalLen !== hb.literalLen || ha.captures.length !== hb.captures.length)
+        return { ok: false, checked: i, firstDiff: `line ${i} hit ${j}: header/site/len differ` };
+      for (let k = 0; k < ha.captures.length; k++)
+        if (ha.captures[k] !== hb.captures[k])
+          return { ok: false, checked: i, firstDiff: `line ${i} hit ${j} cap ${k}: ${JSON.stringify(ha.captures[k])} vs ${JSON.stringify(hb.captures[k])}` };
+    }
+  }
+  return { ok: true, checked: nested.length, firstDiff: null };
+}
+
+function benchmark(jsonl, N) {
+  const texts = textsOf(jsonl);
+
+  // Realistic log: cycle renderSample over every site with text, up to N lines.
+  const base = [];
+  texts.forEach((text) => {
+    if (!text) return;
+    let r; try { r = renderSample(text); } catch { return; }
+    base.push(r.replace(/\n+$/, ""));
+  });
+  const lines = [];
+  for (let i = 0; i < N; i++) lines.push(base[i % base.length]);
+
+  // ── build once (timed separately — this is the lazy-oracle win) ──
+  let t = performance.now();
+  const wasm = new WasmScanner(jsonl);
+  const wasmBuildMs = performance.now() - t;
+  const patterns = wasm.report().compiled;
+
+  // ── correctness: packed (decoded) must equal nested, over ALL N lines —
+  // and the packed TRIGRAM path (the previous algorithm) must equal both,
+  // which cross-proves the specialized matcher against the regex-verify path
+  // in-browser. ──
+  const nestedOnce = wasm.scanBatch(lines);
+  const packedOnce = decodePacked(wasm.scanBatchPacked(lines), lines);
+  const cc = crossCheck(nestedOnce, packedOnce);
+  const packedTriOnce = decodePacked(wasm.scanBatchPackedTrigram(lines), lines);
+  const ccTri = crossCheck(nestedOnce, packedTriOnce);
+
+  // warm-up (not timed).
+  wasm.scanBatch(lines.slice(0, 500));
+  wasm.scanBatchPacked(lines.slice(0, 500));
+  wasm.scanBatchPackedTrigram(lines.slice(0, 500));
+  wasm.marshalInProbe(lines.slice(0, 500));
+
+  const REP = 3;
+  // nested WASM scanBatch.
+  let wasmBest = Infinity, wasmHits = 0;
+  for (let r = 0; r < REP; r++) {
+    const t0 = performance.now();
+    const batch = wasm.scanBatch(lines);
+    const dt = performance.now() - t0;
+    if (dt < wasmBest) { wasmBest = dt; wasmHits = batch.reduce((a, h) => a + h.length, 0); }
+  }
+  // packed WASM: scanBatchPacked (marshal-in + compute + Int32Array copy) + JS
+  // reconstruction. Both phases charged to the packed timing; also split them.
+  let packedBest = Infinity, packedCallBest = Infinity, packedDecodeBest = Infinity, packedHits = 0;
+  for (let r = 0; r < REP; r++) {
+    const t0 = performance.now();
+    const buf = wasm.scanBatchPacked(lines);
+    const t1 = performance.now();
+    const decoded = decodePacked(buf, lines);
+    const t2 = performance.now();
+    const total = t2 - t0;
+    if (total < packedBest) {
+      packedBest = total;
+      packedCallBest = t1 - t0;
+      packedDecodeBest = t2 - t1;
+      packedHits = decoded.reduce((a, h) => a + h.length, 0);
+    }
+  }
+  // packed TRIGRAM WASM: the previous algorithm, same packed marshalling.
+  let packedTriBest = Infinity, packedTriHits = 0;
+  for (let r = 0; r < REP; r++) {
+    const t0 = performance.now();
+    const decoded = decodePacked(wasm.scanBatchPackedTrigram(lines), lines);
+    const dt = performance.now() - t0;
+    if (dt < packedTriBest) {
+      packedTriBest = dt;
+      packedTriHits = decoded.reduce((a, h) => a + h.length, 0);
+    }
+  }
+  // marshal-IN probe: deserialize the string[] and return only the count.
+  let marshalInBest = Infinity;
+  for (let r = 0; r < REP; r++) {
+    const t0 = performance.now();
+    wasm.marshalInProbe(lines);
+    const dt = performance.now() - t0;
+    if (dt < marshalInBest) marshalInBest = dt;
+  }
+  return {
+    N, patterns, distinct: base.length,
+    wasmLps: N / (wasmBest / 1000),
+    packedLps: N / (packedBest / 1000),
+    packedTriLps: N / (packedTriBest / 1000),
+    wasmBest, packedBest, packedCallBest, packedDecodeBest, marshalInBest,
+    packedTriBest,
+    wasmBuildMs, wasmHits, packedHits, packedTriHits,
+    crossCheck: cc, crossCheckTrigram: ccTri,
+    reps: REP,
+  };
+}
+
+function renderScale(title, desc, r) {
+  // The headline verdict: the specialized matcher vs the trigram+regex path it
+  // replaced, inside the same wasm build, same packed marshalling both sides.
+  const ratio = r.packedLps / r.packedTriLps;
+  const win = ratio >= 1
+    ? `<b>Specialized matcher wins ${ratio.toFixed(2)}×</b> — ${fmt(r.packedLps)} vs ${fmt(r.packedTriLps)} lines/sec (incl. JS reconstruction). Nested scanBatch: ${fmt(r.wasmLps)}. Scanner built in ${r.wasmBuildMs.toFixed(1)} ms.`
+    : `<b>The previous trigram path wins ${(1/ratio).toFixed(2)}×</b> — ${fmt(r.packedTriLps)} vs specialized ${fmt(r.packedLps)} lines/sec. Nested scanBatch: ${fmt(r.wasmLps)}.`;
+  const ccOk = r.crossCheck.ok && r.crossCheckTrigram.ok;
+  const cc = ccOk
+    ? `specialized == trigram == nested over all ${fmt(r.crossCheck.checked)} lines ✓`
+    : r.crossCheck.ok
+      ? `TRIGRAM CROSS-CHECK FAILED after ${fmt(r.crossCheckTrigram.checked)} lines: ${r.crossCheckTrigram.firstDiff}`
+      : `CROSS-CHECK FAILED after ${fmt(r.crossCheck.checked)} lines: ${r.crossCheck.firstDiff}`;
+  const el = document.createElement("div");
+  el.className = "scale";
+  el.innerHTML = `
+    <h2>${title}</h2>
+    <p class="desc">${desc} · ${fmt(r.patterns)} patterns · N = ${fmt(r.N)} lines · best of ${r.reps} · <span style="color:${ccOk ? '#56d364' : '#f85149'}">${cc}</span></p>
+    <div class="grid three">
+      <div class="card">
+        <h3>Specialized · scanBatchPacked + JS decode</h3>
+        <div class="num packed">${fmt(r.packedLps)} <span class="unit">lines/sec</span></div>
+        <div class="row"><span>total scan time</span><span>${r.packedBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>· wasm call (in+compute+copy)</span><span>${r.packedCallBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>· of which marshal-in</span><span>${r.marshalInBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>· JS reconstruct</span><span>${r.packedDecodeBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>scanner build (once)</span><span>${r.wasmBuildMs.toFixed(1)} ms</span></div>
+        <div class="row"><span>matches</span><span>${fmt(r.packedHits)}</span></div>
+      </div>
+      <div class="card">
+        <h3>Trigram (previous) · scanBatchPackedTrigram</h3>
+        <div class="num trig">${fmt(r.packedTriLps)} <span class="unit">lines/sec</span></div>
+        <div class="row"><span>scan time (incl. decode)</span><span>${r.packedTriBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>matches</span><span>${fmt(r.packedTriHits)}</span></div>
+      </div>
+      <div class="card">
+        <h3>Nested · scanBatch (specialized)</h3>
+        <div class="num wasm">${fmt(r.wasmLps)} <span class="unit">lines/sec</span></div>
+        <div class="row"><span>scan time</span><span>${r.wasmBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>matches</span><span>${fmt(r.wasmHits)}</span></div>
+      </div>
+    </div>
+    <div class="verdict ${ratio >= 1 ? "" : "lose"}">${win}</div>`;
+  $("results").appendChild(el);
+}
+
+async function run() {
+  setStatus("loading wasm…");
+  await init({ module_or_path: "./logref_wasm_bg.wasm" });
+
+  setStatus("loading catalogs…");
+  const small = await (await fetch("./corpus.jsonl")).text();
+  const large = await (await fetch("./corpus-large.jsonl")).text();
+
+  const N = 20000;
+  setStatus(`benchmarking small catalog (${N} lines)…`);
+  const rSmall = benchmark(small, N);
+  setStatus(`benchmarking large catalog (${N} lines)…`);
+  const rLarge = benchmark(large, N);
+
+  $("results").style.display = "block";
+  renderScale("Large realistic catalog (production scale)",
+    "4,000 patterns synthesized from the 48 real pg-catalog sites (unique literal prefixes) — the scale of the site's reference index",
+    rLarge);
+  renderScale("Small catalog (the 48-site sample as-is)",
+    "the raw pg-catalog-sample.jsonl — tiny catalog, cache-hot",
+    rSmall);
+
+  $("meta").innerHTML =
+    `Chromium ${navigator.userAgent.match(/Chrome\/[\d.]+/)?.[0] ?? ""} · ` +
+    `the production scan page (site/src/scan.ts) ships the specialized packed path.`;
+  setStatus("done.");
+  window.__BENCH_DONE__ = { small: rSmall, large: rLarge };
+}
+
+run().catch((e) => { setStatus("ERROR: " + e.message); window.__BENCH_ERROR__ = String(e.stack || e); console.error(e); });
+</script>
+</body>
+</html>
