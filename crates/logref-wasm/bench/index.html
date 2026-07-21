@@ -5,7 +5,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="icon" href="data:," />
-<title>logref — batched-WASM vs hand-tuned TS scanner benchmark</title>
+<title>logref — WASM scanner throughput benchmark</title>
 <style>
   :root { color-scheme: dark; }
   body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -23,10 +23,8 @@
   .num { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .num.wasm { color: #56d364; }
   .num.packed { color: #d2a8ff; }
-  .num.ts { color: #79c0ff; }
   .num.trig { color: #e3b341; }
   .grid.three { grid-template-columns: 1fr 1fr 1fr; }
-  .grid.four { grid-template-columns: 1fr 1fr 1fr 1fr; }
   .unit { font-size: 12px; color: #8b98a9; font-weight: 400; }
   .row { display: flex; justify-content: space-between; font-size: 12.5px;
          padding: 3px 0; border-top: 1px solid #21283680; color: #b9c2cf; margin-top: 2px; }
@@ -41,40 +39,25 @@
 </style>
 </head>
 <body>
-  <h1>logref scanner throughput — specialized-matcher WASM vs hand-tuned TS</h1>
-  <p class="sub">Same catalog, same rendered log lines, in the browser.
-     <span class="num packed" style="font-size:14px">Specialized WASM</span> is the purpose-built printf matcher (anchored Aho-Corasick candidates + regex-free
+  <h1>logref scanner throughput — the specialized matcher vs the paths it replaced</h1>
+  <p class="sub">Same catalog, same rendered log lines, in the browser. All three paths run the REAL Rust scanner compiled to wasm
+     (the hand-ported TS mirror this page originally benchmarked against was retired once WASM won — its ~110k lines/sec at 4k patterns
+     is recorded in the bench README).
+     <span class="num packed" style="font-size:14px">Specialized</span> is the purpose-built printf matcher (anchored Aho-Corasick candidates + regex-free
      byte-loop verification) via <code>scanBatchPacked(lines)</code> — the whole result as ONE flat <code>Int32Array</code>, reconstructed JS-side by slicing each
      line by the returned byte spans (that decode cost is charged here).
-     <span class="num trig" style="font-size:14px">Trigram WASM</span> is the PREVIOUS wasm path (trigram prefilter + <code>regex</code>-crate verify), same packed marshalling.
-     <span class="num wasm" style="font-size:14px">Nested WASM</span> is the specialized matcher behind serde-marshalled <code>scanBatch</code>.
-     <span class="num ts" style="font-size:14px">Hand-tuned TS</span> is the production <code>ScanIndex</code> (trigram prefilter + V8-JIT <code>RegExp</code>, per-line <code>scanLine</code>).</p>
+     <span class="num trig" style="font-size:14px">Trigram</span> is the PREVIOUS wasm path (trigram prefilter + <code>regex</code>-crate verify), same packed marshalling.
+     <span class="num wasm" style="font-size:14px">Nested</span> is the specialized matcher behind serde-marshalled <code>scanBatch</code>.</p>
   <p id="status">booting…</p>
   <div id="results" style="display:none"></div>
   <div class="meta" id="meta"></div>
 
 <script type="module">
-import init, { Scanner as WasmScanner } from "./logref_wasm.js";
-import { ScanIndex, lowerFormat, renderSample } from "./site-bundle.js";
+import init, { Scanner as WasmScanner, renderSample } from "./logref_wasm.js";
 
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => Math.round(n).toLocaleString("en-US");
 const setStatus = (s) => { $("status").textContent = s; };
-
-function patternsFromTexts(texts) {
-  const patterns = [];
-  texts.forEach((text, siteIdx) => {
-    if (!text) return;
-    let low; try { low = lowerFormat(text); } catch { return; }
-    patterns.push({
-      slug: String(siteIdx), message: text, level: [],
-      regexSource: low.regex, groups: low.groups,
-      literalLen: low.literalLen, literals: low.literals,
-      catchAll: low.literals.length === 0,
-    });
-  });
-  return patterns;
-}
 
 function textsOf(jsonl) {
   return jsonl.split("\n").filter((l) => l.trim())
@@ -86,8 +69,8 @@ function textsOf(jsonl) {
 // each line by the returned byte spans. Layout, read sequentially (we know N):
 //   per line: [ numHits, (site, literalLen, numCaps, (capStart, capEnd)*)* ]
 // An unmatched optional group is (-1,-1) → "". This JS cost is charged to the
-// packed WASM timing, so the comparison against TS (which returns ready-to-use
-// results) is fair.
+// packed WASM timing. (The production decoder, with exact non-ASCII handling +
+// tests, lives in site/src/packed.ts; this bench corpus is ASCII.)
 function decodePacked(arr, lines) {
   const out = new Array(lines.length);
   let p = 0;
@@ -113,7 +96,7 @@ function decodePacked(arr, lines) {
 
 // Deep-equal the nested scanBatch result against a decoded packed result, so we
 // PROVE the packed path reconstructs the identical {site, literalLen, captures}
-// the nested (RegexSet-proven) path returns before trusting its throughput.
+// the nested path returns before trusting its throughput.
 // Returns { ok, checked, firstDiff }.
 function crossCheck(nested, packed) {
   if (nested.length !== packed.length)
@@ -136,21 +119,22 @@ function crossCheck(nested, packed) {
 
 function benchmark(jsonl, N) {
   const texts = textsOf(jsonl);
-  const patterns = patternsFromTexts(texts);
 
   // Realistic log: cycle renderSample over every site with text, up to N lines.
   const base = [];
-  texts.forEach((text) => { if (text) { const r = renderSample(text); if (r !== null) base.push(r.replace(/\n+$/, "")); } });
+  texts.forEach((text) => {
+    if (!text) return;
+    let r; try { r = renderSample(text); } catch { return; }
+    base.push(r.replace(/\n+$/, ""));
+  });
   const lines = [];
   for (let i = 0; i < N; i++) lines.push(base[i % base.length]);
 
-  // ── build once (timed separately) ──
+  // ── build once (timed separately — this is the lazy-oracle win) ──
   let t = performance.now();
   const wasm = new WasmScanner(jsonl);
   const wasmBuildMs = performance.now() - t;
-  t = performance.now();
-  const ts = new ScanIndex(patterns);
-  const tsBuildMs = performance.now() - t;
+  const patterns = wasm.report().compiled;
 
   // ── correctness: packed (decoded) must equal nested, over ALL N lines —
   // and the packed TRIGRAM path (the previous algorithm) must equal both,
@@ -167,10 +151,9 @@ function benchmark(jsonl, N) {
   wasm.scanBatchPacked(lines.slice(0, 500));
   wasm.scanBatchPackedTrigram(lines.slice(0, 500));
   wasm.marshalInProbe(lines.slice(0, 500));
-  for (let i = 0; i < 500; i++) ts.scanLine(lines[i]);
 
   const REP = 3;
-  // nested WASM scanBatch (the current 66k baseline).
+  // nested WASM scanBatch.
   let wasmBest = Infinity, wasmHits = 0;
   for (let r = 0; r < REP; r++) {
     const t0 = performance.now();
@@ -214,34 +197,26 @@ function benchmark(jsonl, N) {
     const dt = performance.now() - t0;
     if (dt < marshalInBest) marshalInBest = dt;
   }
-  let tsBest = Infinity, tsHits = 0;
-  for (let r = 0; r < REP; r++) {
-    const t0 = performance.now();
-    let hh = 0;
-    for (let i = 0; i < lines.length; i++) hh += ts.scanLine(lines[i]).hits.length;
-    const dt = performance.now() - t0;
-    if (dt < tsBest) { tsBest = dt; tsHits = hh; }
-  }
   return {
-    N, patterns: patterns.length, distinct: base.length,
-    wasmLps: N / (wasmBest / 1000), tsLps: N / (tsBest / 1000),
+    N, patterns, distinct: base.length,
+    wasmLps: N / (wasmBest / 1000),
     packedLps: N / (packedBest / 1000),
     packedTriLps: N / (packedTriBest / 1000),
-    wasmBest, tsBest, packedBest, packedCallBest, packedDecodeBest, marshalInBest,
+    wasmBest, packedBest, packedCallBest, packedDecodeBest, marshalInBest,
     packedTriBest,
-    wasmBuildMs, tsBuildMs, wasmHits, tsHits, packedHits, packedTriHits,
+    wasmBuildMs, wasmHits, packedHits, packedTriHits,
     crossCheck: cc, crossCheckTrigram: ccTri,
     reps: REP,
   };
 }
 
 function renderScale(title, desc, r) {
-  // The headline verdict is the EXPERIMENT: the specialized matcher (packed
-  // WASM) vs the hand-tuned TS scanner.
-  const ratio = r.packedLps / r.tsLps;
+  // The headline verdict: the specialized matcher vs the trigram+regex path it
+  // replaced, inside the same wasm build, same packed marshalling both sides.
+  const ratio = r.packedLps / r.packedTriLps;
   const win = ratio >= 1
-    ? `<b>Specialized WASM wins ${ratio.toFixed(2)}×</b> — ${fmt(r.packedLps)} vs ${fmt(r.tsLps)} lines/sec (incl. JS reconstruction). Previous trigram WASM: ${fmt(r.packedTriLps)}; nested scanBatch: ${fmt(r.wasmLps)}.`
-    : `<b>Hand-tuned TS still wins ${(1/ratio).toFixed(2)}×</b> — ${fmt(r.tsLps)} vs specialized ${fmt(r.packedLps)} lines/sec. Trigram WASM: ${fmt(r.packedTriLps)}; nested scanBatch: ${fmt(r.wasmLps)}.`;
+    ? `<b>Specialized matcher wins ${ratio.toFixed(2)}×</b> — ${fmt(r.packedLps)} vs ${fmt(r.packedTriLps)} lines/sec (incl. JS reconstruction). Nested scanBatch: ${fmt(r.wasmLps)}. Scanner built in ${r.wasmBuildMs.toFixed(1)} ms.`
+    : `<b>The previous trigram path wins ${(1/ratio).toFixed(2)}×</b> — ${fmt(r.packedTriLps)} vs specialized ${fmt(r.packedLps)} lines/sec. Nested scanBatch: ${fmt(r.wasmLps)}.`;
   const ccOk = r.crossCheck.ok && r.crossCheckTrigram.ok;
   const cc = ccOk
     ? `specialized == trigram == nested over all ${fmt(r.crossCheck.checked)} lines ✓`
@@ -253,35 +228,28 @@ function renderScale(title, desc, r) {
   el.innerHTML = `
     <h2>${title}</h2>
     <p class="desc">${desc} · ${fmt(r.patterns)} patterns · N = ${fmt(r.N)} lines · best of ${r.reps} · <span style="color:${ccOk ? '#56d364' : '#f85149'}">${cc}</span></p>
-    <div class="grid four">
+    <div class="grid three">
       <div class="card">
-        <h3>Specialized WASM · scanBatchPacked + JS decode</h3>
+        <h3>Specialized · scanBatchPacked + JS decode</h3>
         <div class="num packed">${fmt(r.packedLps)} <span class="unit">lines/sec</span></div>
         <div class="row"><span>total scan time</span><span>${r.packedBest.toFixed(1)} ms</span></div>
         <div class="row"><span>· wasm call (in+compute+copy)</span><span>${r.packedCallBest.toFixed(1)} ms</span></div>
         <div class="row"><span>· of which marshal-in</span><span>${r.marshalInBest.toFixed(1)} ms</span></div>
         <div class="row"><span>· JS reconstruct</span><span>${r.packedDecodeBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>scanner build (once)</span><span>${r.wasmBuildMs.toFixed(1)} ms</span></div>
         <div class="row"><span>matches</span><span>${fmt(r.packedHits)}</span></div>
       </div>
       <div class="card">
-        <h3>Trigram WASM (previous) · scanBatchPackedTrigram</h3>
+        <h3>Trigram (previous) · scanBatchPackedTrigram</h3>
         <div class="num trig">${fmt(r.packedTriLps)} <span class="unit">lines/sec</span></div>
         <div class="row"><span>scan time (incl. decode)</span><span>${r.packedTriBest.toFixed(1)} ms</span></div>
         <div class="row"><span>matches</span><span>${fmt(r.packedTriHits)}</span></div>
       </div>
       <div class="card">
-        <h3>Nested WASM · scanBatch (specialized)</h3>
+        <h3>Nested · scanBatch (specialized)</h3>
         <div class="num wasm">${fmt(r.wasmLps)} <span class="unit">lines/sec</span></div>
         <div class="row"><span>scan time</span><span>${r.wasmBest.toFixed(1)} ms</span></div>
-        <div class="row"><span>build (once)</span><span>${r.wasmBuildMs.toFixed(1)} ms</span></div>
         <div class="row"><span>matches</span><span>${fmt(r.wasmHits)}</span></div>
-      </div>
-      <div class="card">
-        <h3>Hand-tuned TS · ScanIndex</h3>
-        <div class="num ts">${fmt(r.tsLps)} <span class="unit">lines/sec</span></div>
-        <div class="row"><span>scan time</span><span>${r.tsBest.toFixed(1)} ms</span></div>
-        <div class="row"><span>build (once)</span><span>${r.tsBuildMs.toFixed(1)} ms</span></div>
-        <div class="row"><span>matches</span><span>${fmt(r.tsHits)}</span></div>
       </div>
     </div>
     <div class="verdict ${ratio >= 1 ? "" : "lose"}">${win}</div>`;
@@ -304,15 +272,15 @@ async function run() {
 
   $("results").style.display = "block";
   renderScale("Large realistic catalog (production scale)",
-    "4,000 patterns synthesized from the 48 real pg-catalog sites (unique literal prefixes) — the scale of the site's reference index, where the ~58k lines/sec baseline lives",
+    "4,000 patterns synthesized from the 48 real pg-catalog sites (unique literal prefixes) — the scale of the site's reference index",
     rLarge);
   renderScale("Small catalog (the 48-site sample as-is)",
-    "the raw pg-catalog-sample.jsonl — tiny catalog, both scanners cache-hot",
+    "the raw pg-catalog-sample.jsonl — tiny catalog, cache-hot",
     rSmall);
 
   $("meta").innerHTML =
     `Chromium ${navigator.userAgent.match(/Chrome\/[\d.]+/)?.[0] ?? ""} · ` +
-    `TS excludes bare catch-alls + strips <code>LEVEL:</code> prefixes, so its match count differs by design.`;
+    `the production scan page (site/src/scan.ts) ships the specialized packed path.`;
   setStatus("done.");
   window.__BENCH_DONE__ = { small: rSmall, large: rLarge };
 }
