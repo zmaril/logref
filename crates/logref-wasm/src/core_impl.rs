@@ -22,7 +22,16 @@ impl ScanCore for ScanImpl {
             // core counts are usize; the binding DTO is i32 (a JS number).
             literal_len: core.literal_len as i32,
             spec_count: core.spec_count as i32,
+            groups: core.groups,
+            literals: core.literals,
         })
+    }
+
+    fn render_sample(fmt: String) -> anyhow::Result<String> {
+        // logref_core::render_sample(&str) -> Option<String>; `None` (a spec the
+        // lowering would reject) becomes the thrown error text.
+        logref_core::render_sample(&fmt)
+            .ok_or_else(|| anyhow::anyhow!("format string cannot be rendered"))
     }
 }
 
@@ -81,8 +90,8 @@ impl ScannerCore for ScannerImpl {
     }
 }
 
-/// The packed scan path (the throughput experiment — see `src/packed.rs`). Kept
-/// on the hand-written seam because it reaches `logref_core::Scanner`'s
+/// The packed scan path (the production scan surface — see `src/packed.rs`).
+/// Kept on the hand-written seam because it reaches `logref_core::Scanner`'s
 /// span-valued scan (`scan_line_spans`); `packed.rs` is only the thin
 /// `#[wasm_bindgen]` wrapper that hands the buffer to JS as one `Int32Array`.
 impl ScannerImpl {

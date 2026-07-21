@@ -17,6 +17,8 @@ export interface Lowered {
   regex: string;
   literalLen: number;
   specCount: number;
+  groups: string[];
+  literals: string[];
 }
 export interface MatchHit {
   site: number;
@@ -44,6 +46,8 @@ pub struct Lowered {
     pub regex: String,
     pub literal_len: i32,
     pub spec_count: i32,
+    pub groups: Vec<String>,
+    pub literals: Vec<String>,
 }
 
 /// A single resolved match: the catalog site a rendered line traced back to, its
@@ -78,6 +82,7 @@ pub struct BuildReport {
 /// The `Scan` contract — implement over the engine in `crate::core_impl`.
 pub trait ScanCore: Sized + Send + Sync + 'static {
     fn lower_format(fmt: String) -> anyhow::Result<Lowered>;
+    fn render_sample(fmt: String) -> anyhow::Result<String>;
 }
 
 /// The `Scanner` contract — implement over the engine in `crate::core_impl`.
@@ -98,12 +103,20 @@ pub fn lower_format(fmt: String) -> Result<JsValue, JsValue> {
     Ok(serde_wasm_bindgen::to_value(&out)?)
 }
 
+/// Render a format string with canned, plausible values — the inverse of
+/// `lower_format`, used to synthesize sample log lines. Fallible: rejected
+/// when the format contains a spec that lowering itself would reject.
+#[wasm_bindgen(js_name = "renderSample")]
+pub fn render_sample(fmt: String) -> Result<String, JsValue> {
+    <crate::core_impl::ScanImpl as ScanCore>::render_sample(fmt).map_err(err)
+}
+
 /// A `RegexSet`-backed log scanner: build once, scan many.
 #[wasm_bindgen]
 pub struct Scanner {
     // `pub(crate)` (the generator emits a private field) is the ONE deliberate
     // deviation from the generated surface: it lets the hand-written packed-scan
-    // experiment in `crate::packed` reach the built scanner without routing a new
+    // path in `crate::packed` reach the built scanner without routing a new
     // op through fluessig. See `src/packed.rs`.
     pub(crate) inner: crate::core_impl::ScannerImpl,
 }

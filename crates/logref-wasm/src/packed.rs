@@ -1,6 +1,7 @@
-//! HAND-WRITTEN experiment — NOT fluessig-generated. A "packed" batch-scan path
-//! that measures the ceiling of WASM scan throughput once the result-marshalling
-//! tax is removed.
+//! HAND-WRITTEN — NOT fluessig-generated. The "packed" batch-scan path: the
+//! production scan surface of the site's Scan page (site/src/scan.ts), born as
+//! the experiment that measured the ceiling of WASM scan throughput once the
+//! result-marshalling tax is removed.
 //!
 //! The generated `Scanner::scanBatch` (see `binding.rs`) returns a nested
 //! `MatchHit[][]`, which `serde_wasm_bindgen` materializes as ~75k JS
@@ -15,16 +16,17 @@
 //! by the returned byte spans (it already holds the lines). See the bench in
 //! `bench/index.html`.
 //!
-//! Productionization caveat — UTF-8 vs UTF-16 offsets: the emitted capture spans
-//! are Rust **byte** offsets; JS strings index UTF-16 code units. For ASCII log
-//! lines (this benchmark's corpus, and the overwhelming common case) the two
-//! coincide, so slicing is exact. For lines with non-ASCII text a real feature
-//! would emit UTF-16 offsets (or char offsets + a JS-side conversion). This
-//! experiment keeps byte offsets to measure the honest best case.
+//! UTF-8 vs UTF-16 offsets: the emitted capture spans are Rust **byte**
+//! offsets; JS strings index UTF-16 code units. For ASCII log lines (the
+//! overwhelming common case) the two coincide, so the decoder slices the JS
+//! string directly; for a line with non-ASCII text the production decoder
+//! (site/src/packed.ts) round-trips through the line's UTF-8 bytes, so the
+//! reconstruction is exact for every input.
 //!
 //! This lives in its own `impl Scanner` block, alongside the generated one,
-//! rather than being threaded through the fluessig-generated binding — it is a
-//! measurement of the ceiling, not a shipped op.
+//! rather than being threaded through the fluessig-generated binding — the
+//! generated surface stays exactly what the fluessig schema describes, and this
+//! deliberately low-level boundary shape stays a hand-maintained seam.
 
 use wasm_bindgen::prelude::*;
 

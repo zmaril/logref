@@ -31,6 +31,12 @@ pub struct Lowered {
     pub literal_len: i32,
     /// Number of conversion specs (capture groups) in the pattern.
     pub spec_count: i32,
+    /// The conversion character for each capture group, in order (`["s","d"]`) —
+    /// lets a consumer label each extracted value with the `%`-spec it came from.
+    pub groups: Vec<String>,
+    /// The maximal literal runs between conversion specs (each unescaped, `%%`
+    /// folded to `%`); every one must appear verbatim in any matching line.
+    pub literals: Vec<String>,
 }
 
 /// Why a format string could not be lowered. Surfaced only as the fallible op's
@@ -57,6 +63,14 @@ impl Scan {
     pub fn lower_format(fmt: &str) -> Result<Lowered, LowerError> {
         // Body is a stub — the derive reads only the signature. The real impl is
         // hand-written in crates/logref-wasm/src/core_impl.rs over logref-core.
+        let _ = fmt;
+        unimplemented!()
+    }
+
+    /// Render a format string with canned, plausible values — the inverse of
+    /// `lower_format`, used to synthesize sample log lines. Fallible: rejected
+    /// when the format contains a spec that lowering itself would reject.
+    pub fn render_sample(fmt: &str) -> Result<String, LowerError> {
         let _ = fmt;
         unimplemented!()
     }

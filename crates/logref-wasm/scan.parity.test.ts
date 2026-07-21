@@ -2,33 +2,28 @@
 // fluessig's wasm backend — ctor `build` + `scanLine` + `scanBatch` + `report`,
 // compiled to wasm32) must resolve rendered log lines identically to the
 // canonical Rust `Scanner` (crates/logref-scan/tests/resolve.rs is the ground
-// truth). It is then compared against the hand-tuned TS `ScanIndex`
-// (site/src/scanner.ts), whose DELIBERATE divergences (trigram prefilter, bare
-// catch-alls fully excluded, `LEVEL:` prefix stripping) are documented, not
-// treated as failures — the Rust/WASM scanner is ground truth.
+// truth). The hand-tuned TS `ScanIndex` this file originally also compared
+// against is retired — the wasm scanner IS the site scanner now, and
+// site/src/scanwasm.test.ts pins the site-level layer (prefix stripping +
+// catch-all suppression) over it.
 //
-// Run: bun test crates/logref-wasm/scan.parity.test.ts   (from the repo root)
+// Run: bun test crates/logref-wasm/scan.parity.test.ts   (from the repo root;
+// build the nodejs-target pkg first — see README.md)
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "bun:test";
 
 // The compiled wasm binding (wasm-bindgen --target nodejs).
-import { Scanner as WasmScanner } from "./pkg/logref_wasm.js";
-// The hand-tuned TS scanner + its lowering (the production site surface).
-import { lowerFormat, renderSample } from "../../site/src/lower.ts";
-import { type PatternEntry, ScanIndex } from "../../site/src/scanner.ts";
+import { renderSample, Scanner as WasmScanner } from "./pkg/logref_wasm.js";
 
 type WasmHit = { site: number; literalLen: number; captures: string[] };
 
 const REPO = join(import.meta.dir, "..", "..");
 const read = (p: string) => readFileSync(join(REPO, p), "utf8");
 
-// ── the fixture index + sample log (the Rust ground-truth corpus) ──
+// ── the fixture index (the Rust ground-truth corpus) ──
 const FIXTURE_SITES = read("crates/logref-scan/tests/fixtures/sites.jsonl");
-const SAMPLE_LOG = read("crates/logref-scan/tests/fixtures/sample.log")
-  .split("\n")
-  .filter((l) => l.length > 0);
 
 // A LogSite line (as stored in the index JSONL).
 interface Site {
@@ -39,36 +34,6 @@ const siteTexts = (jsonl: string): (string | undefined)[] =>
     .split("\n")
     .filter((l) => l.trim().length > 0)
     .map((l) => (JSON.parse(l) as Site).message?.text);
-
-/**
- * Build the TS `ScanIndex`'s `PatternEntry[]` from the SAME index JSONL the WASM
- * scanner builds from, so the two scan the same catalog. Each site's format text
- * is lowered with the production `lowerFormat`; `slug` carries the site index so
- * a TS hit can be compared to a WASM hit's `site`.
- */
-function patternsFromJsonl(jsonl: string): PatternEntry[] {
-  const out: PatternEntry[] = [];
-  siteTexts(jsonl).forEach((text, siteIdx) => {
-    if (!text) return; // no literal text (expr-only) → skipped, like Rust's no_text
-    let l: ReturnType<typeof lowerFormat>;
-    try {
-      l = lowerFormat(text);
-    } catch {
-      return; // lower_failed
-    }
-    out.push({
-      slug: String(siteIdx),
-      message: text,
-      level: [],
-      regexSource: l.regex,
-      groups: l.groups,
-      literalLen: l.literalLen,
-      literals: l.literals,
-      catchAll: l.literals.length === 0,
-    });
-  });
-  return out;
-}
 
 // ── 1. WASM vs Rust ground truth (must be identical) ──
 
@@ -136,52 +101,30 @@ test("a no-specific-site line resolves only to the bare catch-all (site 5)", () 
   expect(siteTexts(FIXTURE_SITES)[hits[0]!.site]).toBe("%s");
 });
 
-// ── 2. WASM vs the hand-tuned TS ScanIndex ──
+// ── 2. Larger real corpus: pg-catalog-sample.jsonl (48 sites) ──
 
-test("wasm vs TS ScanIndex: top-site + captures agree on well-defined lines", () => {
-  const wasm = new WasmScanner(FIXTURE_SITES);
-  const ts = new ScanIndex(patternsFromJsonl(FIXTURE_SITES));
-  const texts = siteTexts(FIXTURE_SITES);
-
-  let agree = 0;
-  const divergences: string[] = [];
-  for (const [line, expText] of GROUND_TRUTH) {
-    const w = wasm.scanLine(line) as WasmHit[];
-    const t = ts.scanLine(line);
-    // WASM top site (excluding the bare catch-all, which TS drops entirely).
-    const wTop = w.find((h) => texts[h.site] !== "%s");
-    const wText = wTop ? texts[wTop.site] : undefined;
-    const wCaps = wTop ? wTop.captures : [];
-    const tTop = t.hits[0];
-    const tText = tTop?.pattern.message;
-    const tCaps = tTop ? tTop.captures.map((c) => c.value) : [];
-    if (wText === expText && tText === expText && JSON.stringify(wCaps) === JSON.stringify(tCaps)) {
-      agree++;
-    } else {
-      divergences.push(`  ${JSON.stringify(line)}: wasm=${wText}/${JSON.stringify(wCaps)} ts=${tText}/${JSON.stringify(tCaps)}`);
-    }
-  }
-  console.log(`WASM vs TS (fixture): ${agree}/${GROUND_TRUTH.length} well-defined lines agree on top-site+captures`);
-  if (divergences.length > 0) console.log("divergences:\n" + divergences.join("\n"));
-  expect(agree).toBe(GROUND_TRUTH.length);
-});
-
-// ── 3. Larger real corpus: pg-catalog-sample.jsonl (48 sites) ──
-
-test("larger corpus: wasm vs Rust-shaped expectations + wasm vs TS, with counts", () => {
+test("larger corpus: every rendered line round-trips to its generating site", () => {
   const CORPUS = read("snippets/pg-catalog-sample.jsonl");
   const wasm = new WasmScanner(CORPUS);
   const report = wasm.report();
-  console.log(`pg-catalog corpus: total=${report.total} compiled=${report.compiled} noText=${report.noText} lowerFailed=${report.lowerFailed} compileFailed=${report.compileFailed}`);
+  console.log(
+    `pg-catalog corpus: total=${report.total} compiled=${report.compiled} noText=${report.noText} lowerFailed=${report.lowerFailed} compileFailed=${report.compileFailed}`,
+  );
 
-  // Synthesize one rendered line per site with literal text (renderSample is the
-  // inverse of lowering — the same canned values the Rust round-trip test uses).
+  // Synthesize one rendered line per site with literal text (the wasm
+  // renderSample is the inverse of lowering — the same canned values the Rust
+  // round-trip test uses).
   const texts = siteTexts(CORPUS);
   const synth: { line: string; siteIdx: number; text: string }[] = [];
   texts.forEach((text, siteIdx) => {
     if (!text) return;
-    const rendered = renderSample(text);
-    if (rendered !== null) synth.push({ line: rendered, siteIdx, text });
+    let rendered: string;
+    try {
+      rendered = renderSample(text);
+    } catch {
+      return;
+    }
+    synth.push({ line: rendered, siteIdx, text });
   });
   console.log(`synthesized ${synth.length} rendered lines from the corpus`);
 
@@ -198,22 +141,4 @@ test("larger corpus: wasm vs Rust-shaped expectations + wasm vs TS, with counts"
   }
   console.log(`round-trip: ${selfMatched}/${synth.length} lines matched their own generating site`);
   expect(selfMatched).toBe(synth.length);
-
-  // WASM vs TS on the corpus: compare the top NON-catch-all site's text.
-  const ts = new ScanIndex(patternsFromJsonl(CORPUS));
-  let agree = 0;
-  let tsEmpty = 0;
-  const diffs: string[] = [];
-  for (let i = 0; i < synth.length; i++) {
-    const w = batch[i]!;
-    const wTop = w.find((h) => texts[h.site] !== "%s");
-    const wText = wTop ? texts[wTop.site] : undefined;
-    const t = ts.scanLine(synth[i]!.line);
-    const tText = t.hits[0]?.pattern.message;
-    if (wText === tText) agree++;
-    else if (t.hits.length === 0) tsEmpty++;
-    else diffs.push(`  ${JSON.stringify(synth[i]!.line)}: wasm=${wText} ts=${tText}`);
-  }
-  console.log(`WASM vs TS (corpus): ${agree}/${synth.length} agree on top site; ${tsEmpty} TS-empty (prefilter/catch-all divergence); ${diffs.length} genuine top-site diffs`);
-  if (diffs.length > 0) console.log("genuine diffs:\n" + diffs.slice(0, 15).join("\n"));
 });

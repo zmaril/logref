@@ -23,6 +23,20 @@
           "name": "specCount",
           "type": "int32",
           "nullable": false
+        },
+        {
+          "name": "groups",
+          "type": {
+            "list": "string"
+          },
+          "nullable": false
+        },
+        {
+          "name": "literals",
+          "type": {
+            "list": "string"
+          },
+          "nullable": false
         }
       ]
     },
@@ -100,6 +114,18 @@
           "returns": {
             "model": "Lowered"
           }
+        },
+        {
+          "name": "renderSample",
+          "doc": "Render a format string with canned, plausible values — the inverse of\n`lower_format`, used to synthesize sample log lines. Fallible: rejected\nwhen the format contains a spec that lowering itself would reject.",
+          "shape": "unary",
+          "params": [
+            {
+              "name": "fmt",
+              "type": "string"
+            }
+          ],
+          "returns": "string"
         }
       ]
     },

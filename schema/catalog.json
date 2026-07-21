@@ -42,6 +42,30 @@
           },
           "nullable": false,
           "doc": "Number of conversion specs (capture groups) in the pattern."
+        },
+        {
+          "name": "groups",
+          "type": {
+            "k": "list",
+            "of": {
+              "k": "scalar",
+              "name": "string"
+            }
+          },
+          "nullable": false,
+          "doc": "The conversion character for each capture group, in order (`[\"s\",\"d\"]`) —\nlets a consumer label each extracted value with the `%`-spec it came from."
+        },
+        {
+          "name": "literals",
+          "type": {
+            "k": "list",
+            "of": {
+              "k": "scalar",
+              "name": "string"
+            }
+          },
+          "nullable": false,
+          "doc": "The maximal literal runs between conversion specs (each unescaped, `%%`\nfolded to `%`); every one must appear verbatim in any matching line."
         }
       ]
     },
