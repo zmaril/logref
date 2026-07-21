@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 473,
-  "combined_total": 718,
+  "new_sites": 549,
+  "combined_total": 794,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -5527,6 +5527,1038 @@
       "message": "%s",
       "scenarios": [
         "tier2__26_roles_acl_plpgsql"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_walinspect/pg_walinspect.c",
+      "line": 489,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "WAL input LSN must be less than current LSN",
+      "scenarios": [
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/contrib/pg_walinspect/pg_walinspect.c",
+      "line": 538,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "WAL start LSN must be less than end LSN",
+      "scenarios": [
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 3279,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "creating and filling new WAL file",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 3401,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "done creating and filling new WAL file",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 4095,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "removing write-ahead log file \"%s\"",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 5910,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was interrupted while in recovery at %s",
+      "scenarios": [
+        "tier4__wal_control_states"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 7115,
+      "level": "IsPostmasterEnvironment ? LOG : NOTICE",
+      "sqlstates": [],
+      "message": "shutting down",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 8180,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "skipping restartpoint, already performed at %X/%08X",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent",
+        "tier4__58_repl_physical_cascade",
+        "tier4__58_repl_physical_standby",
+        "tier4__59_repl_slots_standby",
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 8638,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "restore point \"%s\" created at %X/%08X",
+      "scenarios": [
+        "tier4__pitr_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogarchive.c",
+      "line": 158,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "executing restore command \"%s\"",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogarchive.c",
+      "line": 222,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "restored log file \"%s\" from archive",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogarchive.c",
+      "line": 268,
+      "level": "wait_result_is_any_signal(rc, true) ? FATAL : DEBUG2",
+      "sqlstates": [],
+      "message": "could not restore file \"%s\" from archive: %s",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogfuncs.c",
+      "line": 552,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "recovery is not in progress",
+      "scenarios": [
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogfuncs.c",
+      "line": 582,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "recovery is not in progress",
+      "scenarios": [
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogfuncs.c",
+      "line": 697,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "recovery is not in progress",
+      "scenarios": [
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 767,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "starting point-in-time recovery to %s",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 771,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "starting point-in-time recovery to \"%s\"",
+      "scenarios": [
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 894,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was not properly shut down; automatic recovery in progress",
+      "scenarios": [
+        "tier4__wal_control_states"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 1874,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_CONFIG_FILE_ERROR"
+      ],
+      "message": "recovery ended before configured recovery target was reached",
+      "scenarios": [
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2679,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "recovery stopping before commit of transaction %u, time %s",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2739,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "recovery stopping at restore point \"%s\", time %s",
+      "scenarios": [
+        "tier4__pitr_restore"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 4353,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "got WAL segment from archive",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/archive/shell_archive.c",
+      "line": 75,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "executing archive command \"%s\"",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/archive/shell_archive.c",
+      "line": 135,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "archived write-ahead log file \"%s\"",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/archive/shell_archive.c",
+      "line": 142,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "archiver process shutting down",
+      "scenarios": [
+        "tier4__pitr_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/autovacuum.c",
+      "line": 834,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "autovacuum launcher shutting down",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/autovacuum.c",
+      "line": 1630,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "autovacuum: processing database \"%s\"",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/autovacuum.c",
+      "line": 3325,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "%s: vac: %.0f (thresh %.0f, score %.2f), ins: %.0f (thresh %.0f, score %.2f), anl: %.0f (thresh %.0f, score %.2f), xid score: %.2f, mxid score: %.2f",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/checkpointer.c",
+      "line": 474,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "checkpoints are occurring too frequently (%d second apart)",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2104,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "postmaster received shutdown request signal",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2181,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "received fast shutdown request",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2199,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "aborting any active transactions",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2298,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "shutdown at recovery target",
+      "scenarios": [
+        "tier4__pitr_beforeconsistent"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 2831,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "terminating any other active server processes",
+      "scenarios": [
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 3219,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "shutting down due to startup process failure",
+      "scenarios": [
+        "tier4__pitr_unreached"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 3493,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "sending signal %d/%s to %s process with pid %d",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 3734,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "postmaster received pmsignal signal",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/postmaster.c",
+      "line": 3990,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "%s process %d is still running",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/postmaster/syslogger.c",
+      "line": 593,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "logger shutting down",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/dsm.c",
+      "line": 407,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "cleaning up orphaned dynamic shared memory with ID %u",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/dsm.c",
+      "line": 416,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "cleaning up dynamic shared memory control segment with ID %u",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/standby.c",
+      "line": 1002,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "adding recovery lock: db %u rel %u",
+      "scenarios": [
+        "tier4__standby_conflict"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/ipc/standby.c",
+      "line": 1046,
+      "level": "DEBUG4",
+      "sqlstates": [],
+      "message": "releasing recovery lock: xid %u db %u rel %u",
+      "scenarios": [
+        "tier4__standby_conflict"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3377,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_T_R_SERIALIZATION_FAILURE"
+      ],
+      "message": "canceling statement due to conflict with recovery",
+      "scenarios": [
+        "tier4__standby_conflict"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3477,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_ADMIN_SHUTDOWN"
+      ],
+      "message": "terminating autovacuum process due to administrator command",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3488,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "logical replication launcher shutting down",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3499,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_ADMIN_SHUTDOWN"
+      ],
+      "message": "terminating walreceiver process due to administrator command",
+      "scenarios": [
+        "tier4__standby_conflict",
+        "tier4__58_repl_physical_standby",
+        "tier4__59_repl_slots_standby",
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/activity/pgstat.c",
+      "line": 1656,
+      "level": "DEBUG2",
+      "sqlstates": [],
+      "message": "writing stats file \"%s\"",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/init/miscinit.c",
+      "line": 1147,
+      "level": "IsPostmasterEnvironment ? LOG : NOTICE",
+      "sqlstates": [],
+      "message": "database system is shut down",
+      "scenarios": [
+        "tier4__checkpoint_bgwriter",
+        "tier4__checkpoint_wal_badcombo",
+        "tier4__checkpoint_wal_logical",
+        "tier4__checkpoint_wal_minimal",
+        "tier4__pitr_beforeconsistent",
+        "tier4__pitr_primary",
+        "tier4__pitr_restore",
+        "tier4__pitr_unreached",
+        "tier4__standby_conflict",
+        "tier4__standby_primary",
+        "tier4__wal_control_states",
+        "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 3707,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "%s cannot run inside a transaction block",
+      "scenarios": [
+        "tier4__59_repl_slots_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 5896,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was shut down in recovery at %s",
+      "scenarios": [
+        "tier4__59_repl_slots_standby",
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 5919,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was interrupted while in recovery at log time %s",
+      "scenarios": [
+        "tier4__58_repl_physical_cascade"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 7175,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "restartpoint starting:%s",
+      "scenarios": [
+        "tier4__58_repl_physical_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 10032,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "WAL archiving is not enabled; you must ensure that all required WAL segments are copied through other means to complete the backup",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2098,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "saw end-of-backup record for backup starting at %X/%08X, waiting for %X/%08X",
+      "scenarios": [
+        "tier4__59_repl_slots_standby",
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 3712,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "waiting for WAL to become available at %X/%08X",
+      "scenarios": [
+        "tier4__58_repl_physical_cascade"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 1105,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s constraint on partitioned table must include all partitioning columns",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby",
+        "tier4__61_pub_sub_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 958,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CONNECTION_FAILURE"
+      ],
+      "message": "subscription \"%s\" could not connect to the publisher: %s",
+      "scenarios": [
+        "tier4__61_pub_sub_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 1062,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "subscription was created, but is not connected",
+      "scenarios": [
+        "tier4__61_pub_sub_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 2547,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "subscription \"%s\" does not exist, skipping",
+      "scenarios": [
+        "tier4__61_pub_sub_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/libpqwalreceiver/libpqwalreceiver.c",
+      "line": 645,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_PROTOCOL_VIOLATION"
+      ],
+      "message": "could not start WAL streaming: %s",
+      "scenarios": [
+        "tier4__58_repl_physical_cascade"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 512,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "cannot use physical replication slot for logical decoding",
+      "scenarios": [
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby",
+        "tier4__60_logical_decoding_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 1721,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "got new catalog xmin %u at %X/%08X",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby",
+        "tier4__61_pub_sub_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 1781,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "got new restart lsn %X/%08X at %X/%08X",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby",
+        "tier4__61_pub_sub_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/slotsync.c",
+      "line": 1180,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "replication slot synchronization requires \"%s\" to be specified in \"%s\"",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/slotsync.c",
+      "line": 1648,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "slot sync worker started",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5103,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication worker for subscription \"%s\" will stop because the subscription was disabled",
+      "scenarios": [
+        "tier4__61_pub_sub_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 447,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "replication slot \"%s\" already exists",
+      "scenarios": [
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby",
+        "tier4__60_logical_decoding_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 715,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_IN_USE"
+      ],
+      "message": "replication slot \"%s\" is active for PID %d",
+      "scenarios": [
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slotfuncs.c",
+      "line": 552,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid target WAL LSN",
+      "scenarios": [
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/syncrep.c",
+      "line": 330,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "canceling wait for synchronous replication due to user request",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/syncrep.c",
+      "line": 470,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "standby \"%s\" now has synchronous standby priority %d",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/syncrep.c",
+      "line": 536,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "standby \"%s\" is now a synchronous standby with priority %d",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/syncrep.c",
+      "line": 578,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "released %d procs up to write %X/%08X, %d procs up to flush %X/%08X, %d procs up to apply %X/%08X",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 502,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "parameter \"%s\" removed from configuration file, reset to default",
+      "scenarios": [
+        "tier4__58_repl_physical_primary",
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby",
+        "tier4__60_logical_decoding_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 567,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "parameter \"%s\" changed to \"%s\"",
+      "scenarios": [
+        "tier4__58_repl_physical_primary",
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby",
+        "tier4__60_logical_decoding_primary",
+        "tier4__61_pub_sub_publisher"
       ]
     }
   ]

@@ -18,18 +18,18 @@ extracted catalog by `(basename, line)`.
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
 - Baseline (Tier 1, exact file:line): **245** (1.65%)
-- Tier 2-4 scenarios add **473** new distinct sites
-- **Combined: 718 of 14806 (4.85%)**
+- Tier 2-4 scenarios add **549** new distinct sites
+- **Combined: 794 of 14806 (5.36%)**
 
 ## New sites by tier
 
-Attributed to the first tier that fired each site (no double-counting).
+Attributed to the first scenario that fired each site (no double-counting).
 
 | tier | new sites |
 |---|--:|
 | Tier 2 — crafted-SQL error corpus + contrib | 363 |
 | Tier 3 — config / auth / SSL | 22 |
-| Tier 4 — corruption / replication / resource / crash | 88 |
+| Tier 4 — corruption / replication / resource / crash | 164 |
 
 ## New sites by scenario
 
@@ -45,82 +45,99 @@ Attributed to the first tier that fired each site (no double-counting).
 | `tier2__22_system_admin_funcs` | 31 |
 | `tier2__23_query_semantics_extended` | 17 |
 | `tier2__24_txn_copy_cursor` | 19 |
-| `tier2__25_ddl_objects_more` | 30 |
-| `tier2__26_roles_acl_plpgsql` | 13 |
-| `tier2__27_alter_table` | 27 |
-| `tier2__28_typecmds_domain_comment` | 30 |
-| `tier2__29_func_index_extension_ddl` | 30 |
-| `tier2__30_plpgsql_runtime` | 2 |
-| `tier2__31_createtable_view_trigger` | 29 |
+| `tier2__25_ddl_objects_more` | 29 |
+| `tier2__26_roles_acl_plpgsql` | 12 |
+| `tier2__27_alter_table` | 25 |
+| `tier2__28_typecmds_domain_comment` | 20 |
+| `tier2__29_func_index_extension_ddl` | 24 |
+| `tier2__31_createtable_view_trigger` | 23 |
 | `tier2__32_adt_arithmetic_overflow` | 14 |
-| `tier2__33_grant_roles_coerce_dml` | 14 |
-| `tier2__34_guc_vacuum_copy_xml` | 29 |
-| `tier2__40_extensions_setup` | 7 |
-| `tier2__41_contrib_input_errors` | 7 |
-| `tier2__42_contrib_inspection` | 30 |
-| `tier2__43_contrib_fdw_indexam` | 14 |
-| `tier3__auth_ssl` | 16 |
-| `tier3__bad_config` | 11 |
-| `tier3__bad_hba` | 13 |
-| `tier4__corruption` | 7 |
+| `tier2__33_grant_roles_coerce_dml` | 8 |
+| `tier2__34_guc_vacuum_copy_xml` | 26 |
+| `tier2__40_extensions_setup` | 6 |
+| `tier2__41_contrib_input_errors` | 5 |
+| `tier2__42_contrib_inspection` | 28 |
+| `tier2__43_contrib_fdw_indexam` | 9 |
+| `tier3__auth_ssl` | 13 |
+| `tier3__bad_config` | 2 |
+| `tier3__bad_hba` | 7 |
+| `tier4__58_repl_physical_cascade` | 3 |
+| `tier4__58_repl_physical_primary` | 7 |
+| `tier4__58_repl_physical_standby` | 1 |
+| `tier4__59_repl_slots_primary` | 5 |
+| `tier4__59_repl_slots_standby` | 2 |
+| `tier4__61_pub_sub_pub_standby` | 5 |
+| `tier4__61_pub_sub_subscriber` | 4 |
+| `tier4__checkpoint_bgwriter` | 21 |
+| `tier4__corruption` | 1 |
 | `tier4__crash_recovery` | 3 |
 | `tier4__disk_full` | 2 |
-| `tier4__logical_publisher` | 25 |
-| `tier4__logical_subscriber` | 19 |
-| `tier4__replication_primary` | 14 |
-| `tier4__replication_standby` | 47 |
-| `tier4__resource_timeouts` | 6 |
+| `tier4__logical_publisher` | 20 |
+| `tier4__logical_subscriber` | 14 |
+| `tier4__pitr_beforeconsistent` | 10 |
+| `tier4__pitr_primary` | 2 |
+| `tier4__pitr_restore` | 2 |
+| `tier4__pitr_unreached` | 3 |
+| `tier4__replication_primary` | 4 |
+| `tier4__replication_standby` | 41 |
+| `tier4__resource_timeouts` | 3 |
+| `tier4__standby_conflict` | 4 |
+| `tier4__wal_control_states` | 7 |
 
 ## New sites by severity
 
 | level | new sites |
 |---|--:|
-| ERROR | 331 |
-| DEBUG1 | 29 |
-| LOG | 27 |
-| DEBUG2 | 22 |
-| elevel | 17 |
-| DEBUG4 | 16 |
-| WARNING | 7 |
-| DEBUG3 | 5 |
-| NOTICE | 5 |
-| FATAL | 5 |
+| ERROR | 346 |
+| LOG | 48 |
+| DEBUG1 | 40 |
+| DEBUG2 | 31 |
+| elevel | 20 |
+| DEBUG4 | 19 |
+| DEBUG3 | 9 |
+| WARNING | 9 |
+| FATAL | 8 |
+| NOTICE | 7 |
 | log_replication_commands ? LOG : DEBUG1 | 3 |
+| IsPostmasterEnvironment ? LOG : NOTICE | 2 |
 | LogicalDecodingLogLevel() | 2 |
-| flags & PIV_LOG_WARNING ? WARNING : LOG | 1 |
 | emode_for_corrupt_record(emode, xlogreader->EndRecPtr) | 1 |
-| trace_level | 1 |
+| flags & PIV_LOG_WARNING ? WARNING : LOG | 1 |
 | stmt->elog_level | 1 |
+| trace_level | 1 |
+| wait_result_is_any_signal(rc, true) ? FATAL : DEBUG2 | 1 |
 
 ## Top source files by new sites
 
-| file | new | in catalog |
-|---|--:|--:|
-| `postgres/src/backend/commands/tablecmds.c` | 27 | 521 |
-| `postgres/src/backend/access/transam/xlogrecovery.c` | 17 | 115 |
-| `postgres/src/backend/commands/copy.c` | 12 | 57 |
-| `postgres/src/backend/commands/indexcmds.c` | 11 | 80 |
-| `postgres/src/backend/commands/functioncmds.c` | 10 | 99 |
-| `postgres/src/backend/utils/adt/timestamp.c` | 9 | 147 |
-| `postgres/src/backend/access/transam/xlog.c` | 9 | 140 |
-| `postgres/src/backend/utils/misc/guc.c` | 8 | 107 |
-| `postgres/src/backend/postmaster/postmaster.c` | 8 | 91 |
-| `postgres/src/backend/replication/logical/snapbuild.c` | 7 | 50 |
-| `postgres/src/backend/parser/parse_utilcmd.c` | 6 | 147 |
-| `postgres/src/backend/commands/sequence.c` | 6 | 41 |
-| `postgres/src/backend/parser/parse_func.c` | 6 | 68 |
-| `postgres/src/backend/commands/vacuum.c` | 6 | 33 |
-| `postgres/src/backend/storage/ipc/procarray.c` | 6 | 25 |
-| `postgres/src/backend/commands/subscriptioncmds.c` | 6 | 81 |
-| `postgres/src/backend/catalog/namespace.c` | 6 | 46 |
-| `postgres/src/backend/commands/extension.c` | 6 | 81 |
-| `postgres/src/backend/replication/logical/worker.c` | 6 | 78 |
-| `postgres/src/backend/commands/trigger.c` | 6 | 89 |
-| `postgres/src/backend/commands/typecmds.c` | 5 | 122 |
-| `postgres/src/backend/libpq/hba.c` | 5 | 52 |
-| `postgres/src/backend/utils/adt/jsonpath_exec.c` | 5 | 96 |
-| `postgres/src/backend/replication/walsender.c` | 5 | 54 |
-| `postgres/src/backend/libpq/be-secure-openssl.c` | 5 | 67 |
+Ranked by new sites reproduced. Per-file catalog denominators are not recomputed here (no Postgres rebuild this pass).
+
+| file | new sites |
+|---|--:|
+| `postgres/src/backend/commands/tablecmds.c` | 27 |
+| `postgres/src/backend/access/transam/xlogrecovery.c` | 26 |
+| `postgres/src/backend/access/transam/xlog.c` | 20 |
+| `postgres/src/backend/postmaster/postmaster.c` | 17 |
+| `postgres/src/backend/commands/copy.c` | 12 |
+| `postgres/src/backend/commands/indexcmds.c` | 12 |
+| `postgres/src/backend/commands/functioncmds.c` | 10 |
+| `postgres/src/backend/utils/misc/guc.c` | 10 |
+| `postgres/src/backend/commands/subscriptioncmds.c` | 9 |
+| `postgres/src/backend/utils/adt/timestamp.c` | 9 |
+| `postgres/src/backend/replication/logical/logical.c` | 7 |
+| `postgres/src/backend/replication/logical/snapbuild.c` | 7 |
+| `postgres/src/backend/replication/logical/worker.c` | 7 |
+| `postgres/src/backend/catalog/namespace.c` | 6 |
+| `postgres/src/backend/commands/extension.c` | 6 |
+| `postgres/src/backend/commands/sequence.c` | 6 |
+| `postgres/src/backend/commands/trigger.c` | 6 |
+| `postgres/src/backend/commands/vacuum.c` | 6 |
+| `postgres/src/backend/parser/parse_func.c` | 6 |
+| `postgres/src/backend/parser/parse_utilcmd.c` | 6 |
+| `postgres/src/backend/replication/slot.c` | 6 |
+| `postgres/src/backend/storage/ipc/procarray.c` | 6 |
+| `postgres/src/backend/commands/typecmds.c` | 5 |
+| `postgres/src/backend/libpq/be-secure-openssl.c` | 5 |
+| `postgres/src/backend/libpq/hba.c` | 5 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 
