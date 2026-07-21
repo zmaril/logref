@@ -79,6 +79,22 @@ jsonlog_of() {
     find "$1/log" -name '*.json' -print 2>/dev/null | head -1
 }
 
+# capture_scenario <sock> <port> <logfile> <capdir> <sqlfile> [tier]
+# Isolate one scenario's jsonlog and copy it to <capdir>/<tier>__<name>.json.
+# Truncate the live log, run just this file, run a trailing statement to flush
+# the last record, then snapshot. This is the per-scenario capture step every
+# Tier 2+ driver shares; keeping it here means a new driver is just "which files"
+# rather than a re-copy of the isolate/run/flush/snapshot dance.
+capture_scenario() {
+    local sock="$1" port="$2" logfile="$3" capdir="$4" sqlfile="$5" tier="${6:-tier2}"
+    local name; name="$(basename "$sqlfile" .sql)"
+    : > "$logfile"
+    qpsql "$sock" "$port" -f "$sqlfile"
+    qpsql "$sock" "$port" -c "SELECT 1"
+    cp "$logfile" "$capdir/${tier}__${name}.json"
+    log "  captured $(wc -l <"$logfile") lines -> ${tier}__${name}.json"
+}
+
 # driver_env_setup — shared bootstrap for the per-scenario capture drivers
 # (env-run.sh, sql-caps.sh): put PGBIN/PGLIB on the tool path, require initdb,
 # and populate the scratch-root globals every driver writes captures into.

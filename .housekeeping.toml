@@ -27,5 +27,6 @@ allow = [
     "reproducers/scenarios/59_repl_slots.sh",
     "reproducers/scenarios/60_logical_decoding.sh",
     "reproducers/scenarios/61_pub_sub.sh",
+    "reproducers/contrib-caps.sh",
     "crates/logref-wasm/bench/build.sh",
 ]
