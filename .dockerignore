@@ -1,0 +1,15 @@
+# Build context for site/Dockerfile (context = repo root). Keep it small and
+# reproducible: build artifacts are regenerated inside the image.
+.git
+target/
+node_modules/
+site/dist/
+site/src/wasm/
+site/src/generated/
+site/.source/
+crates/logref-wasm/pkg/
+crates/logref-wasm/pkg-web/
+crates/logref-wasm/bench/logref_wasm*
+crates/logref-wasm/bench/corpus*.jsonl
+styles/
+scratch-*.png

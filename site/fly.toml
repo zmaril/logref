@@ -1,8 +1,10 @@
 # Fly.io configuration for the LogRef reference site.
 #
 # The site is a static bundle built and served by the Dockerfile in this
-# directory (Bun build -> nginx). Deploy from `site/` with `fly deploy`; see
-# DEPLOY.md for the first-time setup and the FLY_API_TOKEN CI flow.
+# directory (Rust→wasm scanner build -> Bun build -> nginx). The Docker build
+# context is the REPO ROOT (the wasm stage needs crates/), so deploy from the
+# repo root with `fly deploy . --config site/fly.toml --dockerfile site/Dockerfile`;
+# see DEPLOY.md for the first-time setup and the FLY_API_TOKEN CI flow.
 #
 # NOTE: `app` must be globally unique across all of Fly. If "logref" is taken,
 # pick another name here (or pass `fly deploy --app <name>`) and the site will
