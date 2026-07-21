@@ -18,8 +18,8 @@ extracted catalog by `(basename, line)`.
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
 - Baseline (Tier 1, exact file:line): **245** (1.65%)
-- Tier 2-4 scenarios add **776** new distinct sites
-- **Combined: 1021 of 14806 (6.90%)**
+- Tier 2-4 scenarios add **933** new distinct sites
+- **Combined: 1178 of 14806 (7.96%)**
 
 ## New sites by tier
 
@@ -27,7 +27,7 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | tier | new sites |
 |---|--:|
-| Tier 2 — crafted-SQL error corpus + contrib | 583 |
+| Tier 2 — crafted-SQL error corpus + contrib | 740 |
 | Tier 3 — config / auth / SSL | 22 |
 | Tier 3-4 — multi-session concurrency | 7 |
 | Tier 4 — corruption / replication / resource / crash | 164 |
@@ -62,10 +62,14 @@ Attributed to the first scenario that fired each site (no double-counting).
 | `tier2__35_ddl_object_lifecycle` | 24 |
 | `tier2__36_constraints_partitioning` | 21 |
 | `tier2__37_alter_type_column_tablespace` | 25 |
+| `tier2__38_planner_executor_runtime` | 8 |
+| `tier2__39_cte_cursors_prepared_lock` | 26 |
 | `tier2__40_extensions_setup` | 6 |
 | `tier2__41_contrib_input_errors` | 5 |
 | `tier2__42_contrib_inspection` | 28 |
 | `tier2__43_contrib_fdw_indexam` | 9 |
+| `tier2__44_functions_operators_aggregates` | 38 |
+| `tier2__45_create_routines` | 85 |
 | `tier2__46_grant_revoke_privtypes` | 9 |
 | `tier2__47_permission_denied_objtypes` | 2 |
 | `tier2__48_roles_membership_reserved` | 8 |
@@ -109,14 +113,14 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | level | new sites |
 |---|--:|
-| ERROR | 551 |
+| ERROR | 707 |
 | LOG | 49 |
 | DEBUG1 | 46 |
 | DEBUG2 | 32 |
 | elevel | 23 |
 | DEBUG4 | 19 |
+| WARNING | 13 |
 | NOTICE | 12 |
-| WARNING | 12 |
 | FATAL | 10 |
 | DEBUG3 | 9 |
 | log_replication_commands ? LOG : DEBUG1 | 3 |
@@ -136,30 +140,30 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | file | new sites |
 |---|--:|
 | `postgres/src/backend/commands/tablecmds.c` | 64 |
+| `postgres/src/backend/commands/functioncmds.c` | 42 |
+| `postgres/src/backend/parser/parse_func.c` | 38 |
+| `postgres/src/backend/commands/typecmds.c` | 27 |
 | `postgres/src/backend/access/transam/xlogrecovery.c` | 26 |
 | `postgres/src/backend/access/transam/xlog.c` | 20 |
+| `postgres/src/backend/parser/parse_cte.c` | 19 |
 | `postgres/src/backend/postmaster/postmaster.c` | 17 |
-| `postgres/src/backend/commands/typecmds.c` | 15 |
 | `postgres/src/backend/catalog/aclchk.c` | 13 |
 | `postgres/src/backend/commands/copy.c` | 12 |
 | `postgres/src/backend/commands/indexcmds.c` | 12 |
 | `postgres/src/backend/utils/misc/guc.c` | 12 |
+| `postgres/src/backend/catalog/pg_operator.c` | 11 |
+| `postgres/src/backend/commands/aggregatecmds.c` | 11 |
+| `postgres/src/backend/parser/parse_agg.c` | 11 |
 | `postgres/src/backend/utils/adt/jsonpath_exec.c` | 11 |
 | `postgres/src/backend/utils/adt/timestamp.c` | 11 |
-| `postgres/src/backend/commands/functioncmds.c` | 10 |
+| `postgres/src/backend/catalog/namespace.c` | 10 |
 | `postgres/contrib/postgres_fdw/option.c` | 9 |
-| `postgres/src/backend/catalog/namespace.c` | 9 |
 | `postgres/src/backend/commands/subscriptioncmds.c` | 9 |
 | `postgres/src/backend/commands/user.c` | 9 |
+| `postgres/src/backend/parser/parse_clause.c` | 9 |
 | `postgres/src/backend/parser/parse_utilcmd.c` | 9 |
 | `postgres/src/backend/tcop/postgres.c` | 9 |
 | `postgres/src/backend/utils/adt/int.c` | 9 |
-| `postgres/src/backend/access/transam/xact.c` | 8 |
-| `postgres/src/backend/catalog/objectaddress.c` | 8 |
-| `postgres/src/backend/parser/analyze.c` | 8 |
-| `postgres/src/backend/utils/adt/int8.c` | 8 |
-| `postgres/src/backend/commands/policy.c` | 7 |
-| `postgres/src/backend/commands/sequence.c` | 7 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 
