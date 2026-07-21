@@ -1,3 +1,8 @@
+// The lowering + specialized matcher live in one file on purpose (they share the
+// token model); the test fixtures/helpers below deliberately mirror the ones in
+// crates/logref-scan (separate crate, can't share a test module).
+// straitjacket-allow-file:file-size
+// straitjacket-allow-file:duplication
 //! Format-string → regex lowering and a `RegexSet`-backed log scanner.
 //!
 //! The `Scan` surface (see `notes/design.md` §3) resolves a *rendered* log line

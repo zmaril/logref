@@ -1,3 +1,6 @@
+// The packed/trigram scan pair below is deliberately parallel (same marshalling
+// both sides so the benchmark isolates the matcher delta — see the doc comments).
+// straitjacket-allow-file:duplication
 //! HAND-WRITTEN — NOT fluessig-generated. The "packed" batch-scan path: the
 //! production scan surface of the site's Scan page (site/src/scan.ts), born as
 //! the experiment that measured the ceiling of WASM scan throughput once the
