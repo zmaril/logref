@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 744,
-  "combined_total": 989,
+  "new_sites": 776,
+  "combined_total": 1021,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -8872,6 +8872,389 @@
       "message": "unit \"%s\" not recognized for type %s",
       "scenarios": [
         "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 209,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "grant options can only be granted to roles",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 565,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "column privileges are only valid for relations",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 577,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1067,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1094,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied to change default privileges",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1212,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "cannot use IN SCHEMA clause when using %s",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1580,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1825,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is an index",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1832,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is a composite type",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1840,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a sequence",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1904,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "invalid privilege type %s for table",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 2072,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "invalid privilege type %s for column",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 2954,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__47_permission_denied_objtypes",
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_shdepend.c",
+      "line": 701,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DEPENDENT_OBJECTS_STILL_EXIST"
+      ],
+      "message": "cannot drop %s because it is required by the database system",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/dropcmds.c",
+      "line": 524,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 96,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied: \"%s\" is a system catalog",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 103,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a table",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 613,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "WITH CHECK cannot be applied to SELECT or DELETE",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 622,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "only WITH CHECK expression allowed for INSERT",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 696,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "policy \"%s\" for table \"%s\" already exists",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 897,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "policy \"%s\" for table \"%s\" does not exist",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/sequence.c",
+      "line": 653,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied for sequence %s",
+      "scenarios": [
+        "tier2__47_permission_denied_objtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 323,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied to create role",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 359,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_RESERVED_NAME"
+      ],
+      "message": "role name \"%s\" is reserved",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 786,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied to alter role",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 1105,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied to drop role",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 1745,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "role \"%s\" cannot be a member of any role",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 2137,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "role \"%s\" cannot have explicit members",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 613,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_GROUPING_ERROR"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1058,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/rewrite/rewriteHandler.c",
+      "line": 2295,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "infinite recursion detected in policy for relation \"%s\"",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/acl.c",
+      "line": 5760,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_RESERVED_NAME"
+      ],
+      "message": "role name \"%s\" is reserved",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
       ]
     }
   ]
