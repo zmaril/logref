@@ -13,7 +13,8 @@
       "!dist",
       "!build",
       "!.source",
-      "!src/generated"
+      "!src/generated",
+      "!src/wasm"
     ]
   },
   "formatter": {

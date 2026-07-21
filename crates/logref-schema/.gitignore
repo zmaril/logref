@@ -1,0 +1,5 @@
+# The fluessig derive-crate symlink → $FLUESSIG_DIR, created by scripts/gen.sh.
+/fluessig
+# Build artifacts from the emit bins (this crate is its own workspace).
+/target
+/Cargo.lock

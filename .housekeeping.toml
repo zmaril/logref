@@ -10,11 +10,13 @@ conventional-commits = "required"
 # The reproducer harness entry points live beside their scenarios under
 # reproducers/, not scripts/ — deliberate keepers. run.sh drives Tiers 1-2;
 # env-run.sh + lib.sh drive the Tier 3-4 env variants; env/entrypoint.sh is the
-# env-variant image's entrypoint.
+# env-variant image's entrypoint. The bench build script lives beside the
+# browser-benchmark demo it builds (bench/README points at it).
 allow = [
     "reproducers/run.sh",
     "reproducers/lib.sh",
     "reproducers/env-run.sh",
     "reproducers/sql-caps.sh",
     "reproducers/env/entrypoint.sh",
+    "crates/logref-wasm/bench/build.sh",
 ]

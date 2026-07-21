@@ -1,0 +1,199 @@
+{
+  "fluessig": {
+    "format": 1,
+    "emitter": "fluessig-derive/0"
+  },
+  "source": "logref.scan",
+  "models": [
+    {
+      "name": "Lowered",
+      "doc": "A format string lowered to a regex, plus a couple of specificity signals.\nMirrors `logref_core::Lowered` (the `{regex, literal_len, spec_count}` core).\n\nThe counts are `i32` (fluessig `int32`) so they cross the wasm boundary as\nplain JS numbers — `serde_wasm_bindgen` maps `i64` to `BigInt`, which would\nbreak `===` against the TS mirror's `number` fields.",
+      "fields": [
+        {
+          "name": "regex",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "literalLen",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "specCount",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "groups",
+          "type": {
+            "list": "string"
+          },
+          "nullable": false
+        },
+        {
+          "name": "literals",
+          "type": {
+            "list": "string"
+          },
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "MatchHit",
+      "doc": "A single resolved match: the catalog site a rendered line traced back to, its\nspecificity, and the concrete values pulled from the line's variable bits.\nMirrors `logref_core::MatchHit`.\n\nThe counts are `i32` (fluessig `int32`), NOT `usize`/`u32` — fluessig's `ty()`\ncurrently maps unsigned scalars to `String`, and `i64` would marshal to a\n`BigInt` and break `===` against the TS mirror's `number` fields. `core_impl`\ncasts the core's `usize` counts to `i32`.",
+      "fields": [
+        {
+          "name": "site",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "literalLen",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "captures",
+          "type": {
+            "list": "string"
+          },
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "BuildReport",
+      "doc": "What happened while building a `Scanner` over an index — every site is\naccounted for exactly once across these buckets. Mirrors\n`logref_core::BuildReport` (counts widened `usize` → `i32`).",
+      "fields": [
+        {
+          "name": "total",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "noText",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "lowerFailed",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "compileFailed",
+          "type": "int32",
+          "nullable": false
+        },
+        {
+          "name": "compiled",
+          "type": "int32",
+          "nullable": false
+        }
+      ]
+    }
+  ],
+  "unions": [],
+  "interfaces": [
+    {
+      "name": "Scan",
+      "doc": "Stateless log-line lowering/resolution helpers.",
+      "ops": [
+        {
+          "name": "lowerFormat",
+          "doc": "Lower a Postgres/C `printf`-style format string into an anchored regex.\nLiteral runs are escaped verbatim; each conversion spec becomes a capture\ngroup. Fallible: a dangling `%` or an unknown conversion is rejected.",
+          "shape": "unary",
+          "params": [
+            {
+              "name": "fmt",
+              "type": "string"
+            }
+          ],
+          "returns": {
+            "model": "Lowered"
+          }
+        },
+        {
+          "name": "renderSample",
+          "doc": "Render a format string with canned, plausible values — the inverse of\n`lower_format`, used to synthesize sample log lines. Fallible: rejected\nwhen the format contains a spec that lowering itself would reject.",
+          "shape": "unary",
+          "params": [
+            {
+              "name": "fmt",
+              "type": "string"
+            }
+          ],
+          "returns": "string"
+        }
+      ]
+    },
+    {
+      "name": "Scanner",
+      "doc": "A `RegexSet`-backed log scanner: build once, scan many.",
+      "ops": [
+        {
+          "name": "build",
+          "doc": "Build a scanner over a JSONL index (`Index::from_jsonl` then\n`Scanner::build`): lower every site with a literal message, compile the\npatterns, and build the `RegexSet`. Fallible — a bad index or a pattern\nthat overflows the regex budget is rejected (`regex::Error`).",
+          "shape": "ctor",
+          "params": [
+            {
+              "name": "indexJsonl",
+              "type": "string"
+            }
+          ],
+          "returns": "void"
+        },
+        {
+          "name": "scanLine",
+          "doc": "Resolve ONE rendered log line to every catalog site whose pattern matches\nit, most-specific (longest literal) first. Empty ⇒ no match; more than one\n⇒ the line is ambiguous.",
+          "shape": "unary",
+          "infallible": true,
+          "params": [
+            {
+              "name": "line",
+              "type": "string"
+            }
+          ],
+          "returns": {
+            "list": {
+              "model": "MatchHit"
+            }
+          }
+        },
+        {
+          "name": "scanBatch",
+          "doc": "Resolve a BATCH of lines in ONE boundary crossing — the honest amortized\nshape for high-volume scanning. Returns one `MatchHit[]` per input line,\npositionally aligned with `lines`.",
+          "shape": "unary",
+          "infallible": true,
+          "params": [
+            {
+              "name": "lines",
+              "type": {
+                "list": "string"
+              }
+            }
+          ],
+          "returns": {
+            "list": {
+              "list": {
+                "model": "MatchHit"
+              }
+            }
+          }
+        },
+        {
+          "name": "report",
+          "doc": "The `BuildReport` tallied while building — how many sites were compiled,\nskipped (no text), or failed to lower/compile.",
+          "shape": "unary",
+          "infallible": true,
+          "params": [],
+          "returns": {
+            "model": "BuildReport"
+          }
+        }
+      ]
+    }
+  ]
+}

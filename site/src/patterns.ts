@@ -1,87 +1,78 @@
-// Build-time pattern index for the Scan surface. For every reference page we
-// lower its frontmatter `message` format string to an anchored regex (via the
-// shared lowering in lower.ts — the same one the Rust scanner uses) and emit a
-// compact record: slug, raw message, level, regex source, capture-group
-// provenance, a literal-length specificity score, and a catch-all flag. build.ts
-// writes the collected records to dist/patterns.json, which the scan page fetches
-// and compiles client-side. The log line never leaves the browser.
+// Build-time scan index for the Scan surface. For every reference page we
+// lower its frontmatter `message` format string through the REAL Rust lowering
+// (`lower_format` in crates/logref-core, compiled to wasm and run under Bun —
+// the same code the browser scanner executes) and keep a compact record per
+// scannable page: slug, raw message, level, and capture-group provenance.
+// build.ts writes the collected records to dist/scan-index.json; the scan page
+// fetches it, rebuilds the site JSONL, and constructs the wasm `Scanner` from
+// it client-side. The log line never leaves the browser.
 
 import type { MessageDoc } from "./frontmatter.ts";
-import { tryLowerFormat } from "./lower.ts";
-import type { PatternEntry } from "./scanner.ts";
+import type { ScanIndexFile, ScanSite } from "./wasmScanner.ts";
 
-/** Tally of what happened while lowering the catalog — mirrors the Rust `BuildReport`. */
+/** The lowering surface this builder needs from the wasm module. */
+export type LowerFn = (fmt: string) => { literalLen: number; groups: string[] };
+
+/** Tally of what happened while lowering the catalog. */
 export interface PatternReport {
   total: number;
   /** Pages whose `message` lowering failed (dangling `%` / unknown conversion). */
   lowerFailed: number;
-  /** Pages whose lowered regex failed to compile. */
-  compileFailed: number;
-  /** Live patterns emitted to the index. */
+  /** Scannable pages emitted to the index. */
   compiled: number;
-  /** Of the compiled, how many are bare catch-alls (no literal anchor). */
+  /** Bare catch-alls (no literal anchor) — counted, then held out entirely. */
   catchAlls: number;
 }
 
 /**
- * Lower one page's format string into a {@link PatternEntry}, or `null` if it
- * cannot be lowered or compiled (the page still gets its reference page — it just
- * isn't scannable). A pattern with no literal characters is a bare catch-all
- * (`%s` → `^(.*?)$`): kept, but flagged so the scanner holds it back from normal
- * matching, exactly as the Rust scanner down-ranks a zero-`literal_len` site.
+ * Lower an entire catalog of pages into the scan index + a build report.
+ *
+ * A page that cannot be lowered still gets its reference page — it just isn't
+ * scannable, so it is left out of the index. A pattern with no literal
+ * characters is a bare catch-all (`%s` → `^(.*?)$`): it matches every line and
+ * resolves nothing, so it is also left out (the strongest form of the down-
+ * ranking the Rust scanner's `literal_len` sort applies), but tallied so the
+ * page can report how many were held back.
  */
-export function toPatternEntry(doc: MessageDoc): PatternEntry | null {
-  const lowered = tryLowerFormat(doc.message);
-  if (!lowered) return null;
-  try {
-    new RegExp(lowered.regex);
-  } catch {
-    return null;
-  }
-  return {
-    slug: doc.slug,
-    message: doc.message,
-    level: doc.level,
-    regexSource: lowered.regex,
-    groups: lowered.groups,
-    literalLen: lowered.literalLen,
-    literals: lowered.literals,
-    catchAll: lowered.literalLen === 0,
-  };
-}
-
-/** Lower an entire catalog of pages into the pattern index + a build report. */
-export function buildPatternIndex(docs: Iterable<MessageDoc>): {
-  patterns: PatternEntry[];
-  report: PatternReport;
-} {
-  const patterns: PatternEntry[] = [];
+export function buildScanIndex(
+  docs: Iterable<MessageDoc>,
+  lowerFormat: LowerFn,
+): { index: ScanIndexFile; report: PatternReport } {
+  const withScore: (ScanSite & { literalLen: number })[] = [];
   const report: PatternReport = {
     total: 0,
     lowerFailed: 0,
-    compileFailed: 0,
     compiled: 0,
     catchAlls: 0,
   };
   for (const doc of docs) {
     report.total++;
-    const lowered = tryLowerFormat(doc.message);
-    if (!lowered) {
+    let lowered: ReturnType<LowerFn>;
+    try {
+      lowered = lowerFormat(doc.message);
+    } catch {
       report.lowerFailed++;
       continue;
     }
-    const entry = toPatternEntry(doc);
-    if (!entry) {
-      report.compileFailed++;
+    if (lowered.literalLen === 0) {
+      report.catchAlls++;
       continue;
     }
-    patterns.push(entry);
+    withScore.push({
+      slug: doc.slug,
+      message: doc.message,
+      level: doc.level,
+      groups: lowered.groups,
+      literalLen: lowered.literalLen,
+    });
     report.compiled++;
-    if (entry.catchAll) report.catchAlls++;
   }
   // Most-specific first keeps the JSON stable and puts useful anchors early.
-  patterns.sort(
+  withScore.sort(
     (a, b) => b.literalLen - a.literalLen || a.slug.localeCompare(b.slug),
   );
-  return { patterns, report };
+  const sites: ScanSite[] = withScore.map(
+    ({ slug, message, level, groups }) => ({ slug, message, level, groups }),
+  );
+  return { index: { sites, catchAlls: report.catchAlls }, report };
 }
