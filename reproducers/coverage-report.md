@@ -18,8 +18,8 @@ extracted catalog by `(basename, line)`.
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
 - Baseline (Tier 1, exact file:line): **245** (1.65%)
-- Tier 2-4 scenarios add **602** new distinct sites
-- **Combined: 847 of 14806 (5.72%)**
+- Tier 2-4 scenarios add **636** new distinct sites
+- **Combined: 881 of 14806 (5.95%)**
 
 ## New sites by tier
 
@@ -27,8 +27,9 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | tier | new sites |
 |---|--:|
-| Tier 2 — crafted-SQL error corpus + contrib | 416 |
+| Tier 2 — crafted-SQL error corpus + contrib | 443 |
 | Tier 3 — config / auth / SSL | 22 |
+| Tier 3-4 — multi-session concurrency | 7 |
 | Tier 4 — corruption / replication / resource / crash | 164 |
 
 ## New sites by scenario
@@ -58,10 +59,15 @@ Attributed to the first scenario that fired each site (no double-counting).
 | `tier2__41_contrib_input_errors` | 5 |
 | `tier2__42_contrib_inspection` | 28 |
 | `tier2__43_contrib_fdw_indexam` | 9 |
+| `tier2__50_txn_control_savepoints` | 10 |
+| `tier2__51_twophase_prepare` | 5 |
+| `tier2__52_locks_rowmarks_advisory` | 7 |
+| `tier2__53_vacuum_cluster_concurrency_ddl` | 5 |
 | `tier2__62_contrib_type_input_deep` | 13 |
 | `tier2__63_contrib_dict_trigger` | 11 |
 | `tier2__64_contrib_inspect_deep` | 14 |
 | `tier2__65_contrib_fdw_dblink_crypto` | 15 |
+| `tier34__50_txn_concurrency` | 7 |
 | `tier3__auth_ssl` | 13 |
 | `tier3__bad_config` | 2 |
 | `tier3__bad_hba` | 7 |
@@ -92,15 +98,15 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | level | new sites |
 |---|--:|
-| ERROR | 389 |
-| LOG | 48 |
+| ERROR | 415 |
+| LOG | 49 |
 | DEBUG1 | 46 |
 | DEBUG2 | 32 |
-| elevel | 20 |
+| elevel | 23 |
 | DEBUG4 | 19 |
-| WARNING | 10 |
+| WARNING | 12 |
+| FATAL | 10 |
 | DEBUG3 | 9 |
-| FATAL | 8 |
 | NOTICE | 8 |
 | log_replication_commands ? LOG : DEBUG1 | 3 |
 | IsPostmasterEnvironment ? LOG : NOTICE | 2 |
@@ -124,11 +130,15 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/postmaster/postmaster.c` | 17 |
 | `postgres/src/backend/commands/copy.c` | 12 |
 | `postgres/src/backend/commands/indexcmds.c` | 12 |
+| `postgres/src/backend/utils/misc/guc.c` | 12 |
 | `postgres/src/backend/commands/functioncmds.c` | 10 |
-| `postgres/src/backend/utils/misc/guc.c` | 10 |
 | `postgres/contrib/postgres_fdw/option.c` | 9 |
 | `postgres/src/backend/commands/subscriptioncmds.c` | 9 |
+| `postgres/src/backend/tcop/postgres.c` | 9 |
 | `postgres/src/backend/utils/adt/timestamp.c` | 9 |
+| `postgres/src/backend/access/transam/xact.c` | 8 |
+| `postgres/src/backend/parser/analyze.c` | 8 |
+| `postgres/src/backend/commands/vacuum.c` | 7 |
 | `postgres/src/backend/replication/logical/logical.c` | 7 |
 | `postgres/src/backend/replication/logical/snapbuild.c` | 7 |
 | `postgres/src/backend/replication/logical/worker.c` | 7 |
@@ -139,10 +149,6 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/commands/extension.c` | 6 |
 | `postgres/src/backend/commands/sequence.c` | 6 |
 | `postgres/src/backend/commands/trigger.c` | 6 |
-| `postgres/src/backend/commands/vacuum.c` | 6 |
-| `postgres/src/backend/parser/parse_func.c` | 6 |
-| `postgres/src/backend/parser/parse_utilcmd.c` | 6 |
-| `postgres/src/backend/replication/slot.c` | 6 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 

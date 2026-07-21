@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 602,
-  "combined_total": 847,
+  "new_sites": 636,
+  "combined_total": 881,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -6266,7 +6266,9 @@
       ],
       "message": "%s cannot run inside a transaction block",
       "scenarios": [
-        "tier4__59_repl_slots_primary"
+        "tier4__59_repl_slots_primary",
+        "tier2__51_twophase_prepare",
+        "tier2__53_vacuum_cluster_concurrency_ddl"
       ]
     },
     {
@@ -7177,6 +7179,408 @@
       "message": "missing Rules parameter",
       "scenarios": [
         "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/heap/heapam.c",
+      "line": 4993,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_LOCK_NOT_AVAILABLE"
+      ],
+      "message": "could not obtain lock on row in relation \"%s\"",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/twophase.c",
+      "line": 372,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "transaction identifier \"%s\" is too long",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/twophase.c",
+      "line": 399,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "transaction identifier \"%s\" is already in use",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 2658,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot PREPARE a transaction that has operated on temporary objects",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 2668,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot PREPARE a transaction that has exported snapshots",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4008,
+      "level": "WARNING",
+      "sqlstates": [
+        "ERRCODE_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "there is already a transaction in progress",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4200,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NO_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "%s can only be used in transaction blocks",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4323,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NO_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "%s can only be used in transaction blocks",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4536,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_S_E_INVALID_SPECIFICATION"
+      ],
+      "message": "savepoint \"%s\" does not exist",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4647,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_S_E_INVALID_SPECIFICATION"
+      ],
+      "message": "savepoint \"%s\" does not exist",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/repack.c",
+      "line": 783,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not an index for table \"%s\"",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/repack.c",
+      "line": 1431,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "repacking \"%s.%s\" using index scan on \"%s\"",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/vacuum.c",
+      "line": 335,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "BUFFER_USAGE_LIMIT cannot be specified for VACUUM FULL",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execMain.c",
+      "line": 1238,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot lock rows in sequence \"%s\"",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeModifyTable.c",
+      "line": 2890,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_T_R_SERIALIZATION_FAILURE"
+      ],
+      "message": "could not serialize access due to concurrent update",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/optimizer/plan/initsplan.c",
+      "line": 2189,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s cannot be applied to the nullable side of an outer join",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 2184,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with UNION/INTERSECT/EXCEPT",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 3754,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with DISTINCT clause",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 3775,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with aggregate functions",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 3782,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with window functions",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/deadlock.c",
+      "line": 1133,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_T_R_DEADLOCK_DETECTED"
+      ],
+      "message": "deadlock detected",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/lock.c",
+      "line": 2189,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "you don't own a lock of type %s",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/predicate.c",
+      "line": 4652,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_T_R_SERIALIZATION_FAILURE"
+      ],
+      "message": "could not serialize access due to read/write dependencies among transactions",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/proc.c",
+      "line": 1687,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "process %d detected deadlock while waiting for %s on %s after %ld.%03d ms",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3602,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_LOCK_NOT_AVAILABLE"
+      ],
+      "message": "canceling statement due to lock timeout",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3609,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_QUERY_CANCELED"
+      ],
+      "message": "canceling statement due to statement timeout",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3650,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_IDLE_IN_TRANSACTION_SESSION_TIMEOUT"
+      ],
+      "message": "terminating connection due to idle-in-transaction timeout",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3663,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_TRANSACTION_TIMEOUT"
+      ],
+      "message": "terminating connection due to transaction timeout",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 6694,
+      "level": "elevel",
+      "sqlstates": [
+        "GUC_check_errcode_value"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 6846,
+      "level": "elevel",
+      "sqlstates": [
+        "GUC_check_errcode_value"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/mmgr/portalmem.c",
+      "line": 737,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot PREPARE a transaction that has created a cursor WITH HOLD",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/time/snapmgr.c",
+      "line": 1411,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "SET TRANSACTION SNAPSHOT must be called before any query",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/time/snapmgr.c",
+      "line": 1429,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid snapshot identifier: \"%s\"",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/time/snapmgr.c",
+      "line": 1444,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "snapshot \"%s\" does not exist",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
       ]
     }
   ]

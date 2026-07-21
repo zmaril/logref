@@ -28,5 +28,6 @@ allow = [
     "reproducers/scenarios/60_logical_decoding.sh",
     "reproducers/scenarios/61_pub_sub.sh",
     "reproducers/contrib-caps.sh",
+    "reproducers/scenarios/50_txn_concurrency.sh",
     "crates/logref-wasm/bench/build.sh",
 ]
