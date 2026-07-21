@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 933,
-  "combined_total": 1178,
+  "new_sites": 1006,
+  "combined_total": 1251,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -11148,6 +11148,882 @@
       "scenarios": [
         "tier2__45_create_routines"
       ]
+    },
+    {
+      "path": "postgres/src/bin/initdb/initdb.c",
+      "line": 2621,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid authentication method \"%s\" for \"%s\" connections",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/initdb/initdb.c",
+      "line": 2654,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no data directory specified",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/initdb/initdb.c",
+      "line": 2655,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "You must identify the directory where the data for this database system will reside.  Do this with either the invocation option -D or the environment variable PGDATA.",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/initdb/initdb.c",
+      "line": 3304,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "-c %s requires a value",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/initdb/initdb.c",
+      "line": 3497,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "argument of %s must be a power of two between 1 and 1024",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_amcheck/pg_amcheck.c",
+      "line": 588,
+      "level": "WARNING",
+      "sqlstates": null,
+      "message": "skipping database \"%s\": amcheck is not installed",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_amcheck/pg_amcheck.c",
+      "line": 689,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "no relations to check",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_basebackup.c",
+      "line": 348,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid tablespace mapping format \"%s\", must be \"OLDDIR=NEWDIR\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_basebackup.c",
+      "line": 912,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "transfer rate \"%s\" is not a valid value",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_basebackup.c",
+      "line": 2424,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid checkpoint argument \"%s\", must be \"fast\" or \"spread\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_basebackup.c",
+      "line": 2442,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid output format \"%s\", must be \"plain\" or \"tar\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_basebackup.c",
+      "line": 2523,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid wal-method option \"%s\", must be \"fetch\", \"stream\", or \"none\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_basebackup.c",
+      "line": 2607,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "must specify output directory or backup target",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_basebackup.c",
+      "line": 2643,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "unrecognized compression algorithm: \"%s\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_receivewal.c",
+      "line": 766,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "cannot use --create-slot together with --drop-slot",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_receivewal.c",
+      "line": 782,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "cannot use --synchronous together with --no-sync",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_receivewal.c",
+      "line": 792,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no target directory specified",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_recvlogical.c",
+      "line": 884,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no slot specified",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_recvlogical.c",
+      "line": 891,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no target file specified",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_basebackup/pg_recvlogical.c",
+      "line": 912,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "cannot use --create-slot or --start together with --drop-slot",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_checksums/pg_checksums.c",
+      "line": 526,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no data directory specified",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_combinebackup/pg_combinebackup.c",
+      "line": 205,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "unrecognized checksum algorithm: \"%s\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_combinebackup/pg_combinebackup.c",
+      "line": 233,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no input directories specified",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_combinebackup/pg_combinebackup.c",
+      "line": 491,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid tablespace mapping format \"%s\", must be \"OLDDIR=NEWDIR\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 864,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "option %s requires option %s",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 931,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "unrecognized compression algorithm: \"%s\"",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 1018,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "no matching schemas were found",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 1035,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "no matching tables were found",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 1063,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "no matching extensions were found",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 1629,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid output format \"%s\" specified",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 1678,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "no matching schemas were found for pattern \"%s\"",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 1731,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "no matching extensions were found for pattern \"%s\"",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 1784,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "no matching foreign servers were found for pattern \"%s\"",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_dump.c",
+      "line": 1877,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "no matching tables were found for pattern \"%s\"",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_dump/pg_restore.c",
+      "line": 348,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "one of -d/--dbname and -f/--file must be specified",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_rewind/pg_rewind.c",
+      "line": 240,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no source specified (--source-pgdata or --source-server)",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_rewind/pg_rewind.c",
+      "line": 247,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "only one of --source-pgdata or --source-server can be specified",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_verifybackup/pg_verifybackup.c",
+      "line": 215,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid backup format \"%s\", must be \"plain\" or \"tar\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_verifybackup/pg_verifybackup.c",
+      "line": 244,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no backup directory specified",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_waldump/pg_waldump.c",
+      "line": 324,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "could not locate WAL file \"%s\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_waldump/pg_waldump.c",
+      "line": 1065,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "invalid fork name: \"%s\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_waldump/pg_waldump.c",
+      "line": 1140,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "invalid relation specification: \"%s\"",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_waldump/pg_waldump.c",
+      "line": 1141,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "Expecting \"tablespace OID/database OID/relation filenode\".",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pg_waldump/pg_waldump.c",
+      "line": 1544,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "Try \"%s --help\" for more information.",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pgbench/pgbench.c",
+      "line": 5424,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "could not count number of branches: %s",
+      "scenarios": [
+        "frontend__68_bench_psql"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pgbench/pgbench.c",
+      "line": 6240,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "no builtin script found for name \"%s\"",
+      "scenarios": [
+        "frontend__68_bench_psql"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pgbench/pgbench.c",
+      "line": 6976,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid query mode (-M): \"%s\"",
+      "scenarios": [
+        "frontend__68_bench_psql"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pgbench/pgbench.c",
+      "line": 7062,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid sampling rate: \"%s\"",
+      "scenarios": [
+        "frontend__68_bench_psql"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pgbench/pgbench.c",
+      "line": 7108,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "invalid partition method, expecting \"range\" or \"hash\", got: \"%s\"",
+      "scenarios": [
+        "frontend__68_bench_psql"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/pgbench/pgbench.c",
+      "line": 7217,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "some of the specified options cannot be used in initialization (-i) mode",
+      "scenarios": [
+        "frontend__68_bench_psql"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/psql/command.c",
+      "line": 5141,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "\\pset: allowed formats are aligned, asciidoc, csv, html, latex, latex-longtable, troff-ms, unaligned, wrapped",
+      "scenarios": [
+        "frontend__68_bench_psql"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/psql/startup.c",
+      "line": 621,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "could not set printing parameter \"%s\"",
+      "scenarios": [
+        "frontend__68_bench_psql"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/clusterdb.c",
+      "line": 148,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "cannot cluster all databases and a specific one at the same time",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/createdb.c",
+      "line": 166,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "too many command-line arguments (first is \"%s\")",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/createdb.c",
+      "line": 175,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "\"%s\" is not a valid encoding name",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/createdb.c",
+      "line": 262,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "database creation failed: %s",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/createuser.c",
+      "line": 208,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "too many command-line arguments (first is \"%s\")",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/createuser.c",
+      "line": 402,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "creation of new role failed: %s",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/dropdb.c",
+      "line": 112,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "missing required argument database name",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/dropdb.c",
+      "line": 119,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "too many command-line arguments (first is \"%s\")",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/dropdb.c",
+      "line": 156,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "database removal failed: %s",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/dropuser.c",
+      "line": 108,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "too many command-line arguments (first is \"%s\")",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/dropuser.c",
+      "line": 122,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "missing required argument role name",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/dropuser.c",
+      "line": 155,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "removal of role \"%s\" failed: %s",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/reindexdb.c",
+      "line": 217,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "cannot use multiple jobs to reindex system catalogs",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/reindexdb.c",
+      "line": 222,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "cannot reindex all databases and a specific one at the same time",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/vacuumdb.c",
+      "line": 331,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "cannot vacuum all databases and a specific one at the same time",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/bin/scripts/vacuumdb.c",
+      "line": 335,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "cannot vacuum all tables in schema(s) and specific table(s) at the same time",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/fe_utils/option_utils.c",
+      "line": 69,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "invalid value \"%s\" for option %s",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/fe_utils/option_utils.c",
+      "line": 76,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "%s must be in range %d..%d",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/fe_utils/option_utils.c",
+      "line": 139,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "options %s and %s cannot be used together",
+      "scenarios": [
+        "frontend__66_dump"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/fe_utils/parallel_slot.c",
+      "line": 551,
+      "level": "ERROR",
+      "sqlstates": null,
+      "message": "processing of database \"%s\" failed: %s",
+      "scenarios": [
+        "frontend__69_scripts"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
+    },
+    {
+      "path": "postgres/src/fe_utils/version.c",
+      "line": 57,
+      "level": "FATAL",
+      "sqlstates": null,
+      "message": "could not open version file \"%s\": %m",
+      "scenarios": [
+        "frontend__67_backup"
+      ],
+      "kind": "frontend",
+      "match": "message-text"
     }
   ]
 }
