@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/commands/copy.c:743"
-reproduced: false
+reproduced: true
 ---
 
 # `argument to option "%s" must be a valid encoding name`
@@ -28,7 +28,13 @@ Use a valid encoding name such as `UTF8`, `LATIN1`, or `WIN1252`. Check the list
 
 ## Example
 
-*Illustrative* — an unknown encoding name.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
+
+```sql
+COPY repro.parent TO STDOUT (ENCODING 'NOSUCH');
+```
+
+Produces:
 
 ```text
 ERROR:  argument to option "encoding" must be a valid encoding name

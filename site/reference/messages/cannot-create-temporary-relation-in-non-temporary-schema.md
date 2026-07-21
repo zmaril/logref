@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/namespace.c:859"
   - "postgres/src/backend/parser/parse_utilcmd.c:4592"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot create temporary relation in non-temporary schema`
@@ -29,11 +29,16 @@ Drop the schema qualification from the `CREATE TEMP` statement and let Postgres 
 
 ## Example
 
-*Illustrative* — a temp table qualified with a real schema.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-CREATE TEMP TABLE public.t (id int);
--- ERROR:  cannot create temporary relation in non-temporary schema
+CREATE TEMP TABLE repro.tt (a int);
+```
+
+Produces:
+
+```text
+ERROR:  cannot create temporary relation in non-temporary schema
 ```
 
 ## Related

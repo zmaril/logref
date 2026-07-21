@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/utils/activity/pgstat_replslot.c:53"
   - "postgres/src/backend/utils/adt/genfile.c:738"
   - "postgres/src/bin/pg_basebackup/streamutil.c:532"
-reproduced: false
+reproduced: true
 ---
 
 # `replication slot "%s" does not exist`
@@ -34,10 +34,16 @@ List slots with `SELECT slot_name FROM pg_replication_slots` and correct the nam
 
 ## Example
 
-*Illustrative* — dropping a nonexistent slot.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
 
 ```sql
-SELECT pg_drop_replication_slot('missing_slot');
+SELECT pg_drop_replication_slot('nonexistent_slot_xyz');
+```
+
+Produces:
+
+```text
+ERROR:  replication slot "nonexistent_slot_xyz" does not exist
 ```
 
 ## Related

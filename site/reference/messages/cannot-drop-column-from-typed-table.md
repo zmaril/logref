@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:9396"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot drop column from typed table`
@@ -28,7 +28,13 @@ Change the underlying composite type with `ALTER TYPE ... DROP ATTRIBUTE`, which
 
 ## Example
 
-*Illustrative* — dropping a column from a typed table.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
+
+```sql
+ALTER TABLE s35.typedtab DROP COLUMN a;
+```
+
+Produces:
 
 ```text
 ERROR:  cannot drop column from typed table

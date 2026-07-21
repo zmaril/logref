@@ -9,7 +9,7 @@ sqlstate:
     code: "25006"
 call_sites:
   - "postgres/src/backend/tcop/utility.c:412"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot execute %s in a read-only transaction`
@@ -28,7 +28,13 @@ Start a read-write transaction for the command: use `SET TRANSACTION READ WRITE`
 
 ## Example
 
-*Illustrative* — a write inside a read-only transaction.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
+
+```sql
+INSERT INTO repro.parent VALUES (99,'x');
+```
+
+Produces:
 
 ```text
 ERROR:  cannot execute INSERT in a read-only transaction

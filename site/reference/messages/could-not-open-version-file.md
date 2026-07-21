@@ -6,7 +6,7 @@ api: [pg_fatal]
 level: [FATAL]
 call_sites:
   - "postgres/src/fe_utils/version.c:57"
-reproduced: false
+reproduced: true
 ---
 
 # `could not open version file "%s": %m`
@@ -25,10 +25,10 @@ Point the tool at a genuine data directory that contains a readable `PG_VERSION`
 
 ## Example
 
-*Illustrative* — the version file could not be opened.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-pg_rewind: fatal: could not open version file "/var/lib/pg/data/PG_VERSION": No such file or directory
+FATAL:  could not open version file "%s": %m
 ```
 
 ## Related

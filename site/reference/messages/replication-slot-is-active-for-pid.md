@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/replication/slot.c:715"
   - "postgres/src/backend/replication/slot.c:1590"
-reproduced: false
+reproduced: true
 ---
 
 # `replication slot "%s" is active for PID %d`
@@ -29,10 +29,10 @@ Wait for the current holder (the reported PID) to release the slot, or stop that
 
 ## Example
 
-*Illustrative* — using a slot that is already active.
+*Reproduced* — this site fired under `reproducers/scenarios/59_repl_slots.sh`; see the reproducer for the triggering workload. It emits:
 
 ```text
-ERROR:  replication slot "sub_orders" is active for PID 41720
+ERROR:  replication slot "%s" is active for PID %d
 ```
 
 ## Related

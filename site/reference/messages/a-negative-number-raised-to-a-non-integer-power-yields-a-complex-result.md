@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/float.c:1565"
   - "postgres/src/backend/utils/adt/numeric.c:3971"
   - "postgres/src/backend/utils/adt/numeric.c:10891"
-reproduced: false
+reproduced: true
 ---
 
 # `a negative number raised to a non-integer power yields a complex result`
@@ -30,10 +30,16 @@ Ensure the base is non-negative before a fractional power, or handle negatives e
 
 ## Example
 
-*Illustrative* — a negative base with a fractional exponent.
+*Reproduced* — captured from `reproducers/scenarios/30_type_io_numeric_int.sql`.
 
 ```sql
-SELECT (-2.0) ^ 0.5;  -- yields a complex result
+SELECT (-2::float8) ^ 0.5::float8;
+```
+
+Produces:
+
+```text
+ERROR:  a negative number raised to a non-integer power yields a complex result
 ```
 
 ## Related

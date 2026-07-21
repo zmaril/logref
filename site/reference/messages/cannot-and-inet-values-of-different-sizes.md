@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/utils/adt/network.c:1824"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot AND inet values of different sizes`
@@ -28,10 +28,16 @@ Operate on addresses of the same family. Convert or restrict the values so both 
 
 ## Example
 
-*Illustrative* — mixing address families.
+*Reproduced* — captured from `reproducers/scenarios/20_network_geo_enum_ts_xml.sql`.
 
 ```sql
-SELECT inet '192.168.1.0' & inet '::1';
+SELECT '1.2.3.4'::inet & '::1'::inet;
+```
+
+Produces:
+
+```text
+ERROR:  cannot AND inet values of different sizes
 ```
 
 ## Related

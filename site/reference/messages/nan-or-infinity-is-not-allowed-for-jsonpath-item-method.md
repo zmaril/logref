@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:1232"
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:1445"
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:1477"
-reproduced: false
+reproduced: true
 ---
 
 # `NaN or Infinity is not allowed for jsonpath item method .%s()`
@@ -31,10 +31,16 @@ Adjust the path so it never produces a non-finite number: guard with a filter (`
 
 ## Example
 
-*Illustrative* — a jsonpath method yielding infinity.
+*Reproduced* — captured from `reproducers/scenarios/33_type_io_json_range_misc.sql`.
 
 ```sql
-SELECT jsonb_path_query('1e400', '$.double()');
+SELECT jsonb_path_query('"NaN"', '$.double()');
+```
+
+Produces:
+
+```text
+ERROR:  NaN or Infinity is not allowed for jsonpath item method .double()
 ```
 
 ## Related

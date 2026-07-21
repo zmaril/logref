@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:1631"
-reproduced: false
+reproduced: true
 ---
 
 # `argument of cast function must match or be binary-coercible from source data type`
@@ -28,7 +28,13 @@ Make the cast function's first argument the cast's source type, or a type the so
 
 ## Example
 
-*Illustrative* — a cast function whose argument does not match the source type.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE CAST (bool AS int) WITH FUNCTION abs(int);
+```
+
+Produces:
 
 ```text
 ERROR:  argument of cast function must match or be binary-coercible from source data type

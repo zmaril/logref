@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/copy.c:915"
-reproduced: false
+reproduced: true
 ---
 
 # `COPY escape must be a single one-byte character`
@@ -28,11 +28,16 @@ Use a single one-byte escape character, commonly the same as the quote (`"`) or 
 
 ## Example
 
-*Illustrative* — a multi-character escape.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-COPY t FROM STDIN WITH (FORMAT csv, ESCAPE '\\\\');
--- ERROR:  COPY escape must be a single one-byte character
+COPY repro.parent TO STDOUT WITH (FORMAT csv, QUOTE '"', ESCAPE '""');
+```
+
+Produces:
+
+```text
+ERROR:  COPY escape must be a single one-byte character
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "42P20"
 call_sites:
   - "postgres/src/backend/parser/parse_clause.c:3072"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot override ORDER BY clause of window "%s"`
@@ -28,7 +28,13 @@ Either use the named window as-is without an added `ORDER BY`, or define a separ
 
 ## Example
 
-*Illustrative* — overriding a named window's ordering.
+*Reproduced* — captured from `reproducers/scenarios/38_planner_executor_runtime.sql`.
+
+```sql
+SELECT sum(id) OVER (w ORDER BY id) FROM repro.parent WINDOW w AS (ORDER BY label);
+```
+
+Produces:
 
 ```text
 ERROR:  cannot override ORDER BY clause of window "w"

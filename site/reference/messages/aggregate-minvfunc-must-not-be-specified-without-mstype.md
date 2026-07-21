@@ -9,7 +9,7 @@ sqlstate:
     code: "42P13"
 call_sites:
   - "postgres/src/backend/commands/aggregatecmds.c:231"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate minvfunc must not be specified without mstype`
@@ -28,7 +28,13 @@ Add `mstype` (and the forward `msfunc`) so the inverse function has a moving-agg
 
 ## Example
 
-*Illustrative* — minvfunc without mstype.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE AGGREGATE repro.agg_minv(int) (SFUNC = int4pl, STYPE = int, MINVFUNC = int4mi);
+```
+
+Produces:
 
 ```text
 ERROR:  aggregate minvfunc must not be specified without mstype

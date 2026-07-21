@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/indexcmds.c:871"
   - "postgres/src/backend/commands/opclasscmds.c:374"
   - "postgres/src/backend/commands/opclasscmds.c:851"
-reproduced: false
+reproduced: true
 ---
 
 # `access method "%s" does not exist`
@@ -32,10 +32,16 @@ List available access methods with `SELECT amname FROM pg_am`. Correct the name,
 
 ## Example
 
-*Illustrative* — an index on a missing access method.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-CREATE INDEX ON t USING bloom (a);  -- without the bloom extension
+CREATE OPERATOR FAMILY repro.opf USING nonexistent_am;
+```
+
+Produces:
+
+```text
+ERROR:  access method "nonexistent_am" does not exist
 ```
 
 ## Related

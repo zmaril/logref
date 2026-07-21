@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/parser/parse_expr.c:1783"
   - "postgres/src/backend/parser/parse_expr.c:2282"
   - "postgres/src/backend/parser/parse_func.c:2811"
-reproduced: false
+reproduced: true
 ---
 
 # `set-returning functions are not allowed in %s`
@@ -30,10 +30,16 @@ Move the set-returning call to a position that accepts a set — usually the `FR
 
 ## Example
 
-*Illustrative* — a set-returning function in WHERE.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT * FROM t WHERE x = ANY(generate_series(1, 10)) ;  -- move the SRF to FROM
+SELECT COALESCE(generate_series(1, 3), 0);
+```
+
+Produces:
+
+```text
+ERROR:  set-returning functions are not allowed in COALESCE
 ```
 
 ## Related

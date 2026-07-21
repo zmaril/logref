@@ -14,7 +14,7 @@ call_sites:
   - "postgres/src/backend/commands/subscriptioncmds.c:1708"
   - "postgres/src/backend/commands/subscriptioncmds.c:1783"
   - "postgres/src/backend/commands/subscriptioncmds.c:2883"
-reproduced: false
+reproduced: true
 ---
 
 # `password_required=false is superuser-only`
@@ -33,10 +33,16 @@ Have a superuser create or alter the mapping, or leave `password_required` at it
 
 ## Example
 
-*Illustrative* — a non-superuser setting the option.
+*Reproduced* — captured from `reproducers/scenarios/65_contrib_fdw_dblink_crypto.sql`.
 
 ```sql
-ALTER USER MAPPING FOR app SERVER remote OPTIONS (ADD password_required 'false');
+CREATE USER MAPPING FOR repro_fdw_ro SERVER repro_fp_ok OPTIONS (password_required 'false');
+```
+
+Produces:
+
+```text
+ERROR:  password_required=false is superuser-only
 ```
 
 ## Related

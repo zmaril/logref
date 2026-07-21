@@ -9,7 +9,7 @@ sqlstate:
     code: "XX001"
 call_sites:
   - "postgres/contrib/pageinspect/heapfuncs.c:411"
-reproduced: false
+reproduced: true
 ---
 
 # `end of tuple reached without looking at all its data`
@@ -28,7 +28,13 @@ The tuple is inconsistent with the table's structure — likely corruption. Inve
 
 ## Example
 
-*Illustrative* — a malformed tuple seen by pageinspect.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT tuple_data_split('repro.parent'::regclass, '\x00'::bytea, 0, 0, NULL);
+```
+
+Produces:
 
 ```text
 ERROR:  end of tuple reached without looking at all its data

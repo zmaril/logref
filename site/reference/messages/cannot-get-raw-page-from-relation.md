@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/contrib/pageinspect/rawpage.c:162"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot get raw page from relation "%s"`
@@ -28,10 +28,16 @@ Point `get_raw_page()` at a table or index with physical blocks. For partitioned
 
 ## Example
 
-*Illustrative* — raw page requested from an unsupported object.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT get_raw_page('repro.child_v', 0);
+```
+
+Produces:
 
 ```text
-ERROR:  cannot get raw page from relation "my_view"
+ERROR:  cannot get raw page from relation "child_v"
 ```
 
 ## Related

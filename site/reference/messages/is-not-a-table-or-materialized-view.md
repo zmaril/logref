@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/toasting.c:107"
   - "postgres/src/backend/commands/tablecmds.c:20217"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not a table or materialized view`
@@ -29,10 +29,16 @@ Name a table or materialized view, or use the command form appropriate to the ob
 
 ## Example
 
-*Illustrative* — a table-only operation on a view.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-ANALYZE my_view;  -- not a table or materialized view
+CLUSTER repro.child_v;
+```
+
+Produces:
+
+```text
+ERROR:  "child_v" is not a table or materialized view
 ```
 
 ## Related

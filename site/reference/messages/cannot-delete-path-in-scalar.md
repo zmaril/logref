@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/utils/adt/jsonfuncs.c:4981"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot delete path in scalar`
@@ -28,10 +28,16 @@ Stop the deletion path at objects or arrays, which have members to remove. Adjus
 
 ## Example
 
-*Illustrative* — deleting inside a scalar.
+*Reproduced* — captured from `reproducers/scenarios/33_type_io_json_range_misc.sql`.
 
 ```sql
-SELECT '5'::jsonb #- '{a}';
+SELECT to_jsonb(1) #- '{a}';
+```
+
+Produces:
+
+```text
+ERROR:  cannot delete path in scalar
 ```
 
 ## Related

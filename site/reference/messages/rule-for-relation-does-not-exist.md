@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/rewrite/rewriteDefine.c:706"
   - "postgres/src/backend/rewrite/rewriteDefine.c:832"
   - "postgres/src/backend/rewrite/rewriteSupport.c:106"
-reproduced: false
+reproduced: true
 ---
 
 # `rule "%s" for relation "%s" does not exist`
@@ -30,10 +30,16 @@ List the relation's rules (`\d+ relname` in psql shows them) and use the exact r
 
 ## Example
 
-*Illustrative* — dropping a rule that does not exist.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-DROP RULE no_such ON orders;  -- no rule "no_such" on orders
+DROP RULE nosuchrule ON repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  rule "nosuchrule" for relation "parent" does not exist
 ```
 
 ## Related

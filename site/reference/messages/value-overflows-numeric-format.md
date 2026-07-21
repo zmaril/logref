@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/numeric.c:10949"
   - "postgres/src/backend/utils/adt/numeric.c:11043"
   - "postgres/src/backend/utils/adt/numeric.c:11178"
-reproduced: false
+reproduced: true
 ---
 
 # `value overflows numeric format`
@@ -32,10 +32,16 @@ Reduce the magnitude of the computation. `numeric` supports up to 131072 digits 
 
 ## Example
 
-*Illustrative* — an exponentiation that overflows numeric.
+*Reproduced* — captured from `reproducers/scenarios/32_adt_arithmetic_overflow.sql`.
 
 ```sql
-SELECT 10.0 ^ 1000000;
+SELECT exp(1000000::numeric);
+```
+
+Produces:
+
+```text
+ERROR:  value overflows numeric format
 ```
 
 ## Related

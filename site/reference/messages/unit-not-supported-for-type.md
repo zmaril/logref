@@ -26,7 +26,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/timestamp.c:6022"
   - "postgres/src/backend/utils/adt/timestamp.c:6103"
   - "postgres/src/backend/utils/adt/timestamp.c:6248"
-reproduced: false
+reproduced: true
 ---
 
 # `unit "%s" not supported for type %s`
@@ -45,16 +45,16 @@ Use a unit that exists for the type, or cast the value to a type that has the fi
 
 ## Example
 
-*Illustrative* — extracting a time field from a date.
+*Reproduced* — captured from `reproducers/scenarios/31_type_io_datetime.sql`.
 
 ```sql
-SELECT EXTRACT(hour FROM DATE '2024-01-01');
+SELECT extract(timezone FROM time '12:00:00');
 ```
 
 Produces:
 
 ```text
-ERROR:  unit "hour" not supported for type date
+ERROR:  unit "timezone" not supported for type time without time zone
 ```
 
 ## Related

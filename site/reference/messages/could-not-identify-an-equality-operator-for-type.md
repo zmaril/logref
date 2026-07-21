@@ -22,7 +22,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/arrayfuncs.c:4429"
   - "postgres/src/backend/utils/adt/arrayfuncs.c:6463"
   - "postgres/src/backend/utils/adt/rowtypes.c:1218"
-reproduced: false
+reproduced: true
 ---
 
 # `could not identify an equality operator for type %s`
@@ -41,16 +41,16 @@ Provide an equality operator for the type (define one and mark it in a suitable 
 
 ## Example
 
-*Illustrative* — DISTINCT on a type without equality.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT DISTINCT some_opaque_col FROM t;
+SELECT DISTINCT '(1,2)'::point;
 ```
 
 Produces:
 
 ```text
-ERROR:  could not identify an equality operator for type opaque_type
+ERROR:  could not identify an equality operator for type point
 ```
 
 ## Related

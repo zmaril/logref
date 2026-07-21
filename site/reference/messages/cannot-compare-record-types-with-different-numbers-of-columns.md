@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/rowtypes.c:1263"
   - "postgres/src/backend/utils/adt/rowtypes.c:1566"
   - "postgres/src/backend/utils/adt/rowtypes.c:1751"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot compare record types with different numbers of columns`
@@ -31,10 +31,16 @@ Compare records with the same number of columns. Trim or extend one side so the 
 
 ## Example
 
-*Illustrative* — comparing rows of different widths.
+*Reproduced* — captured from `reproducers/scenarios/18_arrays_ranges_composite.sql`.
 
 ```sql
-SELECT ROW(1, 2) = ROW(1, 2, 3);
+SELECT record_eq(ROW(1), ROW(1,2));
+```
+
+Produces:
+
+```text
+ERROR:  cannot compare record types with different numbers of columns
 ```
 
 ## Related

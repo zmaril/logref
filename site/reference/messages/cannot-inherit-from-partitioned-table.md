@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:2751"
   - "postgres/src/backend/commands/tablecmds.c:18010"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot inherit from partitioned table "%s"`
@@ -29,11 +29,16 @@ Attach the table as a partition with `CREATE TABLE ... PARTITION OF` or `ALTER T
 
 ## Example
 
-*Illustrative* — inheriting from a partitioned table.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-CREATE TABLE child () INHERITS (parted);
--- ERROR:  cannot inherit from partitioned table "parted"
+ALTER TABLE s36.ci1 INHERIT s36.parentpart;
+```
+
+Produces:
+
+```text
+ERROR:  cannot inherit from partitioned table "parentpart"
 ```
 
 ## Related

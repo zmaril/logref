@@ -50,7 +50,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/acl.c:2967"
   - "postgres/src/backend/utils/adt/ruleutils.c:3216"
   - "postgres/src/pl/plpgsql/src/pl_comp.c:1637"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" of relation "%s" does not exist`
@@ -69,16 +69,16 @@ Check the column name against `\d relation` (or `information_schema.columns`). W
 
 ## Example
 
-*Illustrative* — altering a column that is not present.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-ALTER TABLE orders DROP COLUMN shipped_at;
+ANALYZE repro.parent (nonexistent_col);
 ```
 
 Produces:
 
 ```text
-ERROR:  column "shipped_at" of relation "orders" does not exist
+ERROR:  column "nonexistent_col" of relation "parent" does not exist
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/array_userfuncs.c:1355"
   - "postgres/src/backend/utils/adt/array_userfuncs.c:1509"
-reproduced: false
+reproduced: true
 ---
 
 # `searching for elements in multidimensional arrays is not supported`
@@ -29,7 +29,13 @@ Flatten or slice the array to one dimension before searching, or restructure the
 
 ## Example
 
-*Illustrative* — array_position on a 2-D array.
+*Reproduced* — captured from `reproducers/scenarios/18_arrays_ranges_composite.sql`.
+
+```sql
+SELECT array_position(ARRAY[[1,2]], 1);
+```
+
+Produces:
 
 ```text
 ERROR:  searching for elements in multidimensional arrays is not supported

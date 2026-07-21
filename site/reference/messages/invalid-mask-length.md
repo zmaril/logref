@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/network.c:330"
   - "postgres/src/backend/utils/adt/network.c:353"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid mask length: %d`
@@ -29,10 +29,16 @@ Pass a mask length within the valid range for the address: `0..32` for IPv4 and 
 
 ## Example
 
-*Illustrative* — a mask length too large for IPv4.
+*Reproduced* — captured from `reproducers/scenarios/20_network_geo_enum_ts_xml.sql`.
 
 ```sql
-SELECT set_masklen('10.0.0.1'::inet, 40);  -- max is 32
+SELECT set_masklen('::1'::inet, 200);
+```
+
+Produces:
+
+```text
+ERROR:  invalid mask length: 200
 ```
 
 ## Related

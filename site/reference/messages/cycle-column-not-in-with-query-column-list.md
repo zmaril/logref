@@ -9,7 +9,7 @@ sqlstate:
     code: "42601"
 call_sites:
   - "postgres/src/backend/parser/parse_cte.c:503"
-reproduced: false
+reproduced: true
 ---
 
 # `cycle column "%s" not in WITH query column list`
@@ -28,11 +28,16 @@ List only columns that the recursive query actually produces after `CYCLE`. Chec
 
 ## Example
 
-*Illustrative* — a CYCLE column that is not in the query.
+*Reproduced* — captured from `reproducers/scenarios/39_cte_cursors_prepared_lock.sql`.
 
 ```sql
-WITH RECURSIVE w(id) AS (...) CYCLE missing SET is_cycle USING path SELECT * FROM w;
--- ERROR:  cycle column "missing" not in WITH query column list
+WITH RECURSIVE t(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM t WHERE n<3) CYCLE nope SET c USING p SELECT * FROM t;
+```
+
+Produces:
+
+```text
+ERROR:  cycle column "nope" not in WITH query column list
 ```
 
 ## Related

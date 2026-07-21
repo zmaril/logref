@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:532"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate functions do not accept RESPECT/IGNORE NULLS`
@@ -28,10 +28,16 @@ Remove the null-treatment clause from the aggregate. If you need null handling, 
 
 ## Example
 
-*Illustrative* — a null-treatment clause on an aggregate.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT sum(x) IGNORE NULLS FROM t;  -- ERROR
+SELECT count(id) IGNORE NULLS FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  aggregate functions do not accept RESPECT/IGNORE NULLS
 ```
 
 ## Related

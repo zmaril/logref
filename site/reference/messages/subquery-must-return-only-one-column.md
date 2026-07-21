@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_expr.c:1944"
   - "postgres/src/backend/parser/parse_expr.c:3848"
-reproduced: false
+reproduced: true
 ---
 
 # `subquery must return only one column`
@@ -29,7 +29,13 @@ Select a single column in the subquery. If you need to compare against multiple 
 
 ## Example
 
-*Illustrative* — a scalar subquery selecting two columns.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
+
+```sql
+SELECT (SELECT id, label FROM repro.parent LIMIT 1);
+```
+
+Produces:
 
 ```text
 ERROR:  subquery must return only one column

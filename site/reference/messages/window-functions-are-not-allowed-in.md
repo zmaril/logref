@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_agg.c:1063"
   - "postgres/src/backend/parser/parse_clause.c:2116"
-reproduced: false
+reproduced: true
 ---
 
 # `window functions are not allowed in %s`
@@ -29,7 +29,13 @@ Move the window function into the `SELECT` list (or `ORDER BY`), then filter or 
 
 ## Example
 
-*Illustrative* — a window function in WHERE.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
+
+```sql
+SELECT * FROM repro.parent WHERE rank() OVER () > 1;
+```
+
+Produces:
 
 ```text
 ERROR:  window functions are not allowed in WHERE

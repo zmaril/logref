@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/trigger.c:968"
   - "postgres/src/backend/parser/parse_target.c:1089"
   - "postgres/src/backend/parser/parse_target.c:1100"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" specified more than once`
@@ -32,10 +32,16 @@ Remove the duplicate so each column is listed once. If you meant two different c
 
 ## Example
 
-*Illustrative* — a repeated column in a COPY list.
+*Reproduced* — captured from `reproducers/scenarios/33_grant_roles_coerce_dml.sql`.
 
 ```sql
-COPY t (a, a) FROM STDIN;
+INSERT INTO repro.parent (id, label, id) VALUES (1, 'x', 2);
+```
+
+Produces:
+
+```text
+ERROR:  column "id" specified more than once
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/replication/logical/logical.c:356"
   - "postgres/src/backend/replication/logical/logical.c:512"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use physical replication slot for logical decoding`
@@ -29,7 +29,7 @@ Create a logical slot with `pg_create_logical_replication_slot('name', 'plugin')
 
 ## Example
 
-*Illustrative* — decoding against a physical slot.
+*Reproduced* — this site fired under `reproducers/scenarios/59_repl_slots.sh`; see the reproducer for the triggering workload. It emits:
 
 ```text
 ERROR:  cannot use physical replication slot for logical decoding

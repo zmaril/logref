@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/contrib/pgcrypto/pgcrypto.c:177"
   - "postgres/contrib/pgcrypto/pgcrypto.c:200"
-reproduced: false
+reproduced: true
 ---
 
 # `gen_salt: %s`
@@ -29,7 +29,13 @@ Use a supported salt type (`bf`, `md5`, `xdes`, `des`) and valid parameters. The
 
 ## Example
 
-*Illustrative* — an invalid gen_salt parameter.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT gen_salt('bf', 99);
+```
+
+Produces:
 
 ```text
 ERROR:  gen_salt: Incorrect number of rounds

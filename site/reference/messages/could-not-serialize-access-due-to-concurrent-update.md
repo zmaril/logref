@@ -16,7 +16,7 @@ call_sites:
   - "postgres/src/backend/executor/nodeModifyTable.c:3096"
   - "postgres/src/backend/executor/nodeModifyTable.c:3827"
   - "postgres/src/backend/utils/adt/ri_triggers.c:3312"
-reproduced: false
+reproduced: true
 ---
 
 # `could not serialize access due to concurrent update`
@@ -35,7 +35,7 @@ This is a normal serialization failure — retry the transaction. Applications a
 
 ## Example
 
-*Illustrative* — two REPEATABLE READ transactions updating one row.
+*Reproduced* — this site fired under `reproducers/scenarios/50_txn_concurrency.sh`; see the reproducer for the triggering workload. It emits:
 
 ```text
 ERROR:  could not serialize access due to concurrent update

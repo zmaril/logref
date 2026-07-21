@@ -9,7 +9,7 @@ sqlstate:
     code: "42883"
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:2536"
-reproduced: false
+reproduced: true
 ---
 
 # `could not find a procedure named "%s"`
@@ -28,11 +28,16 @@ Check the procedure name, argument types, and schema. A function of that name do
 
 ## Example
 
-*Illustrative* — a procedure name with no match.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-DROP PROCEDURE nonexistent_proc();
--- ERROR:  could not find a procedure named "nonexistent_proc"
+DROP PROCEDURE nosuchproc;
+```
+
+Produces:
+
+```text
+ERROR:  could not find a procedure named "nosuchproc"
 ```
 
 ## Related

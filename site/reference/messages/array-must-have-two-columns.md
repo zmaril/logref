@@ -11,7 +11,7 @@ call_sites:
   - "postgres/contrib/hstore/hstore_io.c:749"
   - "postgres/src/backend/utils/adt/json.c:1403"
   - "postgres/src/backend/utils/adt/jsonb.c:1314"
-reproduced: false
+reproduced: true
 ---
 
 # `array must have two columns`
@@ -30,10 +30,16 @@ Shape the array as N rows of two columns: `ARRAY[['k1','v1'],['k2','v2']]`. If y
 
 ## Example
 
-*Illustrative* — an array without exactly two columns.
+*Reproduced* — captured from `reproducers/scenarios/62_contrib_type_input_deep.sql`.
 
 ```sql
-SELECT hstore(ARRAY[['k','v','x']]);  -- array must have two columns
+SELECT hstore('{{a,1,x},{b,2,y}}'::text[]);
+```
+
+Produces:
+
+```text
+ERROR:  array must have two columns
 ```
 
 ## Related

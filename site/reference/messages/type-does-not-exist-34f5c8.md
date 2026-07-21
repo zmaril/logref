@@ -17,7 +17,7 @@ call_sites:
   - "postgres/src/backend/parser/parse_type.c:241"
   - "postgres/src/backend/parser/parse_type.c:270"
   - "postgres/src/backend/utils/adt/acl.c:4604"
-reproduced: false
+reproduced: true
 ---
 
 # `type "%s" does not exist`
@@ -36,16 +36,16 @@ Check the type name with `\dT` (or `pg_type`). If it belongs to an extension, in
 
 ## Example
 
-*Illustrative* — a column of an unknown type.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-CREATE TABLE t (c citext);
+DROP CAST (int AS nosuchtype);
 ```
 
 Produces:
 
 ```text
-ERROR:  type "citext" does not exist
+ERROR:  type "nosuchtype" does not exist
 ```
 
 ## Related

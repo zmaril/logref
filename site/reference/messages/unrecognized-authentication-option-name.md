@@ -11,7 +11,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/libpq/auth-oauth.c:1068"
   - "postgres/src/backend/libpq/hba.c:2320"
-reproduced: false
+reproduced: true
 ---
 
 # `unrecognized authentication option name: "%s"`
@@ -30,10 +30,10 @@ Check the option spelling against the documentation for the authentication metho
 
 ## Example
 
-*Illustrative* — a misspelled HBA option.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier3__bad_hba`). The site emits a background log record; the captured line was:
 
 ```text
-WARNING:  unrecognized authentication option name: "ldapservr"
+LOG:  unrecognized authentication option name: "badoption"
 ```
 
 ## Related

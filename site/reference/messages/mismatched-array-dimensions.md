@@ -11,7 +11,7 @@ call_sites:
   - "postgres/contrib/pgcrypto/pgp-pgsql.c:783"
   - "postgres/src/backend/utils/adt/json.c:1488"
   - "postgres/src/backend/utils/adt/jsonb.c:1415"
-reproduced: false
+reproduced: true
 ---
 
 # `mismatched array dimensions`
@@ -30,10 +30,16 @@ Ensure the arrays share the same dimensions before combining them. Check the sou
 
 ## Example
 
-*Illustrative* — combining arrays of different shapes.
+*Reproduced* — captured from `reproducers/scenarios/19_json_sqljson.sql`.
 
 ```sql
-SELECT ARRAY[1,2] OPERATOR(pg_catalog.||) ARRAY[[1,2],[3,4]];  -- shapes do not match
+SELECT json_object('{a,b}', '{1}');
+```
+
+Produces:
+
+```text
+ERROR:  mismatched array dimensions
 ```
 
 ## Related

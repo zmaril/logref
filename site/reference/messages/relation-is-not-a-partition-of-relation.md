@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/tablecmds.c:18627"
   - "postgres/src/backend/commands/tablecmds.c:18675"
   - "postgres/src/backend/parser/parse_utilcmd.c:3552"
-reproduced: false
+reproduced: true
 ---
 
 # `relation "%s" is not a partition of relation "%s"`
@@ -32,10 +32,16 @@ Confirm the partition hierarchy with `\d+ parent` in psql, which lists the paren
 
 ## Example
 
-*Illustrative* — detaching a table that is not a partition of the parent.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-ALTER TABLE measurements DETACH PARTITION unrelated;  -- not a partition of measurements
+ALTER TABLE repro.at_part DETACH PARTITION repro.at_reg;
+```
+
+Produces:
+
+```text
+ERROR:  relation "at_reg" is not a partition of relation "at_part"
 ```
 
 ## Related

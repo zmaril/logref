@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/varbit.c:1822"
   - "postgres/src/backend/utils/adt/varbit.c:1880"
-reproduced: false
+reproduced: true
 ---
 
 # `bit index %d out of valid range (0..%d)`
@@ -29,10 +29,16 @@ Use a bit index within the value's range, from zero up to the bit length minus o
 
 ## Example
 
-*Illustrative* — a bit index past the end.
+*Reproduced* — captured from `reproducers/scenarios/15_types_extended.sql`.
 
 ```sql
-SELECT get_bit(B'101', 5);  -- valid indexes are 0..2
+SELECT get_bit('101'::bit(3), 9);
+```
+
+Produces:
+
+```text
+ERROR:  bit index 9 out of valid range (0..2)
 ```
 
 ## Related

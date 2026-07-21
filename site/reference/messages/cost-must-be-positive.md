@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:840"
   - "postgres/src/backend/commands/functioncmds.c:1446"
-reproduced: false
+reproduced: true
 ---
 
 # `COST must be positive`
@@ -29,11 +29,16 @@ Set `COST` to a positive number that reflects the function's relative expense (t
 
 ## Example
 
-*Illustrative* — a non-positive cost.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-CREATE FUNCTION f() RETURNS int AS 'SELECT 1' LANGUAGE sql COST 0;
--- ERROR:  COST must be positive
+ALTER FUNCTION repro.altfn() COST -1;
+```
+
+Produces:
+
+```text
+ERROR:  COST must be positive
 ```
 
 ## Related

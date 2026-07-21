@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/utils/mmgr/portalmem.c:737"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot PREPARE a transaction that has created a cursor WITH HOLD`
@@ -28,7 +28,13 @@ Close held cursors before preparing the transaction, or avoid `WITH HOLD` in tra
 
 ## Example
 
-*Illustrative* — PREPARE with a held cursor open.
+*Reproduced* — captured from `reproducers/scenarios/51_twophase_prepare.sql`.
+
+```sql
+PREPARE TRANSACTION 'g_cursor';
+```
+
+Produces:
 
 ```text
 ERROR:  cannot PREPARE a transaction that has created a cursor WITH HOLD

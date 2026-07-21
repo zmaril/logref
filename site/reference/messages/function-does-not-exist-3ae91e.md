@@ -28,7 +28,7 @@ call_sites:
   - "postgres/src/backend/parser/parse_func.c:649"
   - "postgres/src/backend/parser/parse_func.c:2302"
   - "postgres/src/backend/parser/parse_func.c:2575"
-reproduced: false
+reproduced: true
 ---
 
 # `function %s does not exist`
@@ -47,16 +47,16 @@ Check the name and argument types against `\df name`. If the types differ, add e
 
 ## Example
 
-*Illustrative* — calling a function with an unmatched argument type.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-SELECT lower(123);
+CREATE FOREIGN DATA WRAPPER fdw HANDLER nosuchfn;
 ```
 
 Produces:
 
 ```text
-ERROR:  function lower(integer) does not exist
+ERROR:  function nosuchfn() does not exist
 ```
 
 ## Related

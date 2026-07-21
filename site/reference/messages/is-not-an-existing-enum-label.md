@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/pg_enum.c:416"
   - "postgres/src/backend/catalog/pg_enum.c:674"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not an existing enum label`
@@ -29,10 +29,16 @@ Reference an existing label as the anchor. List the enum's labels with `SELECT e
 
 ## Example
 
-*Illustrative* — inserting relative to a nonexistent label.
+*Reproduced* — captured from `reproducers/scenarios/20_network_geo_enum_ts_xml.sql`.
 
 ```sql
-ALTER TYPE mood ADD VALUE 'elated' AFTER 'joyus';  -- no label 'joyus'
+ALTER TYPE repro.mood RENAME VALUE 'nope' TO 'x';
+```
+
+Produces:
+
+```text
+ERROR:  "nope" is not an existing enum label
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/copy.c:435"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use "%s" with HEADER in COPY TO`
@@ -28,11 +28,16 @@ Drop either the `HEADER` option or the conflicting option. Header rows apply onl
 
 ## Example
 
-*Illustrative* — HEADER with a conflicting option.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-COPY t TO '/tmp/t.bin' (FORMAT binary, HEADER);
--- ERROR:  cannot use "binary" with HEADER in COPY TO
+COPY repro.parent TO STDOUT (FORMAT csv, HEADER match);
+```
+
+Produces:
+
+```text
+ERROR:  cannot use "match" with HEADER in COPY TO
 ```
 
 ## Related

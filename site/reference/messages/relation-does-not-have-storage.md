@@ -11,7 +11,7 @@ call_sites:
   - "postgres/contrib/pg_freespacemap/pg_freespacemap.c:38"
   - "postgres/contrib/pg_prewarm/pg_prewarm.c:155"
   - "postgres/src/backend/utils/cache/relcache.c:3893"
-reproduced: false
+reproduced: true
 ---
 
 # `relation "%s" does not have storage`
@@ -30,10 +30,16 @@ Point the function at a relation that has physical storage — an ordinary table
 
 ## Example
 
-*Illustrative* — inspecting storage of a storageless relation.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
 
 ```sql
-SELECT * FROM pg_freespace('my_view');  -- a view has no storage
+SELECT pg_prewarm('repro.child_v', 'buffer');
+```
+
+Produces:
+
+```text
+ERROR:  relation "child_v" does not have storage
 ```
 
 ## Related

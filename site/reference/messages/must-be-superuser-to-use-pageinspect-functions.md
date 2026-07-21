@@ -12,7 +12,7 @@ call_sites:
   - "postgres/contrib/pageinspect/btreefuncs.c:352"
   - "postgres/contrib/pageinspect/btreefuncs.c:634"
   - "postgres/contrib/pageinspect/btreefuncs.c:854"
-reproduced: false
+reproduced: true
 ---
 
 # `must be superuser to use pageinspect functions`
@@ -31,10 +31,16 @@ Run the `pageinspect` call as a superuser, or have a superuser wrap the specific
 
 ## Example
 
-*Illustrative* — a non-superuser calling pageinspect.
+*Reproduced* — captured from `reproducers/scenarios/64_contrib_inspect_deep.sql`.
 
 ```sql
-SELECT * FROM heap_page_items(get_raw_page('t', 0));
+SELECT bt_metap('repro.big_pkey');
+```
+
+Produces:
+
+```text
+ERROR:  must be superuser to use pageinspect functions
 ```
 
 ## Related

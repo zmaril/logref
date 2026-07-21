@@ -18,7 +18,7 @@ call_sites:
   - "postgres/src/backend/parser/parse_expr.c:3688"
   - "postgres/src/backend/parser/parse_expr.c:4209"
   - "postgres/src/backend/parser/parse_target.c:1004"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot cast type %s to %s`
@@ -37,16 +37,16 @@ Use a supported conversion. Often you can go through `text` (cast to text, then 
 
 ## Example
 
-*Illustrative* — a cast with no defined path.
+*Reproduced* — captured from `reproducers/scenarios/18_arrays_ranges_composite.sql`.
 
 ```sql
-SELECT ROW(1,2)::integer;
+SELECT ROW(1)::repro.parent;
 ```
 
 Produces:
 
 ```text
-ERROR:  cannot cast type record to integer
+ERROR:  cannot cast type record to repro.parent
 ```
 
 ## Related

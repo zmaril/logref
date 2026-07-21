@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/libpq/be-fsstubs.c:819"
   - "postgres/src/backend/utils/adt/genfile.c:246"
   - "postgres/src/backend/utils/adt/genfile.c:267"
-reproduced: false
+reproduced: true
 ---
 
 # `requested length cannot be negative`
@@ -30,10 +30,16 @@ Ensure the length argument is zero or positive. Check the arithmetic that produc
 
 ## Example
 
-*Illustrative* — a negative byte length.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
 
 ```sql
-SELECT pg_read_binary_file('base/1/1234', 0, -10);  -- length cannot be negative
+SELECT pg_read_binary_file('/nonexistent', 0, -1);
+```
+
+Produces:
+
+```text
+ERROR:  requested length cannot be negative
 ```
 
 ## Related

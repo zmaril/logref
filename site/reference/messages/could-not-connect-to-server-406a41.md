@@ -9,7 +9,7 @@ sqlstate:
     code: "08001"
 call_sites:
   - "postgres/contrib/postgres_fdw/connection.c:659"
-reproduced: false
+reproduced: true
 ---
 
 # `could not connect to server "%s"`
@@ -28,11 +28,16 @@ Check the foreign server's `host`, `port`, and `dbname` options and the user map
 
 ## Example
 
-*Illustrative* — a foreign-table query failing to reach the remote server.
+*Reproduced* — captured from `reproducers/scenarios/43_contrib_fdw_indexam.sql`.
 
 ```sql
-SELECT * FROM remote_table;
--- ERROR:  could not connect to server "remote_srv"
+SELECT * FROM repro.ft2;
+```
+
+Produces:
+
+```text
+ERROR:  could not connect to server "pgfdw"
 ```
 
 ## Related

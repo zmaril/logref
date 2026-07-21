@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/copy.c:898"
-reproduced: false
+reproduced: true
 ---
 
 # `COPY quote must be a single one-byte character`
@@ -28,11 +28,16 @@ Use a single one-byte quote character, typically `"`. Multibyte or multi-charact
 
 ## Example
 
-*Illustrative* — a multi-character quote.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-COPY t TO STDOUT WITH (FORMAT csv, QUOTE '""');
--- ERROR:  COPY quote must be a single one-byte character
+COPY repro.parent TO STDOUT (FORMAT csv, QUOTE 'xx');
+```
+
+Produces:
+
+```text
+ERROR:  COPY quote must be a single one-byte character
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "42P16"
 call_sites:
   - "postgres/src/backend/catalog/heap.c:2220"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot add NO INHERIT constraint to partitioned table "%s"`
@@ -28,10 +28,16 @@ Define the constraint without `NO INHERIT` so it applies across the partitions, 
 
 ## Example
 
-*Illustrative* — a NO INHERIT check on a partitioned table.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-ALTER TABLE parted ADD CONSTRAINT c CHECK (a > 0) NO INHERIT;
+CREATE TABLE repro.ct24 (a int, CONSTRAINT c CHECK (a > 0) NO INHERIT) PARTITION BY LIST (a);
+```
+
+Produces:
+
+```text
+ERROR:  cannot add NO INHERIT constraint to partitioned table "ct24"
 ```
 
 ## Related

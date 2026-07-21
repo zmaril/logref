@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/storage/ipc/procarray.c:482"
   - "postgres/src/backend/storage/lmgr/proc.c:458"
   - "postgres/src/backend/tcop/backend_startup.c:341"
-reproduced: false
+reproduced: true
 ---
 
 # `sorry, too many clients already`
@@ -30,14 +30,7 @@ First find what is holding connections: `SELECT count(*), state FROM pg_stat_act
 
 ## Example
 
-*Illustrative* — opening more connections than `max_connections` allows.
-
-```sql
--- with max_connections = 100, the 101st non-reserved connection:
-psql -h db -U app
-```
-
-Produces:
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier4__resource_timeouts`). The site emits a background log record; the captured line was:
 
 ```text
 FATAL:  sorry, too many clients already

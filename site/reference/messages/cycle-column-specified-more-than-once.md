@@ -9,7 +9,7 @@ sqlstate:
     code: "42701"
 call_sites:
   - "postgres/src/backend/parser/parse_cte.c:510"
-reproduced: false
+reproduced: true
 ---
 
 # `cycle column "%s" specified more than once`
@@ -28,11 +28,16 @@ Remove the duplicate so each column appears once in the `CYCLE` list. The list s
 
 ## Example
 
-*Illustrative* — a repeated CYCLE column.
+*Reproduced* — captured from `reproducers/scenarios/39_cte_cursors_prepared_lock.sql`.
 
 ```sql
-WITH RECURSIVE w(id) AS (...) CYCLE id, id SET is_cycle USING path SELECT * FROM w;
--- ERROR:  cycle column "id" specified more than once
+WITH RECURSIVE t(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM t WHERE n<3) CYCLE n, n SET c USING p SELECT * FROM t;
+```
+
+Produces:
+
+```text
+ERROR:  cycle column "n" specified more than once
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:17453"
   - "postgres/src/backend/commands/view.c:438"
-reproduced: false
+reproduced: true
 ---
 
 # `WITH CHECK OPTION is supported only on automatically updatable views`
@@ -29,7 +29,14 @@ Simplify the view so it qualifies as automatically updatable (a single base rela
 
 ## Example
 
-*Illustrative* — CHECK OPTION on a non-updatable view.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
+
+```sql
+CREATE VIEW s35.nonupd_v WITH (check_option = cascaded) AS
+    SELECT count(*) AS n FROM s35.base;
+```
+
+Produces:
 
 ```text
 ERROR:  WITH CHECK OPTION is supported only on automatically updatable views

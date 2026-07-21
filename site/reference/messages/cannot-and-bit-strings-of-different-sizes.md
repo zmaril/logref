@@ -9,7 +9,7 @@ sqlstate:
     code: "22026"
 call_sites:
   - "postgres/src/backend/utils/adt/varbit.c:1259"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot AND bit strings of different sizes`
@@ -28,10 +28,16 @@ Make both operands the same length before combining them — pad or truncate one
 
 ## Example
 
-*Illustrative* — bit strings of different widths.
+*Reproduced* — captured from `reproducers/scenarios/15_types_extended.sql`.
 
 ```sql
-SELECT B'1010' & B'11';
+SELECT '101'::bit(3) & '11'::bit(2);
+```
+
+Produces:
+
+```text
+ERROR:  cannot AND bit strings of different sizes
 ```
 
 ## Related

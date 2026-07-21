@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/orderedsetaggs.c:445"
   - "postgres/src/backend/utils/adt/orderedsetaggs.c:550"
   - "postgres/src/backend/utils/adt/orderedsetaggs.c:690"
-reproduced: false
+reproduced: true
 ---
 
 # `percentile value %g is not between 0 and 1`
@@ -30,10 +30,16 @@ Pass a fraction in the range 0 to 1. Convert percentages by dividing by 100, so 
 
 ## Example
 
-*Illustrative* — a percentile given as a percentage.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
 
 ```sql
-SELECT percentile_cont(95) WITHIN GROUP (ORDER BY x) FROM t;  -- use 0.95
+SELECT percentile_cont(2) WITHIN GROUP (ORDER BY id) FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  percentile value 2 is not between 0 and 1
 ```
 
 ## Related

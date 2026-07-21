@@ -9,7 +9,7 @@ sqlstate:
     code: "23514"
 call_sites:
   - "postgres/src/backend/commands/typecmds.c:3303"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" of table "%s" contains values that violate the new constraint`
@@ -28,10 +28,16 @@ Correct or remove the violating rows, or add the constraint as `NOT VALID` and v
 
 ## Example
 
-*Illustrative* — a domain constraint violated by stored data.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
+
+```sql
+ALTER DOMAIN s37.posint ADD CONSTRAINT gt0 CHECK (VALUE > 0);
+```
+
+Produces:
 
 ```text
-ERROR:  column "c" of table "t" contains values that violate the new constraint
+ERROR:  column "v" of table "usedom" contains values that violate the new constraint
 ```
 
 ## Related

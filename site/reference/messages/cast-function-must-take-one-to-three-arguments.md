@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:1625"
-reproduced: false
+reproduced: true
 ---
 
 # `cast function must take one to three arguments`
@@ -28,7 +28,13 @@ Define the cast function with the source type as its first parameter, and add th
 
 ## Example
 
-*Illustrative* — a cast function with too many parameters.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE CAST (int AS text) WITH FUNCTION now();
+```
+
+Produces:
 
 ```text
 ERROR:  cast function must take one to three arguments

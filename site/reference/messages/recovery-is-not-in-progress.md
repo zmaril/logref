@@ -19,7 +19,7 @@ call_sites:
   - "postgres/src/backend/commands/wait.c:302"
   - "postgres/src/backend/commands/wait.c:309"
   - "postgres/src/backend/commands/wait.c:316"
-reproduced: false
+reproduced: true
 ---
 
 # `recovery is not in progress`
@@ -38,17 +38,10 @@ Only call recovery-control functions on a server actually in recovery (a standby
 
 ## Example
 
-*Illustrative* — pausing replay on a primary.
-
-```sql
-SELECT pg_wal_replay_pause();
-```
-
-Produces:
+*Reproduced* — this site fired under `reproducers/scenarios/57_wal_control_states.sh`; see the reproducer for the triggering workload. It emits:
 
 ```text
 ERROR:  recovery is not in progress
-HINT:  Recovery control functions can only be executed during recovery.
 ```
 
 ## Related

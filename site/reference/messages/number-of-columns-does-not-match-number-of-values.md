@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_expr.c:1543"
   - "postgres/src/backend/parser/parse_expr.c:1575"
-reproduced: false
+reproduced: true
 ---
 
 # `number of columns does not match number of values`
@@ -29,10 +29,16 @@ Make the column list and the value list the same length. Add the missing value o
 
 ## Example
 
-*Illustrative* — column and value counts differ.
+*Reproduced* — captured from `reproducers/scenarios/33_grant_roles_coerce_dml.sql`.
 
 ```sql
-INSERT INTO t (a, b) VALUES (1);  -- two columns, one value
+UPDATE repro.parent SET (id, label) = (SELECT 1);
+```
+
+Produces:
+
+```text
+ERROR:  number of columns does not match number of values
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/policy.c:696"
   - "postgres/src/backend/commands/policy.c:1148"
-reproduced: false
+reproduced: true
 ---
 
 # `policy "%s" for table "%s" already exists`
@@ -29,10 +29,16 @@ Use a different policy name, or alter the existing policy with `ALTER POLICY` in
 
 ## Example
 
-*Illustrative* — creating a policy that already exists.
+*Reproduced* — captured from `reproducers/scenarios/49_rls_policies_defaclr.sql`.
+
+```sql
+CREATE POLICY p_dup ON acl49.t USING (true);
+```
+
+Produces:
 
 ```text
-ERROR:  policy "tenant_isolation" for table "orders" already exists
+ERROR:  policy "p_dup" for table "t" already exists
 ```
 
 ## Related

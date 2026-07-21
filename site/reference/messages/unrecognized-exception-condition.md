@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/pl/plpgsql/src/pl_comp.c:2161"
   - "postgres/src/pl/plpgsql/src/pl_comp.c:2210"
-reproduced: false
+reproduced: true
 ---
 
 # `unrecognized exception condition "%s"`
@@ -29,10 +29,16 @@ Use a valid condition name from the documented error-condition list (for example
 
 ## Example
 
-*Illustrative* — an unknown exception condition.
+*Reproduced* — captured from `reproducers/scenarios/26_roles_acl_plpgsql.sql`.
+
+```sql
+DO $$ BEGIN RAISE EXCEPTION USING errcode = 'nonsense_code'; END $$;
+```
+
+Produces:
 
 ```text
-ERROR:  unrecognized exception condition "uniqu_violation"
+ERROR:  unrecognized exception condition "nonsense_code"
 ```
 
 ## Related

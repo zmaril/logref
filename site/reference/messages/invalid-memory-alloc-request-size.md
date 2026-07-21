@@ -7,7 +7,7 @@ level: [ERROR]
 call_sites:
   - "postgres/src/backend/utils/mmgr/mcxt.c:1224"
   - "postgres/src/backend/utils/mmgr/mcxt.c:1301"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid memory alloc request size %zu`
@@ -26,10 +26,16 @@ This is a defensive guard. If a specific value or row triggers it, that data may
 
 ## Example
 
-*Illustrative* — an allocation request beyond the allowed maximum.
+*Reproduced* — captured from `reproducers/scenarios/17_strings_format_regex.sql`.
+
+```sql
+SELECT 'abc' || repeat('x', 1000000000) || repeat('y', 1000000000);
+```
+
+Produces:
 
 ```text
-ERROR:  invalid memory alloc request size 2000000000
+ERROR:  invalid memory alloc request size 2000000007
 ```
 
 ## Related

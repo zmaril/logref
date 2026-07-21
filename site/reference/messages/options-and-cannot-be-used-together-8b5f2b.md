@@ -25,7 +25,7 @@ call_sites:
   - "postgres/src/bin/pg_dump/pg_restore.c:420"
   - "postgres/src/bin/pg_dump/pg_restore.c:428"
   - "postgres/src/fe_utils/option_utils.c:139"
-reproduced: false
+reproduced: true
 ---
 
 # `options %s and %s cannot be used together`
@@ -44,16 +44,10 @@ Keep only one of the two named options. Read the tool's `--help` or manual to un
 
 ## Example
 
-*Illustrative* — two conflicting pg_dump selectors.
-
-```sh
-pg_dump --schema-only --data-only mydb
-```
-
-Produces:
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__66_dump`); see the reproducer for the triggering workload. It emits:
 
 ```text
-pg_dump: error: options -s/--schema-only and -a/--data-only cannot be used together
+FATAL:  options %s and %s cannot be used together
 ```
 
 ## Related

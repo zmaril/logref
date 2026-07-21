@@ -9,7 +9,7 @@ sqlstate:
     code: "42601"
 call_sites:
   - "postgres/src/backend/utils/adt/formatting.c:1259"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use "S" twice`
@@ -28,11 +28,16 @@ Keep a single `S` in the template, placed where you want the sign to appear, and
 
 ## Example
 
-*Illustrative* — a doubled S marker.
+*Reproduced* — captured from `reproducers/scenarios/17_strings_format_regex.sql`.
 
 ```sql
-SELECT to_char(-12, 'S999S');
--- ERROR:  cannot use "S" twice
+SELECT to_number('12', 'NONSENSE_ZZ');
+```
+
+Produces:
+
+```text
+ERROR:  cannot use "S" twice
 ```
 
 ## Related

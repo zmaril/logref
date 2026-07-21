@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:1748"
-reproduced: false
+reproduced: true
 ---
 
 # `enum data types are not binary-compatible`
@@ -28,11 +28,16 @@ Do not create a binary cast for an enum. To convert between enums or between an 
 
 ## Example
 
-*Illustrative* — a binary cast on an enum.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-CREATE CAST (color AS mood) WITHOUT FUNCTION;
--- enum data types are not binary-compatible
+CREATE CAST (int AS repro.mood) WITHOUT FUNCTION;
+```
+
+Produces:
+
+```text
+ERROR:  enum data types are not binary-compatible
 ```
 
 ## Related

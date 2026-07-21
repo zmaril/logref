@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/tablecmds.c:13474"
   - "postgres/src/backend/commands/tablecmds.c:14592"
   - "postgres/src/backend/commands/tablecmds.c:14821"
-reproduced: false
+reproduced: true
 ---
 
 # `constraint "%s" of relation "%s" does not exist`
@@ -32,10 +32,16 @@ List the table's constraints with `\d tablename` in psql or `SELECT conname FROM
 
 ## Example
 
-*Illustrative* — dropping a nonexistent constraint.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-ALTER TABLE t DROP CONSTRAINT no_such_ck;
+ALTER TABLE repro.at DROP CONSTRAINT nonexistent_con;
+```
+
+Produces:
+
+```text
+ERROR:  constraint "nonexistent_con" of relation "at" does not exist
 ```
 
 ## Related

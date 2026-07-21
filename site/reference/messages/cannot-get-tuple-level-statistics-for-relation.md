@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/contrib/pgstattuple/pgstattuple.c:302"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot get tuple-level statistics for relation "%s"`
@@ -28,10 +28,16 @@ Run the function against a supported table or index type. Consult the pgstattupl
 
 ## Example
 
-*Illustrative* — tuple statistics on an unsupported access method.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT pgstattuple('repro.child_v');
+```
+
+Produces:
 
 ```text
-ERROR:  cannot get tuple-level statistics for relation "my_brin_idx"
+ERROR:  cannot get tuple-level statistics for relation "child_v"
 ```
 
 ## Related

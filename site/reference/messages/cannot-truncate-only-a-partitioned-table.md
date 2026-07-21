@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:2016"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot truncate only a partitioned table`
@@ -28,11 +28,16 @@ Drop `ONLY` to truncate the partitioned table and all its partitions, or truncat
 
 ## Example
 
-*Illustrative* — TRUNCATE ONLY on a partitioned table.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-TRUNCATE ONLY measurements;
--- ERROR:  cannot truncate only a partitioned table
+TRUNCATE ONLY s35.pidx;
+```
+
+Produces:
+
+```text
+ERROR:  cannot truncate only a partitioned table
 ```
 
 ## Related

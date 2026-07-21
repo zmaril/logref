@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/indexcmds.c:2342"
   - "postgres/src/backend/commands/indexcmds.c:2350"
   - "postgres/src/backend/commands/opclasscmds.c:203"
-reproduced: false
+reproduced: true
 ---
 
 # `operator class "%s" does not exist for access method "%s"`
@@ -30,10 +30,16 @@ Use an operator-class name that exists for the access method. List available cla
 
 ## Example
 
-*Illustrative* — a nonexistent operator class.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-CREATE INDEX ON t USING btree (c my_missing_ops);  -- no such btree operator class
+CREATE INDEX ON repro.child USING btree (amount nonexistent_opclass);
+```
+
+Produces:
+
+```text
+ERROR:  operator class "nonexistent_opclass" does not exist for access method "btree"
 ```
 
 ## Related

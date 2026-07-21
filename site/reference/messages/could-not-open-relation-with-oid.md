@@ -9,7 +9,7 @@ call_sites:
   - "postgres/src/backend/access/common/relation.c:116"
   - "postgres/src/backend/replication/logical/reorderbuffer.c:2492"
   - "postgres/src/backend/utils/cache/relcache.c:5615"
-reproduced: false
+reproduced: true
 ---
 
 # `could not open relation with OID %u`
@@ -28,10 +28,16 @@ If it coincides with concurrent DDL, retry — the relation was dropped. If it r
 
 ## Example
 
-*Illustrative* — a concurrently dropped relation.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT bt_index_check(999999999);
+```
+
+Produces:
 
 ```text
-ERROR:  could not open relation with OID 16450
+ERROR:  could not open relation with OID 999999999
 ```
 
 ## Related

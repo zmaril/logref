@@ -7,7 +7,7 @@ level: [DEBUG1]
 call_sites:
   - "postgres/src/backend/postmaster/bgworker.c:436"
   - "postgres/src/backend/postmaster/bgworker.c:1001"
-reproduced: false
+reproduced: true
 ---
 
 # `registering background worker "%s"`
@@ -26,10 +26,10 @@ This is startup tracing that confirms a module's worker was registered. No actio
 
 ## Example
 
-*Illustrative* — a preloaded extension registering its worker.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier4__logical_subscriber`). The site emits a background log record; the captured line was:
 
 ```text
-DEBUG:  registering background worker "my_extension worker"
+DEBUG:  registering background worker "logical replication apply worker for subscription 16392"
 ```
 
 ## Related

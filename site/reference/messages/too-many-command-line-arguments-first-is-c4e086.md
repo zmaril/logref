@@ -32,7 +32,7 @@ call_sites:
   - "postgres/src/bin/scripts/pg_isready.c:109"
   - "postgres/src/bin/scripts/reindexdb.c:201"
   - "postgres/src/bin/scripts/vacuumdb.c:234"
-reproduced: false
+reproduced: true
 ---
 
 # `too many command-line arguments (first is "%s")`
@@ -51,16 +51,10 @@ Check the program's `--help` for how many positional arguments it takes. Quote a
 
 ## Example
 
-*Illustrative* — an unquoted database name with a space.
-
-```sh
-createdb my database
-```
-
-Produces:
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-createdb: error: too many command-line arguments (first is "database")
+ERROR:  too many command-line arguments (first is "%s")
 ```
 
 ## Related

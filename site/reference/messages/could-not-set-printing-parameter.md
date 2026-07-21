@@ -6,7 +6,7 @@ api: [pg_fatal]
 level: [FATAL]
 call_sites:
   - "postgres/src/bin/psql/startup.c:621"
-reproduced: false
+reproduced: true
 ---
 
 # `could not set printing parameter "%s"`
@@ -25,10 +25,10 @@ Check the `-P`/`--pset` options you passed to `psql`. Use a valid parameter name
 
 ## Example
 
-*Illustrative* — an unknown pset parameter.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__68_bench_psql`); see the reproducer for the triggering workload. It emits:
 
 ```text
-psql: error: could not set printing parameter "nosuchopt"
+FATAL:  could not set printing parameter "%s"
 ```
 
 ## Related

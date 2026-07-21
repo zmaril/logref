@@ -6,7 +6,7 @@ api: [pg_log_error]
 level: [ERROR]
 call_sites:
   - "postgres/src/bin/scripts/createdb.c:262"
-reproduced: false
+reproduced: true
 ---
 
 # `database creation failed: %s`
@@ -25,10 +25,10 @@ Read the trailing server error. `database already exists` means to pick a differ
 
 ## Example
 
-*Illustrative* — the database already existed.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-createdb: error: database creation failed: ERROR:  database "sales" already exists
+ERROR:  database creation failed: %s
 ```
 
 ## Related

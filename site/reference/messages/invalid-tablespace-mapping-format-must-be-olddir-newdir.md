@@ -7,7 +7,7 @@ level: [FATAL]
 call_sites:
   - "postgres/src/bin/pg_basebackup/pg_basebackup.c:348"
   - "postgres/src/bin/pg_combinebackup/pg_combinebackup.c:491"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid tablespace mapping format "%s", must be "OLDDIR=NEWDIR"`
@@ -26,10 +26,10 @@ Pass the mapping as `OLDDIR=NEWDIR`, with both absolute paths present and a sing
 
 ## Example
 
-*Illustrative* — a mapping missing the '=' separator.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-FATAL:  invalid tablespace mapping format "/old /new", must be "OLDDIR=NEWDIR"
+FATAL:  invalid tablespace mapping format "%s", must be "OLDDIR=NEWDIR"
 ```
 
 ## Related

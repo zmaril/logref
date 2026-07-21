@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:22810"
-reproduced: false
+reproduced: true
 ---
 
 # `column data type %s does not support compression`
@@ -28,11 +28,16 @@ Set compression only on variable-length types such as `text`, `bytea`, or `jsonb
 
 ## Example
 
-*Illustrative* — compression on an unsupported type.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-ALTER TABLE t ALTER COLUMN i SET COMPRESSION lz4;
--- ERROR:  column data type integer does not support compression
+ALTER TABLE repro.at ALTER COLUMN a SET COMPRESSION nonsense;
+```
+
+Produces:
+
+```text
+ERROR:  column data type integer does not support compression
 ```
 
 ## Related

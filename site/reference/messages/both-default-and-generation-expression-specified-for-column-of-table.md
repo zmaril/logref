@@ -9,7 +9,7 @@ sqlstate:
     code: "42601"
 call_sites:
   - "postgres/src/backend/parser/parse_utilcmd.c:975"
-reproduced: false
+reproduced: true
 ---
 
 # `both default and generation expression specified for column "%s" of table "%s"`
@@ -28,10 +28,16 @@ Choose one. Keep `DEFAULT` for a plain column whose value can be supplied or def
 
 ## Example
 
-*Illustrative* — default and generation on one column.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-CREATE TABLE t (a int, b int DEFAULT 0 GENERATED ALWAYS AS (a + 1) STORED);
+CREATE TABLE repro.ct10 (a int DEFAULT 1 GENERATED ALWAYS AS (2) STORED);
+```
+
+Produces:
+
+```text
+ERROR:  both default and generation expression specified for column "a" of table "ct10"
 ```
 
 ## Related

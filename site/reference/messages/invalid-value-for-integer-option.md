@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/contrib/postgres_fdw/option.c:172"
   - "postgres/src/backend/access/common/reloptions.c:1739"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid value for integer option "%s": %s`
@@ -29,10 +29,16 @@ Give the option a whole-number value within its documented range. Remove decimal
 
 ## Example
 
-*Illustrative* — a non-integer value for an integer option.
+*Reproduced* — captured from `reproducers/scenarios/65_contrib_fdw_dblink_crypto.sql`.
 
 ```sql
-OPTIONS ( fetch_size '1.5' )  -- expects an integer
+CREATE SERVER repro_fp3 FOREIGN DATA WRAPPER postgres_fdw OPTIONS (fetch_size 'abc');
+```
+
+Produces:
+
+```text
+ERROR:  invalid value for integer option "fetch_size": abc
 ```
 
 ## Related

@@ -34,7 +34,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/numeric.c:2025"
   - "postgres/src/backend/utils/adt/varbit.c:1193"
   - "postgres/src/backend/utils/adt/varlena.c:873"
-reproduced: false
+reproduced: true
 ---
 
 # `integer out of range`
@@ -53,10 +53,10 @@ Use `bigint` for the column or the expression, or compute the arithmetic in `big
 
 ## Example
 
-*Illustrative* — A 32-bit cast that overflows.
+*Reproduced* — captured from `reproducers/scenarios/30_type_io_numeric_int.sql`.
 
 ```sql
-SELECT 2147483648::int4;
+SELECT gcd((-2147483648)::int4, 0);
 ```
 
 Produces:

@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/tablecmds.c:20765"
   - "postgres/src/backend/commands/typecmds.c:2379"
   - "postgres/src/backend/parser/analyze.c:1503"
-reproduced: false
+reproduced: true
 ---
 
 # `data type %s has no default operator class for access method "%s"`
@@ -32,10 +32,16 @@ Name a specific operator class in the index if a non-default one exists (`CREATE
 
 ## Example
 
-*Illustrative* — no default opclass for the chosen AM.
+*Reproduced* — captured from `reproducers/scenarios/43_contrib_fdw_indexam.sql`.
 
 ```sql
-CREATE INDEX ON t USING gin (a);  -- when a's type has no gin default opclass
+CREATE INDEX amt_btgin ON repro.amt USING gin (id) ;
+```
+
+Produces:
+
+```text
+ERROR:  data type integer has no default operator class for access method "gin"
 ```
 
 ## Related

@@ -21,7 +21,7 @@ call_sites:
   - "postgres/src/backend/commands/user.c:874"
   - "postgres/src/backend/commands/user.c:1037"
   - "postgres/src/backend/commands/user.c:1048"
-reproduced: false
+reproduced: true
 ---
 
 # `permission denied to alter role`
@@ -40,10 +40,10 @@ Perform the change as a role with sufficient rights — a superuser, or a role w
 
 ## Example
 
-*Illustrative* — a non-privileged role altering another.
+*Reproduced* — captured from `reproducers/scenarios/48_roles_membership_reserved.sql`.
 
 ```sql
-ALTER ROLE admin CREATEDB;   -- run by an ordinary role
+ALTER ROLE acl_m1 NOLOGIN;
 ```
 
 Produces:

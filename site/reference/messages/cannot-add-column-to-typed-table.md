@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:7339"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot add column to typed table`
@@ -28,10 +28,16 @@ Add the attribute to the underlying composite type with `ALTER TYPE sometype ADD
 
 ## Example
 
-*Illustrative* — adding a column to a typed table.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-ALTER TABLE my_typed_table ADD COLUMN extra int;
+ALTER TABLE s35.typedtab ADD COLUMN q int;
+```
+
+Produces:
+
+```text
+ERROR:  cannot add column to typed table
 ```
 
 ## Related

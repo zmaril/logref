@@ -28,7 +28,7 @@ call_sites:
   - "postgres/src/backend/replication/walsender.c:1240"
   - "postgres/src/backend/replication/walsender.c:1491"
   - "postgres/src/backend/replication/walsender.c:1500"
-reproduced: false
+reproduced: true
 ---
 
 # `conflicting or redundant options`
@@ -47,10 +47,10 @@ Remove the duplicate, or keep only one of the conflicting options. The error usu
 
 ## Example
 
-*Illustrative* — contradictory volatility markers on a function.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-CREATE FUNCTION f() RETURNS int IMMUTABLE VOLATILE AS 'SELECT 1' LANGUAGE sql;
+CREATE COLLATION s37.c4 (LOCALE = 'C', LC_CTYPE = 'C');
 ```
 
 Produces:

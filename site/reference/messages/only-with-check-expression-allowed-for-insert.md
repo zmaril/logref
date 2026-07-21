@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/policy.c:622"
   - "postgres/src/backend/commands/policy.c:925"
-reproduced: false
+reproduced: true
 ---
 
 # `only WITH CHECK expression allowed for INSERT`
@@ -29,10 +29,16 @@ Use `WITH CHECK (...)` for `INSERT` policies to validate the incoming row. Reser
 
 ## Example
 
-*Illustrative* — a USING clause on an INSERT policy.
+*Reproduced* — captured from `reproducers/scenarios/49_rls_policies_defaclr.sql`.
 
 ```sql
-CREATE POLICY p ON t FOR INSERT USING (owner = current_user);  -- use WITH CHECK
+CREATE POLICY p_ins ON acl49.t FOR INSERT USING (a > 0);
+```
+
+Produces:
+
+```text
+ERROR:  only WITH CHECK expression allowed for INSERT
 ```
 
 ## Related

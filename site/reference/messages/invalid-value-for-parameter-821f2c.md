@@ -18,7 +18,7 @@ call_sites:
   - "postgres/src/common/percentrepl.c:83"
   - "postgres/src/common/percentrepl.c:118"
   - "postgres/src/common/percentrepl.c:122"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid value for parameter "%s": "%s"`
@@ -37,17 +37,16 @@ Use a value the parameter accepts; the message names the parameter. For enum GUC
 
 ## Example
 
-*Illustrative* — a bad enum value for a GUC.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-SET log_statement = 'sometimes';
+SET seq_page_cost = 'x';
 ```
 
 Produces:
 
 ```text
-ERROR:  invalid value for parameter "log_statement": "sometimes"
-HINT:  Available values: none, ddl, mod, all.
+ERROR:  invalid value for parameter "seq_page_cost": "x"
 ```
 
 ## Related

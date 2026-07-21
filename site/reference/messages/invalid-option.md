@@ -17,7 +17,7 @@ call_sites:
   - "postgres/contrib/postgres_fdw/option.c:105"
   - "postgres/contrib/postgres_fdw/postgres_fdw.c:6368"
   - "postgres/src/backend/foreign/foreign.c:690"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid option "%s"`
@@ -36,10 +36,16 @@ Check the accepted option names for the specific wrapper or command and correct 
 
 ## Example
 
-*Illustrative* — an unknown FDW option.
+*Reproduced* — captured from `reproducers/scenarios/43_contrib_fdw_indexam.sql`.
 
 ```sql
-CREATE SERVER s FOREIGN DATA WRAPPER postgres_fdw OPTIONS (hostname 'db');  -- option is host
+CREATE SERVER pgfdw2 FOREIGN DATA WRAPPER postgres_fdw OPTIONS (nonsense_option 'x');
+```
+
+Produces:
+
+```text
+ERROR:  invalid option "nonsense_option"
 ```
 
 ## Related

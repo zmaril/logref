@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/user.c:304"
   - "postgres/src/backend/commands/user.c:744"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid connection limit: %d`
@@ -29,10 +29,16 @@ Pass `-1` for no limit or a value of `0` or greater to cap concurrent connection
 
 ## Example
 
-*Illustrative* — a limit below the allowed floor.
+*Reproduced* — captured from `reproducers/scenarios/33_grant_roles_coerce_dml.sql`.
 
 ```sql
-ALTER ROLE app CONNECTION LIMIT -5;  -- use -1 or >= 0
+CREATE ROLE r_conn CONNECTION LIMIT -5 LOGIN;
+```
+
+Produces:
+
+```text
+ERROR:  invalid connection limit: -5
 ```
 
 ## Related

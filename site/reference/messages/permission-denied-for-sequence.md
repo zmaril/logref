@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/sequence.c:921"
   - "postgres/src/backend/commands/sequence.c:962"
   - "postgres/src/backend/commands/sequence.c:1756"
-reproduced: false
+reproduced: true
 ---
 
 # `permission denied for sequence %s`
@@ -32,10 +32,16 @@ Grant the needed privilege on the sequence: `GRANT USAGE ON SEQUENCE seq TO role
 
 ## Example
 
-*Illustrative* — nextval without USAGE.
+*Reproduced* — captured from `reproducers/scenarios/47_permission_denied_objtypes.sql`.
 
 ```sql
-SELECT nextval('orders_id_seq');
+SELECT nextval('acl47.s');
+```
+
+Produces:
+
+```text
+ERROR:  permission denied for sequence s
 ```
 
 ## Related

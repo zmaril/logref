@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/oracle_compat.c:302"
   - "postgres/src/backend/utils/adt/oracle_compat.c:862"
   - "postgres/src/backend/utils/adt/oracle_compat.c:1165"
-reproduced: false
+reproduced: true
 ---
 
 # `requested length too large`
@@ -34,10 +34,16 @@ Request a smaller length, or read the data in chunks using the offset/length arg
 
 ## Example
 
-*Illustrative* — reading too much at once.
+*Reproduced* — captured from `reproducers/scenarios/17_strings_format_regex.sql`.
 
 ```sql
-SELECT pg_read_file('big.txt', 0, 2000000000);
+SELECT rpad('x', 2000000000, 'yyyy');
+```
+
+Produces:
+
+```text
+ERROR:  requested length too large
 ```
 
 ## Related

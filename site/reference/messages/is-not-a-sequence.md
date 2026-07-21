@@ -18,7 +18,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/acl.c:2250"
   - "postgres/src/backend/utils/adt/acl.c:2281"
   - "postgres/src/backend/utils/adt/acl.c:2312"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not a sequence`
@@ -37,16 +37,16 @@ Point the operation at a real sequence. If you meant the sequence backing a seri
 
 ## Example
 
-*Illustrative* — nextval on a table.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-SELECT nextval('users');
+SELECT nextval('repro.child_v');
 ```
 
 Produces:
 
 ```text
-ERROR:  "users" is not a sequence
+ERROR:  "child_v" is not a sequence
 ```
 
 ## Related

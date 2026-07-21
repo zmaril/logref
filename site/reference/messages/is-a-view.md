@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/trigger.c:275"
   - "postgres/src/backend/commands/trigger.c:282"
   - "postgres/src/backend/commands/trigger.c:458"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is a view`
@@ -30,10 +30,16 @@ If you meant a table, correct the name or schema. If the operation makes sense o
 
 ## Example
 
-*Illustrative* — a table-only operation on a view.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-CREATE TRIGGER t AFTER INSERT ON my_view ...;  -- "my_view" is a view
+CREATE TRIGGER trg AFTER INSERT ON repro.child_v FOR EACH ROW EXECUTE FUNCTION repro.addone();
+```
+
+Produces:
+
+```text
+ERROR:  "child_v" is a view
 ```
 
 ## Related

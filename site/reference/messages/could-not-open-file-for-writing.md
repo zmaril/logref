@@ -9,7 +9,7 @@ call_sites:
   - "postgres/src/bin/initdb/initdb.c:743"
   - "postgres/src/bin/initdb/initdb.c:1051"
   - "postgres/src/bin/initdb/initdb.c:1071"
-reproduced: false
+reproduced: true
 ---
 
 # `could not open file "%s" for writing: %m`
@@ -28,10 +28,16 @@ Read the `%m` text. For `Permission denied`, the server operating-system user mu
 
 ## Example
 
-*Illustrative* — a server-side COPY to an unwritable path.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
+
+```sql
+COPY repro.parent TO '/nonexistent_dir/x.csv';
+```
+
+Produces:
 
 ```text
-ERROR:  could not open file "/var/out.csv" for writing: Permission denied
+ERROR:  could not open file "/nonexistent_dir/x.csv" for writing: No such file or directory
 ```
 
 ## Related

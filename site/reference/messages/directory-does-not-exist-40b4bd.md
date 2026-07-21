@@ -9,7 +9,7 @@ sqlstate:
     code: "58P01"
 call_sites:
   - "postgres/src/backend/commands/tablespace.c:617"
-reproduced: false
+reproduced: true
 ---
 
 # `directory "%s" does not exist`
@@ -28,11 +28,16 @@ Create the directory on the database server host before running `CREATE TABLESPA
 
 ## Example
 
-*Illustrative* — a missing tablespace directory.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-CREATE TABLESPACE ts LOCATION '/data/missing';
--- directory "/data/missing" does not exist
+CREATE TABLESPACE nonexistent_ts LOCATION '/nonexistent/path';
+```
+
+Produces:
+
+```text
+ERROR:  directory "/nonexistent/path" does not exist
 ```
 
 ## Related

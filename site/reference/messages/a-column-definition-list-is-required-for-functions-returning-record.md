@@ -9,7 +9,7 @@ sqlstate:
     code: "42601"
 call_sites:
   - "postgres/src/backend/parser/parse_relation.c:1892"
-reproduced: false
+reproduced: true
 ---
 
 # `a column definition list is required for functions returning "record"`
@@ -28,10 +28,16 @@ Add a column-definition list that names and types each output column: `SELECT * 
 
 ## Example
 
-*Illustrative* — a record-returning function missing its column list.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT * FROM json_to_record('{"id":1}');  -- ERROR: a column definition list is required
+SELECT * FROM json_to_record('{"a":1}') AS x;
+```
+
+Produces:
+
+```text
+ERROR:  a column definition list is required for functions returning "record"
 ```
 
 ## Related

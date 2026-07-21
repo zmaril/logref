@@ -16,7 +16,7 @@ call_sites:
   - "postgres/src/backend/utils/misc/guc.c:3847"
   - "postgres/src/backend/utils/misc/guc.c:3972"
   - "postgres/src/backend/utils/misc/guc.c:4111"
-reproduced: false
+reproduced: true
 ---
 
 # `parameter "%s" cannot be changed without restarting the server`
@@ -35,10 +35,16 @@ Restart the server for the change to take effect — a reload is not enough for 
 
 ## Example
 
-*Illustrative* — reloading after changing a restart-only GUC.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
+
+```sql
+SELECT set_config('shared_buffers', '1', false);
+```
+
+Produces:
 
 ```text
-LOG:  parameter "shared_buffers" cannot be changed without restarting the server
+ERROR:  parameter "shared_buffers" cannot be changed without restarting the server
 ```
 
 ## Related

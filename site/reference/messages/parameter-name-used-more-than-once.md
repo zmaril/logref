@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:398"
   - "postgres/src/pl/plpgsql/src/pl_comp.c:931"
-reproduced: false
+reproduced: true
 ---
 
 # `parameter name "%s" used more than once`
@@ -29,10 +29,16 @@ Remove the duplicate so each parameter name appears once. If you meant to change
 
 ## Example
 
-*Illustrative* — an option list repeating a key.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
+
+```sql
+CREATE FUNCTION repro.f_dupparam(a int, a int) RETURNS int LANGUAGE sql AS 'SELECT 1';
+```
+
+Produces:
 
 ```text
-ERROR:  parameter name "host" used more than once
+ERROR:  parameter name "a" used more than once
 ```
 
 ## Related

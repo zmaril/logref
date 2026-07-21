@@ -18,7 +18,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:1547"
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:1579"
   - "postgres/src/backend/utils/adt/jsonpath_exec.c:1603"
-reproduced: false
+reproduced: true
 ---
 
 # `argument "%s" of jsonpath item method .%s() is invalid for type %s`
@@ -37,16 +37,16 @@ Apply the method only to items of the appropriate JSON type — filter with a ty
 
 ## Example
 
-*Illustrative* — a numeric method on a non-numeric item.
+*Reproduced* — captured from `reproducers/scenarios/19_json_sqljson.sql`.
 
 ```sql
-SELECT jsonb_path_query('{"a":true}', '$.a.double()');
+SELECT jsonb_path_query('"abc"', '$.bigint()');
 ```
 
 Produces:
 
 ```text
-ERROR:  argument "true" of jsonpath item method .double() is invalid for type double precision
+ERROR:  argument "abc" of jsonpath item method .bigint() is invalid for type bigint
 ```
 
 ## Related

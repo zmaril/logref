@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/executor/nodeModifyTable.c:3073"
   - "postgres/src/backend/executor/nodeModifyTable.c:3794"
   - "postgres/src/backend/executor/nodeModifyTable.c:3991"
-reproduced: false
+reproduced: true
 ---
 
 # `%s command cannot affect row a second time`
@@ -30,10 +30,16 @@ Deduplicate the source so each target row is affected at most once: aggregate or
 
 ## Example
 
-*Illustrative* — a source matching one target row twice.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
 
 ```sql
-MERGE INTO t USING (VALUES (1),(1)) s(id) ON t.id=s.id WHEN MATCHED THEN UPDATE SET ...;
+MERGE INTO repro.child_v c USING repro.parent p ON true WHEN MATCHED THEN DELETE;
+```
+
+Produces:
+
+```text
+ERROR:  MERGE command cannot affect row a second time
 ```
 
 ## Related

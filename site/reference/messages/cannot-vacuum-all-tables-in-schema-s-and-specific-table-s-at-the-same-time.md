@@ -6,7 +6,7 @@ api: [pg_fatal]
 level: [FATAL]
 call_sites:
   - "postgres/src/bin/scripts/vacuumdb.c:335"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot vacuum all tables in schema(s) and specific table(s) at the same time`
@@ -25,10 +25,10 @@ Use one selection. Vacuum whole schemas with `--schema`, or name individual tabl
 
 ## Example
 
-*Illustrative* — schema and table selections together.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-vacuumdb: error: cannot vacuum all tables in schema(s) and specific table(s) at the same time
+FATAL:  cannot vacuum all tables in schema(s) and specific table(s) at the same time
 ```
 
 ## Related

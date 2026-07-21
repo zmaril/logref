@@ -9,7 +9,7 @@ sqlstate:
     code: "42P19"
 call_sites:
   - "postgres/src/backend/parser/parse_agg.c:1351"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate functions are not allowed in a recursive query's recursive term`
@@ -28,14 +28,16 @@ Remove the aggregate from the recursive term. Do the recursion without aggregati
 
 ## Example
 
-*Illustrative* — an aggregate in the recursive term.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-WITH RECURSIVE r AS (
-  SELECT 1
-  UNION ALL
-  SELECT sum(n) FROM r  -- ERROR: aggregate in recursive term
-) SELECT * FROM r;
+WITH RECURSIVE t(n) AS (SELECT 1 UNION ALL SELECT count(*) FROM t) SELECT * FROM t;
+```
+
+Produces:
+
+```text
+ERROR:  aggregate functions are not allowed in a recursive query's recursive term
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/access/transam/xact.c:2668"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot PREPARE a transaction that has exported snapshots`
@@ -28,7 +28,13 @@ Do not export snapshots in transactions that use two-phase commit. Let any snaps
 
 ## Example
 
-*Illustrative* — PREPARE after exporting a snapshot.
+*Reproduced* — captured from `reproducers/scenarios/51_twophase_prepare.sql`.
+
+```sql
+PREPARE TRANSACTION 'g_snap';
+```
+
+Produces:
 
 ```text
 ERROR:  cannot PREPARE a transaction that has exported snapshots

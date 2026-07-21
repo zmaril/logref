@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/user.c:1105"
   - "postgres/src/backend/commands/user.c:1176"
   - "postgres/src/backend/commands/user.c:1182"
-reproduced: false
+reproduced: true
 ---
 
 # `permission denied to drop role`
@@ -30,10 +30,16 @@ Perform the drop as a role with sufficient authority — one holding `CREATEROLE
 
 ## Example
 
-*Illustrative* — dropping a role without the needed privilege.
+*Reproduced* — captured from `reproducers/scenarios/48_roles_membership_reserved.sql`.
 
 ```sql
-DROP ROLE some_role;  -- requires CREATEROLE and admin over the target
+DROP ROLE acl_m1;
+```
+
+Produces:
+
+```text
+ERROR:  permission denied to drop role
 ```
 
 ## Related

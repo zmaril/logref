@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/pg_enum.c:361"
   - "postgres/src/backend/catalog/pg_enum.c:679"
-reproduced: false
+reproduced: true
 ---
 
 # `enum label "%s" already exists`
@@ -29,10 +29,16 @@ Use `ADD VALUE IF NOT EXISTS` to make it idempotent, or choose a label name not 
 
 ## Example
 
-*Illustrative* — adding a label that already exists.
+*Reproduced* — captured from `reproducers/scenarios/20_network_geo_enum_ts_xml.sql`.
+
+```sql
+ALTER TYPE repro.mood ADD VALUE 'ok';
+```
+
+Produces:
 
 ```text
-ERROR:  enum label "happy" already exists
+ERROR:  enum label "ok" already exists
 ```
 
 ## Related

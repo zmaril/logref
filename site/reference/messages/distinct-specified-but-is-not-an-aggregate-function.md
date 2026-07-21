@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:325"
-reproduced: false
+reproduced: true
 ---
 
 # `DISTINCT specified, but %s is not an aggregate function`
@@ -28,11 +28,16 @@ Remove `DISTINCT` from the argument list of the non-aggregate call. If you meant
 
 ## Example
 
-*Illustrative* — `DISTINCT` on a scalar function.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT lower(DISTINCT name) FROM t;
--- DISTINCT specified, but lower is not an aggregate function
+SELECT abs(DISTINCT 1);
+```
+
+Produces:
+
+```text
+ERROR:  DISTINCT specified, but abs is not an aggregate function
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/optimizer/plan/initsplan.c:2189"
-reproduced: false
+reproduced: true
 ---
 
 # `%s cannot be applied to the nullable side of an outer join`
@@ -28,10 +28,16 @@ Lock only tables on the non-nullable side of the join, or restructure the query 
 
 ## Example
 
-*Illustrative* — locking the outer side.
+*Reproduced* — captured from `reproducers/scenarios/52_locks_rowmarks_advisory.sql`.
 
 ```sql
-SELECT * FROM a LEFT JOIN b USING (id) FOR UPDATE OF b;
+SELECT p.id FROM repro.parent p LEFT JOIN repro.child c ON c.parent_id = p.id FOR UPDATE OF c;
+```
+
+Produces:
+
+```text
+ERROR:  FOR UPDATE cannot be applied to the nullable side of an outer join
 ```
 
 ## Related

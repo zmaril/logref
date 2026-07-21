@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:22853"
-reproduced: false
+reproduced: true
 ---
 
 # `column data type %s can only have storage PLAIN`
@@ -28,11 +28,16 @@ Leave the storage mode as `PLAIN` for fixed-length types, or set alternative sto
 
 ## Example
 
-*Illustrative* — non-PLAIN storage on a fixed-length type.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-ALTER TABLE t ALTER COLUMN i SET STORAGE EXTENDED;
--- ERROR:  column data type integer can only have storage PLAIN
+ALTER TABLE repro.at ALTER COLUMN a SET STORAGE MAIN;
+```
+
+Produces:
+
+```text
+ERROR:  column data type integer can only have storage PLAIN
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/typecmds.c:1548"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot specify a canonical function without a pre-created shell type`
@@ -28,7 +28,13 @@ Create the shell type first with `CREATE TYPE name;`, define the canonical funct
 
 ## Example
 
-*Illustrative* — a canonical function without a shell type.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE TYPE repro.rng_canon AS RANGE (SUBTYPE = int, CANONICAL = nosuchcanon);
+```
+
+Produces:
 
 ```text
 ERROR:  cannot specify a canonical function without a pre-created shell type

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/json.c:1094"
   - "postgres/src/backend/utils/adt/json.c:1265"
-reproduced: false
+reproduced: true
 ---
 
 # `duplicate JSON object key value: %s`
@@ -29,10 +29,16 @@ Ensure object keys are unique in the input, or de-duplicate before building the 
 
 ## Example
 
-*Illustrative* — a repeated key during JSON construction.
+*Reproduced* — captured from `reproducers/scenarios/19_json_sqljson.sql`.
+
+```sql
+SELECT JSON_OBJECT('a': 1, 'a': 2 WITH UNIQUE);
+```
+
+Produces:
 
 ```text
-ERROR:  duplicate JSON object key value: color
+ERROR:  duplicate JSON object key value: "a"
 ```
 
 ## Related

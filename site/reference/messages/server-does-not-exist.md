@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/foreigncmds.c:1097"
   - "postgres/src/backend/commands/foreigncmds.c:1460"
   - "postgres/src/backend/foreign/foreign.c:743"
-reproduced: false
+reproduced: true
 ---
 
 # `server "%s" does not exist`
@@ -32,10 +32,16 @@ List foreign servers with `\des` in psql or `SELECT srvname FROM pg_foreign_serv
 
 ## Example
 
-*Illustrative* — a user mapping for a missing server.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-CREATE USER MAPPING FOR app SERVER no_such_server OPTIONS (user 'u');
+DROP SERVER nosuchserver;
+```
+
+Produces:
+
+```text
+ERROR:  server "nosuchserver" does not exist
 ```
 
 ## Related

@@ -15,7 +15,7 @@ call_sites:
   - "postgres/contrib/pg_freespacemap/pg_freespacemap.c:45"
   - "postgres/contrib/pg_visibility/pg_visibility.c:101"
   - "postgres/contrib/pg_visibility/pg_visibility.c:142"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid block number`
@@ -34,16 +34,16 @@ Query the relation's page count first — `pg_relation_size(rel) / current_setti
 
 ## Example
 
-*Illustrative* — inspecting a block past the end.
+*Reproduced* — captured from `reproducers/scenarios/64_contrib_inspect_deep.sql`.
 
 ```sql
-SELECT * FROM page_header(get_raw_page('t', 99999));
+SELECT get_raw_page('repro.parent', -1);
 ```
 
 Produces:
 
 ```text
-ERROR:  invalid block number 99999
+ERROR:  invalid block number
 ```
 
 ## Related

@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/statscmds.c:704"
   - "postgres/src/backend/commands/tablecmds.c:9090"
-reproduced: false
+reproduced: true
 ---
 
 # `lowering statistics target to %d`
@@ -29,7 +29,13 @@ Usually no action is needed — the reduced target still produces statistics. If
 
 ## Example
 
-*Illustrative* — clamping a statistics target.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
+
+```sql
+ALTER TABLE repro.at ALTER COLUMN a SET STATISTICS 100000;
+```
+
+Produces:
 
 ```text
 WARNING:  lowering statistics target to 10000

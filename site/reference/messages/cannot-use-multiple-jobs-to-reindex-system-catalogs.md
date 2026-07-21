@@ -6,7 +6,7 @@ api: [pg_fatal]
 level: [FATAL]
 call_sites:
   - "postgres/src/bin/scripts/reindexdb.c:217"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use multiple jobs to reindex system catalogs`
@@ -25,10 +25,10 @@ Drop `--jobs` when reindexing system catalogs, or reindex user tables in paralle
 
 ## Example
 
-*Illustrative* — parallel reindex of catalogs.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-reindexdb: error: cannot use multiple jobs to reindex system catalogs
+FATAL:  cannot use multiple jobs to reindex system catalogs
 ```
 
 ## Related
