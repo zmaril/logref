@@ -6,8 +6,10 @@
 # DEPLOY.md and the root .dockerignore.
 
 # Stage 1 — the wasm scanner: cargo (wasm32) + the pinned wasm-bindgen CLI.
+# binaryen provides wasm-opt for the size pass in build-wasm-web.sh (the alpine
+# package tracks its release cadence; the exact version only affects a few KB).
 FROM rust:1-alpine AS wasm
-RUN apk add --no-cache musl-dev bash curl
+RUN apk add --no-cache musl-dev bash curl binaryen
 # Must match the wasm-bindgen crate version in Cargo.lock (the CLI refuses a
 # module built against a different version). Prebuilt musl binary when the
 # builder is x86_64; cargo install fallback otherwise.
@@ -22,7 +24,9 @@ WORKDIR /repo
 COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates
 COPY scripts/build-wasm-web.sh ./scripts/build-wasm-web.sh
-RUN mkdir -p site/src && bash scripts/build-wasm-web.sh
+# WASM_OPT_REQUIRED: the production image must never silently ship the
+# unoptimized module — the build fails if wasm-opt is missing.
+RUN mkdir -p site/src && WASM_OPT_REQUIRED=1 bash scripts/build-wasm-web.sh
 
 # Stage 2 — generate the static bundle into /repo/site/dist with Bun.
 FROM oven/bun:1-alpine AS build
