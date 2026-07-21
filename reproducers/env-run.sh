@@ -39,16 +39,8 @@ export PGPORT_NEXT=55990
 
 # collect <tier> <scenario> <datadir> — copy a cluster's jsonlog into caps/,
 # tagged, so env-coverage.py can attribute sites to the tier that fired them.
-collect() {
-    local tier="$1" scen="$2" datadir="$3"
-    local src; src="$(jsonlog_of "$datadir")"
-    if [ -n "$src" ] && [ -f "$src" ]; then
-        cp "$src" "$CAPS/${tier}__${scen}.json"
-        log "  captured $(wc -l <"$src") lines -> ${tier}__${scen}.json"
-    else
-        log "  no jsonlog for $scen (cluster may not have booted)"
-    fi
-}
+# The implementation is shared from lib.sh (sourced above); every capture driver
+# needs the identical helper.
 
 # ---------------------------------------------------------------------------
 # Tier 3 — configuration & GUC.

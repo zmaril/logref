@@ -44,7 +44,7 @@ init_cluster() {
     apply_logging_conf "$datadir/postgresql.conf"
     PGPORT="${PGPORT_NEXT:-55990}"
     PGPORT_NEXT=$((PGPORT + 1))
-    PGSOCK="$(dirname "$datadir")/sock-$(basename "$datadir")"
+    PGSOCK="${PGSOCK:-$(mktemp -d /tmp/lrs.XXXXXX)}"
     mkdir -p "$PGSOCK"
     {
         echo "port = $PGPORT"
@@ -91,4 +91,42 @@ driver_env_setup() {
     LOG_LEVEL="${LOG_LEVEL:-debug1}"
     CAPS="$OUTDIR/caps"
     mkdir -p "$CAPS"
+}
+
+# collect <tier> <scenario> <datadir> — copy a cluster's jsonlog into caps/,
+# tagged "<tier>__<scenario>.json", so the coverage tooling can attribute the
+# sites it fired to the tier and scenario that provoked them. A no-op with a note
+# when the cluster produced no jsonlog (e.g. it never booted). Every capture
+# driver needs exactly this, so it lives here rather than being copied per driver.
+collect() {
+    local tier="$1" scen="$2" datadir="$3"
+    local src; src="$(jsonlog_of "$datadir")"
+    if [ -n "$src" ] && [ -f "$src" ]; then
+        cp "$src" "$CAPS/${tier}__${scen}.json"
+        log "  captured $(wc -l <"$src") lines -> ${tier}__${scen}.json"
+    else
+        log "  no jsonlog for $scen (cluster may not have booted)"
+    fi
+}
+
+# scenario_driver_init [default_log_level] — shared top matter for the standalone
+# Tier 4 scenario scripts (scenarios/54-57): default log_min_messages (debug5 for
+# a maximum-coverage pass unless the caller already exported LOG_LEVEL), run the
+# common driver bootstrap, and seed the port allocator. Collapses each scenario's
+# preamble to a single call.
+scenario_driver_init() {
+    export LOG_LEVEL="${LOG_LEVEL:-${1:-debug5}}"
+    driver_env_setup
+    export PGPORT_NEXT="${PGPORT_NEXT:-55990}"
+}
+
+# run_scenario <name> <fn> — invoke a scenario function under the "continue on
+# non-zero" discipline the Tier 4 scripts share (deliberately FATAL boots return
+# non-zero and must not abort the run), bracketed by the standard start/done
+# banner. Factored here so no two scenario scripts repeat the footer.
+run_scenario() {
+    local name="$1" fn="$2"
+    log "=== scenario: $name ==="
+    "$fn" || log "  scenario $name exited non-zero (continuing)"
+    log "done. scratch: $OUTDIR  caps: $CAPS"
 }
