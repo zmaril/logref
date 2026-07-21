@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/access/transam/xact.c:4587"
   - "postgres/src/backend/access/transam/xact.c:4647"
   - "postgres/src/backend/access/transam/xact.c:4696"
-reproduced: false
+reproduced: true
 ---
 
 # `savepoint "%s" does not exist`
@@ -31,11 +31,16 @@ Establish the savepoint with `SAVEPOINT name` before releasing or rolling back t
 
 ## Example
 
-*Illustrative* — rolling back to an unset savepoint.
+*Reproduced* — captured from `reproducers/scenarios/50_txn_control_savepoints.sql`.
 
 ```sql
-BEGIN;
-ROLLBACK TO SAVEPOINT sp;  -- savepoint "sp" does not exist
+RELEASE SAVEPOINT outer_sp;
+```
+
+Produces:
+
+```text
+ERROR:  savepoint "outer_sp" does not exist
 ```
 
 ## Related

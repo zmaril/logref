@@ -9,7 +9,7 @@ sqlstate:
     code: "F0000"
 call_sites:
   - "postgres/contrib/unaccent/unaccent.c:106"
-reproduced: false
+reproduced: true
 ---
 
 # `could not open unaccent file "%s": %m`
@@ -28,10 +28,16 @@ Confirm the `unaccent` rules file exists in the text-search data directory with 
 
 ## Example
 
-*Illustrative* — a missing unaccent rules file.
+*Reproduced* — captured from `reproducers/scenarios/63_contrib_dict_trigger.sql`.
+
+```sql
+CREATE TEXT SEARCH DICTIONARY repro_un1 (template = unaccent, rules = 'a', rules = 'b');
+```
+
+Produces:
 
 ```text
-ERROR:  could not open unaccent file "/usr/share/postgresql/tsearch_data/unaccent.rules": No such file or directory
+ERROR:  could not open unaccent file "/tmp/lr/install/share/postgresql/tsearch_data/a.rules": No such file or directory
 ```
 
 ## Related

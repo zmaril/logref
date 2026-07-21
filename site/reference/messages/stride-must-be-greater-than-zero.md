@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/timestamp.c:4646"
   - "postgres/src/backend/utils/adt/timestamp.c:4883"
-reproduced: false
+reproduced: true
 ---
 
 # `stride must be greater than zero`
@@ -29,7 +29,13 @@ Pass a positive interval as the stride, for example `'15 minutes'`. A zero or ne
 
 ## Example
 
-*Illustrative* — a non-positive date_bin stride.
+*Reproduced* — captured from `reproducers/scenarios/16_datetime_extended.sql`.
+
+```sql
+SELECT date_bin('0 seconds', now(), '2024-01-01'::timestamp);
+```
+
+Produces:
 
 ```text
 ERROR:  stride must be greater than zero

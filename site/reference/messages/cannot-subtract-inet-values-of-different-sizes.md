@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/utils/adt/network.c:1958"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot subtract inet values of different sizes`
@@ -28,11 +28,16 @@ Subtract only addresses of the same family. Check the inputs and cast or filter 
 
 ## Example
 
-*Illustrative* — mixing address families.
+*Reproduced* — captured from `reproducers/scenarios/32_type_io_net_geo_bit.sql`.
 
 ```sql
-SELECT inet '10.0.0.5' - inet '::1';
--- ERROR:  cannot subtract inet values of different sizes
+SELECT '1.2.3.4'::inet - '::1'::inet;
+```
+
+Produces:
+
+```text
+ERROR:  cannot subtract inet values of different sizes
 ```
 
 ## Related

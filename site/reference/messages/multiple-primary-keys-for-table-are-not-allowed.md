@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/index.c:219"
   - "postgres/src/backend/parser/parse_utilcmd.c:2356"
-reproduced: false
+reproduced: true
 ---
 
 # `multiple primary keys for table "%s" are not allowed`
@@ -29,10 +29,16 @@ Declare a single primary key. To key on several columns, use one composite `PRIM
 
 ## Example
 
-*Illustrative* — two primary keys in one table.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-CREATE TABLE t (a int PRIMARY KEY, b int PRIMARY KEY);  -- only one allowed
+CREATE TABLE repro.ct1 (a int, PRIMARY KEY (a), PRIMARY KEY (a));
+```
+
+Produces:
+
+```text
+ERROR:  multiple primary keys for table "ct1" are not allowed
 ```
 
 ## Related

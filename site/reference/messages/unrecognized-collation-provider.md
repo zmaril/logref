@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/collationcmds.c:228"
   - "postgres/src/bin/pg_dump/pg_dump.c:15091"
   - "postgres/src/bin/pg_dump/pg_dump.c:15159"
-reproduced: false
+reproduced: true
 ---
 
 # `unrecognized collation provider: %s`
@@ -30,10 +30,16 @@ Align the software versions. If it appears during restore, use a target server n
 
 ## Example
 
-*Illustrative* — an unknown collation provider.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
+
+```sql
+CREATE COLLATION s37.c3 (PROVIDER = nonesuch, LOCALE = 'C');
+```
+
+Produces:
 
 ```text
-ERROR:  unrecognized collation provider: x
+ERROR:  unrecognized collation provider: nonesuch
 ```
 
 ## Related

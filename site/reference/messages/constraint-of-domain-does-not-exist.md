@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/typecmds.c:2936"
   - "postgres/src/backend/commands/typecmds.c:3121"
-reproduced: false
+reproduced: true
 ---
 
 # `constraint "%s" of domain "%s" does not exist`
@@ -29,11 +29,16 @@ Inspect the domain's constraints with `\dD+ domain` in psql (or `pg_constraint`)
 
 ## Example
 
-*Illustrative* — dropping a missing domain constraint.
+*Reproduced* — captured from `reproducers/scenarios/28_typecmds_domain_comment.sql`.
 
 ```sql
-ALTER DOMAIN d DROP CONSTRAINT no_such;
--- ERROR:  constraint "no_such" of domain "d" does not exist
+ALTER DOMAIN repro.posint DROP CONSTRAINT nonexistent;
+```
+
+Produces:
+
+```text
+ERROR:  constraint "nonexistent" of domain "repro.posint" does not exist
 ```
 
 ## Related

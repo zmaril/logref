@@ -13,7 +13,7 @@ call_sites:
   - "postgres/contrib/pageinspect/btreefuncs.c:862"
   - "postgres/contrib/pageinspect/gistfuncs.c:222"
   - "postgres/contrib/pageinspect/hashfuncs.c:425"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not a %s index`
@@ -32,10 +32,16 @@ Pass an index of the exact type the function expects. Verify the object with `\d
 
 ## Example
 
-*Illustrative* — a non-BRIN index passed to a BRIN function.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT bt_metap('repro.parent');
+```
+
+Produces:
 
 ```text
-ERROR:  "t_pkey" is not a BRIN index
+ERROR:  "parent" is not a btree index
 ```
 
 ## Related

@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/executor/functions.c:2365"
   - "postgres/src/backend/executor/functions.c:2398"
   - "postgres/src/backend/executor/functions.c:2412"
-reproduced: false
+reproduced: true
 ---
 
 # `return type mismatch in function declared to return %s`
@@ -34,17 +34,16 @@ Make the body return exactly the declared type — cast the final expression, or
 
 ## Example
 
-*Illustrative* — a body returning the wrong type.
+*Reproduced* — captured from `reproducers/scenarios/26_roles_acl_plpgsql.sql`.
 
 ```sql
-CREATE FUNCTION f() RETURNS integer AS $$ SELECT 'x' $$ LANGUAGE sql;
+SELECT repro.polymatch(1);
 ```
 
 Produces:
 
 ```text
-ERROR:  return type mismatch in function declared to return integer
-DETAIL:  Actual return type is text.
+ERROR:  return type mismatch in function declared to return integer[]
 ```
 
 ## Related

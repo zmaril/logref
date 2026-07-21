@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_func.c:2311"
   - "postgres/src/backend/parser/parse_func.c:2588"
-reproduced: false
+reproduced: true
 ---
 
 # `function name "%s" is not unique`
@@ -29,10 +29,16 @@ Qualify the function with its argument types, for example `my_func(integer, text
 
 ## Example
 
-*Illustrative* — an ambiguous function name.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+DROP FUNCTION repro.ambi;
+```
+
+Produces:
 
 ```text
-ERROR:  function name "my_func" is not unique
+ERROR:  function name "repro.ambi" is not unique
 ```
 
 ## Related

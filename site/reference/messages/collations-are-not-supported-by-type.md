@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/parser/parse_type.c:566"
   - "postgres/src/backend/parser/parse_utilcmd.c:4383"
   - "postgres/src/backend/utils/adt/misc.c:601"
-reproduced: false
+reproduced: true
 ---
 
 # `collations are not supported by type %s`
@@ -34,10 +34,10 @@ Remove the `COLLATE` clause from non-string values — collation is meaningless 
 
 ## Example
 
-*Illustrative* — a COLLATE on an integer.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-SELECT 1 COLLATE "en_US";
+SELECT 1 COLLATE "C";
 ```
 
 Produces:

@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/varlena.c:610"
   - "postgres/src/backend/utils/adt/varlena.c:674"
   - "postgres/src/backend/utils/adt/varlena.c:869"
-reproduced: false
+reproduced: true
 ---
 
 # `negative substring length not allowed`
@@ -34,10 +34,10 @@ Ensure the length argument is non-negative. If it is computed, check the arithme
 
 ## Example
 
-*Illustrative* — a negative computed length.
+*Reproduced* — captured from `reproducers/scenarios/15_types_extended.sql`.
 
 ```sql
-SELECT substring('hello' FROM 3 FOR -1);
+SELECT overlay('101'::bit(3) placing '11'::bit(2) from 0);
 ```
 
 Produces:

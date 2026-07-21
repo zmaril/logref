@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/src/backend/commands/lockcmds.c:101"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot lock relation "%s"`
@@ -28,10 +28,16 @@ Lock an ordinary table, materialized view, or another lockable relation. If you 
 
 ## Example
 
-*Illustrative* — locking an unlockable object.
+*Reproduced* — captured from `reproducers/scenarios/39_cte_cursors_prepared_lock.sql`.
+
+```sql
+LOCK TABLE repro.churn_id_seq IN ACCESS SHARE MODE;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot lock relation "my_view"
+ERROR:  cannot lock relation "churn_id_seq"
 ```
 
 ## Related

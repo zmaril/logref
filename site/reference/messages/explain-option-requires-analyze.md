@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/commands/explain_state.c:189"
   - "postgres/src/backend/commands/explain_state.c:195"
   - "postgres/src/backend/commands/explain_state.c:201"
-reproduced: false
+reproduced: true
 ---
 
 # `EXPLAIN option %s requires ANALYZE`
@@ -31,10 +31,16 @@ Add `ANALYZE` to actually execute the statement and collect the run-time data: `
 
 ## Example
 
-*Illustrative* — a run-time option without ANALYZE.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-EXPLAIN (TIMING) SELECT 1;
+EXPLAIN (SERIALIZE, FORMAT text) SELECT 1;
+```
+
+Produces:
+
+```text
+ERROR:  EXPLAIN option SERIALIZE requires ANALYZE
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:20705"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use constant expression as partition key`
@@ -28,11 +28,16 @@ Use an expression that references one or more table columns, or a plain column, 
 
 ## Example
 
-*Illustrative* — a constant partition key.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-CREATE TABLE t (a int) PARTITION BY RANGE ((1));
--- ERROR:  cannot use constant expression as partition key
+CREATE TABLE s36.pk_const (a int) PARTITION BY RANGE ((1));
+```
+
+Produces:
+
+```text
+ERROR:  cannot use constant expression as partition key
 ```
 
 ## Related

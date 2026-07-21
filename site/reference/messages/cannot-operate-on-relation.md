@@ -9,7 +9,7 @@ sqlstate:
     code: "42809"
 call_sites:
   - "postgres/contrib/pg_surgery/heap_surgery.c:112"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot operate on relation "%s"`
@@ -28,10 +28,16 @@ Run the surgery function against a regular heap table. These functions are last-
 
 ## Example
 
-*Illustrative* — pg_surgery on an unsupported object.
+*Reproduced* — captured from `reproducers/scenarios/42_contrib_inspection.sql`.
+
+```sql
+SELECT heap_force_kill('repro.child_v', ARRAY['(0,1)']::tid[]);
+```
+
+Produces:
 
 ```text
-ERROR:  cannot operate on relation "my_index"
+ERROR:  cannot operate on relation "child_v"
 ```
 
 ## Related

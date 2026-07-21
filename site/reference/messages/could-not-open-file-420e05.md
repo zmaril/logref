@@ -107,7 +107,7 @@ call_sites:
   - "postgres/src/common/file_utils.c:428"
   - "postgres/src/common/file_utils.c:502"
   - "postgres/src/fe_utils/recovery_gen.c:141"
-reproduced: false
+reproduced: true
 ---
 
 # `could not open file "%s": %m`
@@ -126,10 +126,10 @@ Read the `%m` text first — it tells you which failure it was. For `Permission 
 
 ## Example
 
-*Illustrative* — a data file whose permissions were changed.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier4__replication_standby`). The site emits a background log record; the captured line was:
 
 ```text
-ERROR:  could not open file "base/16384/1259": Permission denied
+DEBUG:  could not open file "pg_wal/000000010000000000000004": No such file or directory
 ```
 
 ## Related

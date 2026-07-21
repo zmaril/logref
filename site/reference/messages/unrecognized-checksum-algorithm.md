@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/backup/basebackup.c:870"
   - "postgres/src/bin/pg_combinebackup/pg_combinebackup.c:205"
-reproduced: false
+reproduced: true
 ---
 
 # `unrecognized checksum algorithm: "%s"`
@@ -29,10 +29,10 @@ Use one of the supported algorithm names — `NONE`, `CRC32C`, `SHA224`, `SHA256
 
 ## Example
 
-*Illustrative* — an unsupported checksum name.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-ERROR:  unrecognized checksum algorithm: "sha3"
+FATAL:  unrecognized checksum algorithm: "%s"
 ```
 
 ## Related

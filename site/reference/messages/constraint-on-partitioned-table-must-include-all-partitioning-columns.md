@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/indexcmds.c:1105"
-reproduced: false
+reproduced: true
 ---
 
 # `%s constraint on partitioned table must include all partitioning columns`
@@ -28,11 +28,10 @@ Add every partitioning column to the constraint's column list. If you need uniqu
 
 ## Example
 
-*Illustrative* — a primary key missing a partition column.
+*Reproduced* — this site fired under `reproducers/scenarios/61_pub_sub.sh`; see the reproducer for the triggering workload. It emits:
 
-```sql
-CREATE TABLE t (a int, b int, PRIMARY KEY (a)) PARTITION BY RANGE (b);
--- ERROR:  PRIMARY KEY constraint on partitioned table must include all partitioning columns
+```text
+ERROR:  %s constraint on partitioned table must include all partitioning columns
 ```
 
 ## Related

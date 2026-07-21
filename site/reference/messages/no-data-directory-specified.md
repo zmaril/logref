@@ -9,7 +9,7 @@ call_sites:
   - "postgres/src/bin/pg_checksums/pg_checksums.c:526"
   - "postgres/src/bin/pg_controldata/pg_controldata.c:163"
   - "postgres/src/bin/pg_resetwal/pg_resetwal.c:376"
-reproduced: false
+reproduced: true
 ---
 
 # `no data directory specified`
@@ -28,11 +28,10 @@ Pass the data directory explicitly — `-D /path/to/data` (or `--pgdata=`) — o
 
 ## Example
 
-*Illustrative* — initdb run with no data directory.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
-```sh
-initdb            # error: no data directory specified
-initdb -D /var/lib/pgsql/data
+```text
+ERROR:  no data directory specified
 ```
 
 ## Related

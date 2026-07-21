@@ -19,7 +19,7 @@ call_sites:
   - "postgres/src/backend/commands/typecmds.c:1444"
   - "postgres/src/backend/commands/typecmds.c:1631"
   - "postgres/src/backend/commands/typecmds.c:2624"
-reproduced: false
+reproduced: true
 ---
 
 # `type "%s" already exists`
@@ -38,17 +38,16 @@ Choose a different name, or drop the existing type first if it is truly obsolete
 
 ## Example
 
-*Illustrative* — creating a type whose name is taken.
+*Reproduced* — captured from `reproducers/scenarios/28_typecmds_domain_comment.sql`.
 
 ```sql
-CREATE TYPE color AS ENUM ('r','g','b');
-CREATE TYPE color AS ENUM ('x');
+CREATE TYPE repro.shell AS ENUM ('x');
 ```
 
 Produces:
 
 ```text
-ERROR:  type "color" already exists
+ERROR:  type "shell" already exists
 ```
 
 ## Related

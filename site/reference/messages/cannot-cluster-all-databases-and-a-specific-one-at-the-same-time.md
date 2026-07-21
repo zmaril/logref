@@ -6,7 +6,7 @@ api: [pg_fatal]
 level: [FATAL]
 call_sites:
   - "postgres/src/bin/scripts/clusterdb.c:148"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot cluster all databases and a specific one at the same time`
@@ -25,10 +25,10 @@ Choose one mode. Use `clusterdb --all` to cluster all databases, or `clusterdb d
 
 ## Example
 
-*Illustrative* — combining --all with a database.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-clusterdb: error: cannot cluster all databases and a specific one at the same time
+FATAL:  cannot cluster all databases and a specific one at the same time
 ```
 
 ## Related

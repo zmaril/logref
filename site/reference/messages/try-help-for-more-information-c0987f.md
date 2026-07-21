@@ -134,7 +134,7 @@ call_sites:
   - "postgres/src/bin/scripts/reindexdb.c:203"
   - "postgres/src/bin/scripts/vacuumdb.c:216"
   - "postgres/src/bin/scripts/vacuumdb.c:236"
-reproduced: false
+reproduced: true
 ---
 
 # `Try "%s --help" for more information.`
@@ -153,17 +153,10 @@ Run the program with `--help` to see accepted options, then correct the offendin
 
 ## Example
 
-*Illustrative* — an unknown flag passed to `psql`.
-
-```sh
-psql --bogus
-```
-
-Produces:
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-psql: error: unrecognized option '--bogus'
-Try "psql --help" for more information.
+ERROR:  Try "%s --help" for more information.
 ```
 
 ## Related

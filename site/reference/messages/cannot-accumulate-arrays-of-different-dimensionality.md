@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/array_userfuncs.c:1059"
   - "postgres/src/backend/utils/adt/arrayfuncs.c:5650"
   - "postgres/src/backend/utils/adt/arrayfuncs.c:5656"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot accumulate arrays of different dimensionality`
@@ -31,10 +31,16 @@ Ensure every array fed to the aggregate has the same number of dimensions (and, 
 
 ## Example
 
-*Illustrative* — mixing 1-D and 2-D arrays in array_agg.
+*Reproduced* — captured from `reproducers/scenarios/18_arrays_ranges_composite.sql`.
 
 ```sql
-SELECT array_agg(a) FROM (VALUES (ARRAY[1]), (ARRAY[[1,2]])) v(a);
+SELECT array_agg(x) FROM (VALUES (ARRAY[1]),(ARRAY[1,2])) t(x);
+```
+
+Produces:
+
+```text
+ERROR:  cannot accumulate arrays of different dimensionality
 ```
 
 ## Related

@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/catalog/namespace.c:665"
   - "postgres/src/backend/catalog/namespace.c:757"
   - "postgres/src/backend/commands/trigger.c:5920"
-reproduced: false
+reproduced: true
 ---
 
 # `cross-database references are not implemented: "%s.%s.%s"`
@@ -31,10 +31,16 @@ Connect directly to the target database, or use `postgres_fdw`/`dblink` to expos
 
 ## Example
 
-*Illustrative* — a three-part cross-database name.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
 
 ```sql
-SELECT * FROM otherdb.public.t;
+CREATE TABLE nosuchdb.public.t (a int);
+```
+
+Produces:
+
+```text
+ERROR:  cross-database references are not implemented: "nosuchdb.public.t"
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "55000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:8428"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" of relation "%s" must be declared NOT NULL before identity can be added`
@@ -28,11 +28,16 @@ Mark the column `NOT NULL` first with `ALTER TABLE ... ALTER COLUMN ... SET NOT 
 
 ## Example
 
-*Illustrative* — adding identity to a nullable column.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-ALTER TABLE t ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
--- ERROR:  column "id" of relation "t" must be declared NOT NULL before identity can be added
+ALTER TABLE s36.idt ALTER COLUMN b ADD GENERATED ALWAYS AS IDENTITY;
+```
+
+Produces:
+
+```text
+ERROR:  column "b" of relation "idt" must be declared NOT NULL before identity can be added
 ```
 
 ## Related

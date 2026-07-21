@@ -9,7 +9,7 @@ sqlstate:
     code: "42P13"
 call_sites:
   - "postgres/src/backend/commands/aggregatecmds.c:216"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate msfunc must be specified when mstype is specified`
@@ -28,7 +28,13 @@ Provide `msfunc` (and `minvfunc`) whenever you set `mstype`, or drop the moving-
 
 ## Example
 
-*Illustrative* — mstype without its forward function.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE AGGREGATE repro.agg_ms(int) (SFUNC = int4pl, STYPE = int, MSTYPE = int);
+```
+
+Produces:
 
 ```text
 ERROR:  aggregate msfunc must be specified when mstype is specified

@@ -15,7 +15,7 @@ call_sites:
   - "postgres/src/backend/commands/wait.c:85"
   - "postgres/src/backend/postmaster/checkpointer.c:1015"
   - "postgres/src/backend/replication/walsender.c:1213"
-reproduced: false
+reproduced: true
 ---
 
 # `unrecognized value for %s option "%s": "%s"`
@@ -34,10 +34,16 @@ Use one of the option's accepted values. Consult the command's documentation for
 
 ## Example
 
-*Illustrative* — an invalid option value.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-EXPLAIN (FORMAT toml) SELECT 1;
+EXPLAIN (FORMAT nonsense) SELECT 1;
+```
+
+Produces:
+
+```text
+ERROR:  unrecognized value for EXPLAIN option "format": "nonsense"
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "42P13"
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:252"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate cannot accept shell type %s`
@@ -28,11 +28,16 @@ Finish defining the type (its I/O functions via the full `CREATE TYPE`) before u
 
 ## Example
 
-*Illustrative* — an aggregate over an incomplete shell type.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-CREATE TYPE myt;  -- shell only
-CREATE AGGREGATE a(myt) (...);  -- ERROR:  aggregate cannot accept shell type myt
+CREATE AGGREGATE repro.agg_shell(repro.shell1) (SFUNC = int4pl, STYPE = int);
+```
+
+Produces:
+
+```text
+ERROR:  aggregate cannot accept shell type repro.shell1
 ```
 
 ## Related

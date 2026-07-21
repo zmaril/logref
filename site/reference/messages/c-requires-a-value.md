@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/postmaster/postmaster.c:648"
   - "postgres/src/backend/tcop/postgres.c:4055"
   - "postgres/src/bin/initdb/initdb.c:3304"
-reproduced: false
+reproduced: true
 ---
 
 # `-c %s requires a value`
@@ -31,10 +31,10 @@ Write the option as `-c name=value` with no space around the `=`. Supply the int
 
 ## Example
 
-*Illustrative* — a -c option missing its value.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
-```sh
-postgres -c work_mem
+```text
+ERROR:  -c %s requires a value
 ```
 
 ## Related

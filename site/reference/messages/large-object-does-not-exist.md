@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/catalog/pg_largeobject.c:125"
   - "postgres/src/backend/libpq/be-fsstubs.c:321"
   - "postgres/src/backend/storage/large_object/inv_api.c:245"
-reproduced: false
+reproduced: true
 ---
 
 # `large object %u does not exist`
@@ -32,10 +32,16 @@ Confirm the large object exists — `SELECT oid FROM pg_largeobject_metadata WHE
 
 ## Example
 
-*Illustrative* — opening a nonexistent large object.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
 
 ```sql
-SELECT lo_open(999999, 262144);
+SELECT lo_get(999999999);
+```
+
+Produces:
+
+```text
+ERROR:  large object 999999999 does not exist
 ```
 
 ## Related

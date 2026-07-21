@@ -7,7 +7,7 @@ level: [LOG]
 call_sites:
   - "postgres/src/backend/postmaster/postmaster.c:2039"
   - "postgres/src/backend/postmaster/postmaster.c:2044"
-reproduced: false
+reproduced: true
 ---
 
 # `%s was not reloaded`
@@ -26,10 +26,10 @@ The change is pending: the running server keeps the old value until it is restar
 
 ## Example
 
-*Illustrative* — a restart-only setting changed during a reload.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier3__bad_hba`). The site emits a background log record; the captured line was:
 
 ```text
-LOG:  shared_buffers was not reloaded
+LOG:  /tmp/lr/env/badhba/pgdata/pg_hba.conf was not reloaded
 ```
 
 ## Related

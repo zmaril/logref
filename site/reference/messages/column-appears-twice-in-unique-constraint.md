@@ -9,7 +9,7 @@ sqlstate:
     code: "42701"
 call_sites:
   - "postgres/src/backend/parser/parse_utilcmd.c:2757"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" appears twice in unique constraint`
@@ -28,11 +28,16 @@ List each column once. Remove the duplicate from the unique constraint definitio
 
 ## Example
 
-*Illustrative* — a repeated unique-constraint column.
+*Reproduced* — captured from `reproducers/scenarios/31_createtable_view_trigger.sql`.
 
 ```sql
-ALTER TABLE t ADD UNIQUE (a, a);
--- ERROR:  column "a" appears twice in unique constraint
+CREATE TABLE repro.ct7 (a int, UNIQUE (a, a));
+```
+
+Produces:
+
+```text
+ERROR:  column "a" appears twice in unique constraint
 ```
 
 ## Related

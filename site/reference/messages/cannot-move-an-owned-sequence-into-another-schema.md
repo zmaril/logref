@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:19684"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot move an owned sequence into another schema`
@@ -28,7 +28,13 @@ Move the owning table to the target schema, which brings the sequence with it, o
 
 ## Example
 
-*Illustrative* — moving an owned sequence directly.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
+
+```sql
+ALTER SEQUENCE s35.owner_seq_id_seq SET SCHEMA public;
+```
+
+Produces:
 
 ```text
 ERROR:  cannot move an owned sequence into another schema

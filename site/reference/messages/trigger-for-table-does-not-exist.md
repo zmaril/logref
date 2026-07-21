@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/trigger.c:1414"
   - "postgres/src/backend/commands/trigger.c:1581"
   - "postgres/src/backend/commands/trigger.c:1862"
-reproduced: false
+reproduced: true
 ---
 
 # `trigger "%s" for table "%s" does not exist`
@@ -30,10 +30,16 @@ List the table's triggers with `\d tablename` in psql and use the exact trigger 
 
 ## Example
 
-*Illustrative* — dropping a trigger that does not exist.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-DROP TRIGGER no_such ON orders;  -- no trigger "no_such" on orders
+ALTER TABLE repro.at ENABLE TRIGGER nonexistent_trg;
+```
+
+Produces:
+
+```text
+ERROR:  trigger "nonexistent_trg" for table "at" does not exist
 ```
 
 ## Related

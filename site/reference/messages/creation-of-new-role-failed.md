@@ -6,7 +6,7 @@ api: [pg_log_error]
 level: [ERROR]
 call_sites:
   - "postgres/src/bin/scripts/createuser.c:402"
-reproduced: false
+reproduced: true
 ---
 
 # `creation of new role failed: %s`
@@ -25,10 +25,10 @@ Read the trailing server error. `role already exists` means to pick a different 
 
 ## Example
 
-*Illustrative* — the role already existed.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__69_scripts`); see the reproducer for the triggering workload. It emits:
 
 ```text
-createuser: error: creation of new role failed: ERROR:  role "app" already exists
+ERROR:  creation of new role failed: %s
 ```
 
 ## Related

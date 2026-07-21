@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_agg.c:1098"
   - "postgres/src/backend/parser/parse_clause.c:3010"
-reproduced: false
+reproduced: true
 ---
 
 # `window "%s" does not exist`
@@ -29,7 +29,13 @@ Define the window in a `WINDOW <name> AS (...)` clause and reference the exact n
 
 ## Example
 
-*Illustrative* — referencing an undefined window.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
+
+```sql
+SELECT rank() OVER w FROM repro.parent;
+```
+
+Produces:
 
 ```text
 ERROR:  window "w" does not exist

@@ -9,7 +9,7 @@ sqlstate:
     code: "42P17"
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:1667"
-reproduced: false
+reproduced: true
 ---
 
 # `cast function must not return a set`
@@ -28,7 +28,13 @@ Use a function that returns a single value of the target type. Rewrite the conve
 
 ## Example
 
-*Illustrative* — a set-returning cast function.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE CAST (int AS int) WITH FUNCTION generate_series(int, int);
+```
+
+Produces:
 
 ```text
 ERROR:  cast function must not return a set

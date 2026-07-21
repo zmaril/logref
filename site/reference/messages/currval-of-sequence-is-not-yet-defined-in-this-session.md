@@ -9,7 +9,7 @@ sqlstate:
     code: "55000"
 call_sites:
   - "postgres/src/backend/commands/sequence.c:885"
-reproduced: false
+reproduced: true
 ---
 
 # `currval of sequence "%s" is not yet defined in this session`
@@ -28,11 +28,16 @@ Call `nextval()` on the sequence first in this session, then `currval()` returns
 
 ## Example
 
-*Illustrative* — currval before any nextval.
+*Reproduced* — captured from `reproducers/scenarios/24_txn_copy_cursor.sql`.
 
 ```sql
-SELECT currval('s');
--- ERROR:  currval of sequence "s" is not yet defined in this session
+SELECT currval('repro.churn_id_seq');
+```
+
+Produces:
+
+```text
+ERROR:  currval of sequence "churn_id_seq" is not yet defined in this session
 ```
 
 ## Related

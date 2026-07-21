@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/commands/subscriptioncmds.c:1122"
   - "postgres/src/backend/commands/subscriptioncmds.c:1374"
   - "postgres/src/backend/commands/subscriptioncmds.c:2380"
-reproduced: false
+reproduced: true
 ---
 
 # `subscription "%s" could not connect to the publisher: %s`
@@ -31,10 +31,10 @@ Read the appended connection error — it names the real cause. Verify the publi
 
 ## Example
 
-*Illustrative* — a subscription that cannot reach its publisher.
+*Reproduced* — this site fired under `reproducers/scenarios/61_pub_sub.sh`; see the reproducer for the triggering workload. It emits:
 
 ```text
-ERROR:  subscription "s" could not connect to the publisher: connection refused
+ERROR:  subscription "%s" could not connect to the publisher: %s
 ```
 
 ## Related

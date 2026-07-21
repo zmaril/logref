@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/commands/typecmds.c:3810"
   - "postgres/src/backend/commands/typecmds.c:3895"
   - "postgres/src/backend/commands/typecmds.c:4111"
-reproduced: false
+reproduced: true
 ---
 
 # `%s is not a domain`
@@ -31,10 +31,16 @@ Verify the type is actually a domain (`\dD` in psql, or `SELECT typname FROM pg_
 
 ## Example
 
-*Illustrative* — ALTER DOMAIN on a non-domain type.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-ALTER DOMAIN int4 ADD CHECK (VALUE > 0);
+ALTER DOMAIN s37.mood SET NOT NULL;
+```
+
+Produces:
+
+```text
+ERROR:  s37.mood is not a domain
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "25001"
 call_sites:
   - "postgres/src/backend/access/transam/xact.c:3707"
-reproduced: false
+reproduced: true
 ---
 
 # `%s cannot run inside a transaction block`
@@ -28,10 +28,16 @@ Run the command outside any transaction block, in autocommit mode as a single st
 
 ## Example
 
-*Illustrative* — a standalone command inside BEGIN.
+*Reproduced* — captured from `reproducers/scenarios/53_vacuum_cluster_concurrency_ddl.sql`.
+
+```sql
+VACUUM;
+```
+
+Produces:
 
 ```text
-ERROR:  CREATE DATABASE cannot run inside a transaction block
+ERROR:  VACUUM cannot run inside a transaction block
 ```
 
 ## Related

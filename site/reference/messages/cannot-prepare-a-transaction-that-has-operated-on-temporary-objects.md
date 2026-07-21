@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/access/transam/xact.c:2658"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot PREPARE a transaction that has operated on temporary objects`
@@ -28,7 +28,13 @@ Keep temporary-object work out of two-phase-commit transactions. Use permanent o
 
 ## Example
 
-*Illustrative* — PREPARE after using a temp table.
+*Reproduced* — captured from `reproducers/scenarios/51_twophase_prepare.sql`.
+
+```sql
+PREPARE TRANSACTION 'g_temp';
+```
+
+Produces:
 
 ```text
 ERROR:  cannot PREPARE a transaction that has operated on temporary objects

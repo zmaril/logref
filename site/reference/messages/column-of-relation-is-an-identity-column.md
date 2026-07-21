@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/tablecmds.c:7924"
   - "postgres/src/backend/commands/tablecmds.c:8292"
   - "postgres/src/backend/commands/tablecmds.c:14713"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" of relation "%s" is an identity column`
@@ -32,10 +32,16 @@ Work with identity rules rather than against them: use `OVERRIDING SYSTEM VALUE`
 
 ## Example
 
-*Illustrative* — explicit insert into a GENERATED ALWAYS identity.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-INSERT INTO t (id) VALUES (5);  -- column "id" of relation "t" is an identity column
+ALTER TABLE s36.idt ALTER COLUMN a SET DEFAULT 5;
+```
+
+Produces:
+
+```text
+ERROR:  column "a" of relation "idt" is an identity column
 ```
 
 ## Related

@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/parser/parse_agg.c:827"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate function calls cannot contain set-returning function calls`
@@ -28,10 +28,16 @@ Move the set-returning function out of the aggregate: expand the set in a `FROM`
 
 ## Example
 
-*Illustrative* — a set-returning function inside an aggregate.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT sum(unnest(arr)) FROM t;  -- ERROR
+SELECT sum(generate_series(1, 3));
+```
+
+Produces:
+
+```text
+ERROR:  aggregate function calls cannot contain set-returning function calls
 ```
 
 ## Related

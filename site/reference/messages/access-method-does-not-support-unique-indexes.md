@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/indexcmds.c:884"
-reproduced: false
+reproduced: true
 ---
 
 # `access method "%s" does not support unique indexes`
@@ -28,10 +28,16 @@ Use B-tree, which supports unique indexes, for uniqueness and primary keys. Swit
 
 ## Example
 
-*Illustrative* — a unique index on an unsupported method.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-CREATE UNIQUE INDEX ON t USING gin (c);  -- gin cannot enforce uniqueness
+CREATE UNIQUE INDEX ON repro.child USING gin (amount);
+```
+
+Produces:
+
+```text
+ERROR:  access method "gin" does not support unique indexes
 ```
 
 ## Related

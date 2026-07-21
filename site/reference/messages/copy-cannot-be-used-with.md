@@ -16,7 +16,7 @@ call_sites:
   - "postgres/src/backend/commands/copy.c:959"
   - "postgres/src/backend/commands/copy.c:985"
   - "postgres/src/backend/commands/copy.c:1006"
-reproduced: false
+reproduced: true
 ---
 
 # `COPY %s cannot be used with %s`
@@ -35,16 +35,16 @@ Remove the incompatible combination. If you need to select specific columns from
 
 ## Example
 
-*Illustrative* — a column list on a query-source COPY.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-COPY (SELECT * FROM t) (id) TO STDOUT;
+COPY repro.parent TO STDOUT WITH (FORMAT csv, FORCE_QUOTE *, FORCE_NOT_NULL (id));
 ```
 
 Produces:
 
 ```text
-ERROR:  COPY (query) cannot be used with a column list
+ERROR:  COPY FORCE_NOT_NULL cannot be used with COPY TO
 ```
 
 ## Related

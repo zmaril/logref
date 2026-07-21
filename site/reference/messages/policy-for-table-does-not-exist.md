@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/policy.c:897"
   - "postgres/src/backend/commands/policy.c:1176"
   - "postgres/src/backend/commands/policy.c:1247"
-reproduced: false
+reproduced: true
 ---
 
 # `policy "%s" for table "%s" does not exist`
@@ -30,10 +30,16 @@ List the table's policies with `\d tablename` in psql or query `pg_policies`, an
 
 ## Example
 
-*Illustrative* — altering a policy that does not exist.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-ALTER POLICY no_such ON orders USING (true);  -- no policy "no_such" on orders
+DROP POLICY nosuchpol ON repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  policy "nosuchpol" for table "parent" does not exist
 ```
 
 ## Related

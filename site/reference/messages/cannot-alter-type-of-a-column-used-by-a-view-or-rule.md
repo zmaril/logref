@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:15679"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot alter type of a column used by a view or rule`
@@ -28,7 +28,13 @@ Drop the dependent view or rule, alter the column type, then recreate the view o
 
 ## Example
 
-*Illustrative* — a column referenced by a view.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
+
+```sql
+ALTER TABLE s37.dep ALTER COLUMN a TYPE bigint;
+```
+
+Produces:
 
 ```text
 ERROR:  cannot alter type of a column used by a view or rule

@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/dropcmds.c:94"
   - "postgres/src/backend/commands/functioncmds.c:1401"
   - "postgres/src/backend/utils/adt/ruleutils.c:3314"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is an aggregate function`
@@ -30,10 +30,16 @@ Use the aggregate-specific command form — `DROP AGGREGATE`, `ALTER AGGREGATE` 
 
 ## Example
 
-*Illustrative* — dropping an aggregate as a function.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-DROP FUNCTION sum(int);  -- sum is an aggregate function
+ALTER FUNCTION repro.agg_amb(int) STRICT;
+```
+
+Produces:
+
+```text
+ERROR:  "repro.agg_amb" is an aggregate function
 ```
 
 ## Related

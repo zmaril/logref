@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:1728"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot drop partitioned index "%s" concurrently`
@@ -28,10 +28,16 @@ Drop the partitioned index without `CONCURRENTLY`, or drop the per-partition ind
 
 ## Example
 
-*Illustrative* — concurrent drop of a partitioned index.
+*Reproduced* — captured from `reproducers/scenarios/35_ddl_object_lifecycle.sql`.
+
+```sql
+DROP INDEX CONCURRENTLY s35.pidx_idx;
+```
+
+Produces:
 
 ```text
-ERROR:  cannot drop partitioned index "p_idx" concurrently
+ERROR:  cannot drop partitioned index "pidx_idx" concurrently
 ```
 
 ## Related

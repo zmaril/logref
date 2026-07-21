@@ -9,7 +9,7 @@ sqlstate:
     code: "22023"
 call_sites:
   - "postgres/src/backend/utils/adt/pg_locale_libc.c:1184"
-reproduced: false
+reproduced: true
 ---
 
 # `could not create locale "%s": %m`
@@ -28,10 +28,16 @@ Install the missing locale on the host (`locale -a` lists what is available; on 
 
 ## Example
 
-*Illustrative* — a locale that is not installed.
+*Reproduced* — captured from `reproducers/scenarios/21_ddl_objects.sql`.
+
+```sql
+CREATE COLLATION repro.badcoll (LOCALE = 'nonexistent_xyz');
+```
+
+Produces:
 
 ```text
-ERROR:  could not create locale "de_DE.utf8": No such file or directory
+ERROR:  could not create locale "nonexistent_xyz": No such file or directory
 ```
 
 ## Related

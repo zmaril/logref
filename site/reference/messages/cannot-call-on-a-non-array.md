@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/jsonfuncs.c:2424"
   - "postgres/src/backend/utils/adt/jsonfuncs.c:4173"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot call %s on a non-array`
@@ -29,11 +29,16 @@ Check the JSON type before calling the function, for example with `jsonb_typeof(
 
 ## Example
 
-*Illustrative* — array-length on an object.
+*Reproduced* — captured from `reproducers/scenarios/19_json_sqljson.sql`.
 
 ```sql
-SELECT jsonb_array_length('{"a":1}');
--- ERROR:  cannot get array length of a non-array
+SELECT jsonb_populate_recordset(NULL::repro.parent, '{"id":1}');
+```
+
+Produces:
+
+```text
+ERROR:  cannot call jsonb_populate_recordset on a non-array
 ```
 
 ## Related

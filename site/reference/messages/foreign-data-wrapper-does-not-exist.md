@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/foreigncmds.c:300"
   - "postgres/src/backend/commands/foreigncmds.c:769"
   - "postgres/src/backend/foreign/foreign.c:721"
-reproduced: false
+reproduced: true
 ---
 
 # `foreign-data wrapper "%s" does not exist`
@@ -30,10 +30,16 @@ Install the wrapper's extension first (`CREATE EXTENSION postgres_fdw`), or use 
 
 ## Example
 
-*Illustrative* — a server on a missing FDW.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-CREATE SERVER s FOREIGN DATA WRAPPER nope;  -- foreign-data wrapper "nope" does not exist
+CREATE SERVER srv FOREIGN DATA WRAPPER nosuchfdw;
+```
+
+Produces:
+
+```text
+ERROR:  foreign-data wrapper "nosuchfdw" does not exist
 ```
 
 ## Related

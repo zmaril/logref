@@ -9,7 +9,7 @@ sqlstate:
     code: "24000"
 call_sites:
   - "postgres/src/backend/executor/execCurrent.c:83"
-reproduced: false
+reproduced: true
 ---
 
 # `cursor "%s" is held from a previous transaction`
@@ -28,10 +28,16 @@ Positioned updates require a cursor within the same transaction that holds the r
 
 ## Example
 
-*Illustrative* — CURRENT OF on a held cursor.
+*Reproduced* — captured from `reproducers/scenarios/39_cte_cursors_prepared_lock.sql`.
+
+```sql
+UPDATE repro.parent SET label='x' WHERE CURRENT OF ch;
+```
+
+Produces:
 
 ```text
-ERROR:  cursor "c" is held from a previous transaction
+ERROR:  cursor "ch" is held from a previous transaction
 ```
 
 ## Related

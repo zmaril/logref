@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/objectaddress.c:1496"
   - "postgres/src/backend/commands/tablecmds.c:20389"
-reproduced: false
+reproduced: true
 ---
 
 # `"%s" is not a foreign table`
@@ -29,10 +29,16 @@ Name a foreign table, or use the command that matches the relation's actual kind
 
 ## Example
 
-*Illustrative* — a foreign-table command on a regular table.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-ALTER FOREIGN TABLE local_t OPTIONS (ADD x '1');  -- local_t is not foreign
+ALTER FOREIGN TABLE repro.parent OPTIONS (x 'y');
+```
+
+Produces:
+
+```text
+ERROR:  "parent" is not a foreign table
 ```
 
 ## Related

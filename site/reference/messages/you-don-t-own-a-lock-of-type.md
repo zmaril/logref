@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/storage/lmgr/lock.c:2189"
   - "postgres/src/backend/storage/lmgr/lock.c:2285"
   - "postgres/src/backend/storage/lmgr/lock.c:3344"
-reproduced: false
+reproduced: true
 ---
 
 # `you don't own a lock of type %s`
@@ -30,10 +30,16 @@ Usually harmless to the statement in progress but worth noting: it signals unbal
 
 ## Example
 
-*Illustrative* — emitted internally by the lock manager.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
+
+```sql
+SELECT pg_advisory_unlock(999);
+```
+
+Produces:
 
 ```text
-WARNING:  you don't own a lock of type ShareLock
+WARNING:  you don't own a lock of type ExclusiveLock
 ```
 
 ## Related

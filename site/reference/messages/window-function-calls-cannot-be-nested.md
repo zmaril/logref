@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/executor/execExpr.c:1155"
   - "postgres/src/backend/parser/parse_agg.c:910"
-reproduced: false
+reproduced: true
 ---
 
 # `window function calls cannot be nested`
@@ -29,7 +29,13 @@ Compute the inner window result in a subquery or CTE first, then apply the outer
 
 ## Example
 
-*Illustrative* — a window function inside another.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
+
+```sql
+SELECT lag(rank() OVER ()) OVER () FROM repro.parent;
+```
+
+Produces:
 
 ```text
 ERROR:  window function calls cannot be nested

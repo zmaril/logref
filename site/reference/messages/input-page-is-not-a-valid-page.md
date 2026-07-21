@@ -15,7 +15,7 @@ call_sites:
   - "postgres/contrib/pageinspect/gistfuncs.c:63"
   - "postgres/contrib/pageinspect/hashfuncs.c:70"
   - "postgres/contrib/pageinspect/hashfuncs.c:79"
-reproduced: false
+reproduced: true
 ---
 
 # `input page is not a valid %s page`
@@ -34,16 +34,16 @@ Use the `pageinspect` function that matches the relation's type and read a valid
 
 ## Example
 
-*Illustrative* — a heap page passed to a btree function.
+*Reproduced* — captured from `reproducers/scenarios/64_contrib_inspect_deep.sql`.
 
 ```sql
-SELECT * FROM bt_page_items(get_raw_page('heap_table', 0));
+SELECT brin_revmap_data(get_raw_page('repro.big_pkey', 0));
 ```
 
 Produces:
 
 ```text
-ERROR:  input page is not a valid btree page
+ERROR:  input page is not a valid BRIN page
 ```
 
 ## Related

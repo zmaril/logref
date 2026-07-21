@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/analyze.c:910"
   - "postgres/src/backend/parser/analyze.c:1965"
-reproduced: false
+reproduced: true
 ---
 
 # `VALUES lists must all be the same length`
@@ -29,7 +29,13 @@ Give every row in the `VALUES` list the same number of columns. Add or remove ex
 
 ## Example
 
-*Illustrative* — rows of differing width.
+*Reproduced* — captured from `reproducers/scenarios/23_query_semantics_extended.sql`.
+
+```sql
+VALUES (1,2), (3);
+```
+
+Produces:
 
 ```text
 ERROR:  VALUES lists must all be the same length

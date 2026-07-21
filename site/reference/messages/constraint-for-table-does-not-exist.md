@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/catalog/pg_constraint.c:1234"
   - "postgres/src/backend/catalog/pg_constraint.c:1327"
-reproduced: false
+reproduced: true
 ---
 
 # `constraint "%s" for table "%s" does not exist`
@@ -29,11 +29,16 @@ List the table's constraints with `\d tablename` in psql (or query `pg_constrain
 
 ## Example
 
-*Illustrative* — dropping a non-existent constraint.
+*Reproduced* — captured from `reproducers/scenarios/28_typecmds_domain_comment.sql`.
 
 ```sql
-ALTER TABLE t DROP CONSTRAINT no_such;
--- ERROR:  constraint "no_such" for table "t" does not exist
+COMMENT ON CONSTRAINT nope ON repro.parent IS 'x';
+```
+
+Produces:
+
+```text
+ERROR:  constraint "nope" for table "parent" does not exist
 ```
 
 ## Related

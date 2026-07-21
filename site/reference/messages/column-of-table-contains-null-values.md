@@ -9,7 +9,7 @@ sqlstate:
     code: "23502"
 call_sites:
   - "postgres/src/backend/commands/typecmds.c:3212"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" of table "%s" contains null values`
@@ -28,10 +28,16 @@ Update or remove the offending rows so the column has no nulls, then reapply the
 
 ## Example
 
-*Illustrative* — a NOT NULL domain constraint against existing nulls.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
+
+```sql
+ALTER DOMAIN s37.posint SET NOT NULL;
+```
+
+Produces:
 
 ```text
-ERROR:  column "c" of table "t" contains null values
+ERROR:  column "v" of table "usedom" contains null values
 ```
 
 ## Related

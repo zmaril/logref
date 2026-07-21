@@ -60,7 +60,7 @@ call_sites:
   - "postgres/src/bin/pgbench/pgbench.c:6187"
   - "postgres/src/common/controldata_utils.c:107"
   - "postgres/src/common/controldata_utils.c:111"
-reproduced: false
+reproduced: true
 ---
 
 # `could not read file "%s": %m`
@@ -79,10 +79,16 @@ Read `%m` for the specific cause. `Input/output error` indicates failing storage
 
 ## Example
 
-*Illustrative* — a read against failing storage.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
+
+```sql
+SELECT pg_read_file('base', -1, 10);
+```
+
+Produces:
 
 ```text
-ERROR:  could not read file "base/16384/2836": Input/output error
+ERROR:  could not read file "base": Invalid argument
 ```
 
 ## Related

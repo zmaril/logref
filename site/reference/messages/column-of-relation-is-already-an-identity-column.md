@@ -9,7 +9,7 @@ sqlstate:
     code: "55000"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:8459"
-reproduced: false
+reproduced: true
 ---
 
 # `column "%s" of relation "%s" is already an identity column`
@@ -28,11 +28,16 @@ Use `ALTER TABLE ... ALTER COLUMN ... SET GENERATED { ALWAYS | BY DEFAULT }` to 
 
 ## Example
 
-*Illustrative* — adding identity twice.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-ALTER TABLE t ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
--- ERROR:  column "id" of relation "t" is already an identity column
+ALTER TABLE s36.idt ALTER COLUMN a ADD GENERATED ALWAYS AS IDENTITY;
+```
+
+Produces:
+
+```text
+ERROR:  column "a" of relation "idt" is already an identity column
 ```
 
 ## Related

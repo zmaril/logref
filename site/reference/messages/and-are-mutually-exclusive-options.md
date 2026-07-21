@@ -13,7 +13,7 @@ call_sites:
   - "postgres/src/backend/commands/subscriptioncmds.c:492"
   - "postgres/src/backend/commands/subscriptioncmds.c:513"
   - "postgres/src/backend/commands/subscriptioncmds.c:529"
-reproduced: false
+reproduced: true
 ---
 
 # `%s and %s are mutually exclusive options`
@@ -32,10 +32,16 @@ Remove one of the two named options. Decide which behavior you actually want and
 
 ## Example
 
-*Illustrative* — two conflicting subscription options.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-CREATE SUBSCRIPTION s CONNECTION '...' PUBLICATION p WITH (connect = false, enabled = true);
+CREATE SUBSCRIPTION sub CONNECTION 'host=localhost' PUBLICATION p WITH (connect=false, slot_name=NONE, create_slot=true);
+```
+
+Produces:
+
+```text
+ERROR:  connect = false and create_slot = true are mutually exclusive options
 ```
 
 ## Related

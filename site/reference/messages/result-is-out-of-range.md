@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/utils/adt/network.c:1917"
   - "postgres/src/backend/utils/adt/network.c:1993"
-reproduced: false
+reproduced: true
 ---
 
 # `result is out of range`
@@ -29,11 +29,15 @@ Use a wider type (for example `bigint` or `numeric`) for values that can grow la
 
 ## Example
 
-*Illustrative* — integer arithmetic that overflows.
+*Reproduced* — captured from `reproducers/scenarios/20_network_geo_enum_ts_xml.sql`.
+
+```sql
+SELECT '10.0.0.0/8'::cidr - 999999999999;
+```
+
+Produces:
 
 ```text
-ERROR:  integer out of range
--- or, for other types:
 ERROR:  result is out of range
 ```
 

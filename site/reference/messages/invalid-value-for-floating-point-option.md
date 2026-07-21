@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/contrib/postgres_fdw/option.c:145"
   - "postgres/src/backend/access/common/reloptions.c:1759"
-reproduced: false
+reproduced: true
 ---
 
 # `invalid value for floating point option "%s": %s`
@@ -29,10 +29,16 @@ Give the option a valid floating-point value, such as `0.5` or `1e3`. Remove uni
 
 ## Example
 
-*Illustrative* — a non-numeric value for a float option.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
 
 ```sql
-OPTIONS ( fdw_startup_cost 'cheap' )  -- expects a number
+ALTER TABLE repro.at ALTER COLUMN a SET (n_distinct = 'x');
+```
+
+Produces:
+
+```text
+ERROR:  invalid value for floating point option "n_distinct": x
 ```
 
 ## Related

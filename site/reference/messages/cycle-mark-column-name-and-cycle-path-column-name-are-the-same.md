@@ -9,7 +9,7 @@ sqlstate:
     code: "42601"
 call_sites:
   - "postgres/src/backend/parser/parse_cte.c:534"
-reproduced: false
+reproduced: true
 ---
 
 # `cycle mark column name and cycle path column name are the same`
@@ -28,11 +28,16 @@ Give the mark column and the path column distinct names. The mark column holds t
 
 ## Example
 
-*Illustrative* — identical mark and path names.
+*Reproduced* — captured from `reproducers/scenarios/39_cte_cursors_prepared_lock.sql`.
 
 ```sql
-WITH RECURSIVE w(id) AS (...) CYCLE id SET c USING c SELECT * FROM w;
--- ERROR:  cycle mark column name and cycle path column name are the same
+WITH RECURSIVE t(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM t WHERE n<3) CYCLE n SET c TO 1 DEFAULT 2 USING c SELECT * FROM t;
+```
+
+Produces:
+
+```text
+ERROR:  cycle mark column name and cycle path column name are the same
 ```
 
 ## Related

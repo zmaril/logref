@@ -9,7 +9,7 @@ sqlstate:
     code: "42P13"
 call_sites:
   - "postgres/src/backend/commands/functioncmds.c:284"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregates cannot accept set arguments`
@@ -28,7 +28,13 @@ Give the aggregate scalar argument types and pass scalar values. Expand any set 
 
 ## Example
 
-*Illustrative* — an aggregate declared over a set argument.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
+
+```sql
+CREATE AGGREGATE repro.agg_set(SETOF int) (SFUNC = int4pl, STYPE = int);
+```
+
+Produces:
 
 ```text
 ERROR:  aggregates cannot accept set arguments

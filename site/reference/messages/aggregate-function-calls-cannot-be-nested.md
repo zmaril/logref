@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/executor/nodeAgg.c:4057"
   - "postgres/src/backend/parser/parse_agg.c:706"
   - "postgres/src/backend/parser/parse_agg.c:749"
-reproduced: false
+reproduced: true
 ---
 
 # `aggregate function calls cannot be nested`
@@ -30,10 +30,16 @@ Aggregate in two stages: compute the inner aggregate in a subquery or CTE, then 
 
 ## Example
 
-*Illustrative* — one aggregate inside another.
+*Reproduced* — captured from `reproducers/scenarios/44_functions_operators_aggregates.sql`.
 
 ```sql
-SELECT sum(avg(price)) FROM items;  -- aggregate calls cannot be nested
+SELECT percentile_cont(avg(id)) WITHIN GROUP (ORDER BY id) FROM repro.parent;
+```
+
+Produces:
+
+```text
+ERROR:  aggregate function calls cannot be nested
 ```
 
 ## Related

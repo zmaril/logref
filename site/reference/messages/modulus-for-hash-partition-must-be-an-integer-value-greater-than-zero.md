@@ -12,7 +12,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/parser/parse_utilcmd.c:4883"
   - "postgres/src/backend/partitioning/partbounds.c:4793"
-reproduced: false
+reproduced: true
 ---
 
 # `modulus for hash partition must be an integer value greater than zero`
@@ -31,10 +31,16 @@ Use a positive integer modulus, and make sure each remainder is in `0..m-1`. Acr
 
 ## Example
 
-*Illustrative* — a zero modulus.
+*Reproduced* — captured from `reproducers/scenarios/36_constraints_partitioning.sql`.
 
 ```sql
-... FOR VALUES WITH (MODULUS 0, REMAINDER 0);  -- modulus must be > 0
+CREATE TABLE s36.hp0 PARTITION OF s36.hp FOR VALUES WITH (MODULUS 0, REMAINDER 0);
+```
+
+Produces:
+
+```text
+ERROR:  modulus for hash partition must be an integer value greater than zero
 ```
 
 ## Related

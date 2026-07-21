@@ -7,7 +7,7 @@ level: [DEBUG1]
 call_sites:
   - "postgres/src/backend/access/transam/xlogrecovery.c:577"
   - "postgres/src/backend/access/transam/xlogrecovery.c:727"
-reproduced: false
+reproduced: true
 ---
 
 # `checkpoint record is at %X/%08X`
@@ -26,10 +26,10 @@ No action is needed. It is recovery-diagnostics output visible only at raised de
 
 ## Example
 
-*Illustrative* — a checkpoint-location trace line.
+*Reproduced* — captured by `reproducers/env-run.sh` (scenario `tier4__replication_standby`). The site emits a background log record; the captured line was:
 
 ```text
-DEBUG:  checkpoint record is at 0/1A2B3C0
+DEBUG:  checkpoint record is at 0/03000088
 ```
 
 ## Related

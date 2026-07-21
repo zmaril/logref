@@ -9,7 +9,7 @@ sqlstate:
     code: "2202E"
 call_sites:
   - "postgres/src/backend/utils/adt/tsrank.c:441"
-reproduced: false
+reproduced: true
 ---
 
 # `array of weight is too short`
@@ -28,10 +28,16 @@ Supply a weight array with the full set of label weights the function expects (t
 
 ## Example
 
-*Illustrative* — a too-short weights array for ranking.
+*Reproduced* — captured from `reproducers/scenarios/20_network_geo_enum_ts_xml.sql`.
 
 ```sql
-SELECT ts_rank('{0.1,0.2}', v, q);  -- ERROR:  array of weight is too short
+SELECT ts_rank(ARRAY[1.0], 'a'::tsvector, 'a'::tsquery);
+```
+
+Produces:
+
+```text
+ERROR:  array of weight is too short
 ```
 
 ## Related

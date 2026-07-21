@@ -9,7 +9,7 @@ sqlstate:
     code: "0A000"
 call_sites:
   - "postgres/src/backend/commands/indexcmds.c:889"
-reproduced: false
+reproduced: true
 ---
 
 # `access method "%s" does not support included columns`
@@ -28,10 +28,16 @@ Drop the `INCLUDE` clause, or switch to an access method that supports covering 
 
 ## Example
 
-*Illustrative* — INCLUDE on a method that does not support it.
+*Reproduced* — captured from `reproducers/scenarios/29_func_index_extension_ddl.sql`.
 
 ```sql
-CREATE INDEX ON t USING gin (a) INCLUDE (b);  -- gin does not support included columns
+CREATE INDEX ON repro.child USING brin (amount) INCLUDE (id);
+```
+
+Produces:
+
+```text
+ERROR:  access method "brin" does not support included columns
 ```
 
 ## Related

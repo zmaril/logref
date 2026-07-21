@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/commands/indexcmds.c:2364"
   - "postgres/src/backend/commands/typecmds.c:2367"
-reproduced: false
+reproduced: true
 ---
 
 # `operator class "%s" does not accept data type %s`
@@ -29,10 +29,16 @@ Choose an operator class that matches the column's data type, or omit it to use 
 
 ## Example
 
-*Illustrative* — an operator class not valid for the type.
+*Reproduced* — captured from `reproducers/scenarios/45_create_routines.sql`.
 
 ```sql
-CREATE INDEX ON t (c text_pattern_ops);  -- c is not text
+CREATE TYPE repro.rng_opc AS RANGE (SUBTYPE = int, SUBTYPE_OPCLASS = text_ops);
+```
+
+Produces:
+
+```text
+ERROR:  operator class "text_ops" does not accept data type integer
 ```
 
 ## Related

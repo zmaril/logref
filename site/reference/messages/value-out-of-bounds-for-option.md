@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/access/common/reloptions.c:1745"
   - "postgres/src/backend/access/common/reloptions.c:1765"
-reproduced: false
+reproduced: true
 ---
 
 # `value %s out of bounds for option "%s"`
@@ -29,7 +29,13 @@ Choose a value within the option's documented range. The message names the optio
 
 ## Example
 
-*Illustrative* — an out-of-range option value.
+*Reproduced* — captured from `reproducers/scenarios/27_alter_table.sql`.
+
+```sql
+ALTER TABLE repro.at SET (fillfactor = 5000);
+```
+
+Produces:
 
 ```text
 ERROR:  value 5000 out of bounds for option "fillfactor"

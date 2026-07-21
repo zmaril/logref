@@ -10,7 +10,7 @@ sqlstate:
 call_sites:
   - "postgres/src/backend/partitioning/partbounds.c:3118"
   - "postgres/src/backend/partitioning/partbounds.c:5373"
-reproduced: false
+reproduced: true
 ---
 
 # `empty range bound specified for partition "%s"`
@@ -29,10 +29,16 @@ Set the range so the `FROM` bound is strictly less than the `TO` bound. Correct 
 
 ## Example
 
-*Illustrative* — an inverted range bound.
+*Reproduced* — captured from `reproducers/scenarios/21_ddl_objects.sql`.
+
+```sql
+CREATE TABLE repro.pt_p1 PARTITION OF repro.pt FOR VALUES FROM (10) TO (1);
+```
+
+Produces:
 
 ```text
-ERROR:  empty range bound specified for partition "p1"
+ERROR:  empty range bound specified for partition "pt_p1"
 ```
 
 ## Related

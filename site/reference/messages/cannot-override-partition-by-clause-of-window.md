@@ -9,7 +9,7 @@ sqlstate:
     code: "42P20"
 call_sites:
   - "postgres/src/backend/parser/parse_clause.c:3060"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot override PARTITION BY clause of window "%s"`
@@ -28,7 +28,13 @@ Use the named window without adding `PARTITION BY`, or define a distinct window 
 
 ## Example
 
-*Illustrative* — overriding a named window's partitioning.
+*Reproduced* — captured from `reproducers/scenarios/38_planner_executor_runtime.sql`.
+
+```sql
+SELECT sum(id) OVER (w PARTITION BY id) FROM repro.parent WINDOW w AS (PARTITION BY label);
+```
+
+Produces:
 
 ```text
 ERROR:  cannot override PARTITION BY clause of window "w"

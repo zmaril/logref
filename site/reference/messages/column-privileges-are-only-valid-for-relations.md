@@ -9,7 +9,7 @@ sqlstate:
     code: "0LP01"
 call_sites:
   - "postgres/src/backend/catalog/aclchk.c:565"
-reproduced: false
+reproduced: true
 ---
 
 # `column privileges are only valid for relations`
@@ -28,11 +28,16 @@ Remove the column list, or target a relation. Column-level grants only make sens
 
 ## Example
 
-*Illustrative* — column privileges on a non-relation.
+*Reproduced* — captured from `reproducers/scenarios/46_grant_revoke_privtypes.sql`.
 
 ```sql
-GRANT SELECT (a) ON DATABASE mydb TO alice;
--- ERROR:  column privileges are only valid for relations
+GRANT SELECT (a) ON SEQUENCE acl46.s TO PUBLIC;
+```
+
+Produces:
+
+```text
+ERROR:  column privileges are only valid for relations
 ```
 
 ## Related

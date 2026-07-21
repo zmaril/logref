@@ -12,7 +12,7 @@ call_sites:
   - "postgres/src/backend/commands/publicationcmds.c:1709"
   - "postgres/src/backend/commands/publicationcmds.c:2243"
   - "postgres/src/backend/utils/cache/lsyscache.c:3993"
-reproduced: false
+reproduced: true
 ---
 
 # `publication "%s" does not exist`
@@ -31,10 +31,16 @@ List existing publications with `\dRp` (or `SELECT pubname FROM pg_publication`)
 
 ## Example
 
-*Illustrative* — subscribing to a missing publication.
+*Reproduced* — captured from `reproducers/scenarios/25_ddl_objects_more.sql`.
 
 ```sql
-ALTER SUBSCRIPTION s SET PUBLICATION missing_pub;
+DROP PUBLICATION nosuchpub;
+```
+
+Produces:
+
+```text
+ERROR:  publication "nosuchpub" does not exist
 ```
 
 ## Related

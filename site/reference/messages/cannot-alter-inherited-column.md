@@ -9,7 +9,7 @@ sqlstate:
     code: "42P16"
 call_sites:
   - "postgres/src/backend/commands/tablecmds.c:14974"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot alter inherited column "%s"`
@@ -28,10 +28,16 @@ Alter the column on the parent table, and the change flows to the children. Inhe
 
 ## Example
 
-*Illustrative* — altering an inherited column on a child.
+*Reproduced* — captured from `reproducers/scenarios/37_alter_type_column_tablespace.sql`.
 
 ```sql
-ALTER TABLE child ALTER COLUMN a SET NOT NULL;
+ALTER TABLE s37.ic ALTER COLUMN a TYPE bigint;
+```
+
+Produces:
+
+```text
+ERROR:  cannot alter inherited column "a"
 ```
 
 ## Related

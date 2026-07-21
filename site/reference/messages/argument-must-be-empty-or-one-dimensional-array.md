@@ -11,7 +11,7 @@ call_sites:
   - "postgres/contrib/pg_surgery/heap_surgery.c:381"
   - "postgres/src/backend/utils/adt/array_userfuncs.c:173"
   - "postgres/src/backend/utils/adt/array_userfuncs.c:258"
-reproduced: false
+reproduced: true
 ---
 
 # `argument must be empty or one-dimensional array`
@@ -30,10 +30,16 @@ Flatten the input to one dimension. Build the argument as a simple `ARRAY[a, b, 
 
 ## Example
 
-*Illustrative* — a multidimensional array where 1-D is required.
+*Reproduced* — captured from `reproducers/scenarios/32_adt_arithmetic_overflow.sql`.
 
 ```sql
-SELECT heap_force_kill('t'::regclass, ARRAY[[1,2],[3,4]]::tid[]);
+SELECT array_prepend(1, '{{2}}'::int[]);
+```
+
+Produces:
+
+```text
+ERROR:  argument must be empty or one-dimensional array
 ```
 
 ## Related

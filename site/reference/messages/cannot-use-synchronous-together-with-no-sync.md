@@ -6,7 +6,7 @@ api: [pg_log_error]
 level: [ERROR]
 call_sites:
   - "postgres/src/bin/pg_basebackup/pg_receivewal.c:782"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use --synchronous together with --no-sync`
@@ -25,10 +25,10 @@ Pick one. Keep `--synchronous` for confirmed synchronous flushing, or `--no-sync
 
 ## Example
 
-*Illustrative* — synchronous with no-sync.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-pg_receivewal: error: cannot use --synchronous together with --no-sync
+ERROR:  cannot use --synchronous together with --no-sync
 ```
 
 ## Related

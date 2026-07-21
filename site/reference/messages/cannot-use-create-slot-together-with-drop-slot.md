@@ -6,7 +6,7 @@ api: [pg_log_error]
 level: [ERROR]
 call_sites:
   - "postgres/src/bin/pg_basebackup/pg_receivewal.c:766"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot use --create-slot together with --drop-slot`
@@ -25,10 +25,10 @@ Choose one action. Run `--create-slot` on its own, or `--drop-slot` on its own, 
 
 ## Example
 
-*Illustrative* — create and drop together.
+*Reproduced* — this site fired under `reproducers/frontend-run.sh` (scenario `frontend__67_backup`); see the reproducer for the triggering workload. It emits:
 
 ```text
-pg_recvlogical: error: cannot use --create-slot together with --drop-slot
+ERROR:  cannot use --create-slot together with --drop-slot
 ```
 
 ## Related

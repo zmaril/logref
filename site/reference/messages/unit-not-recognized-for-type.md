@@ -19,7 +19,7 @@ call_sites:
   - "postgres/src/backend/utils/adt/timestamp.c:6031"
   - "postgres/src/backend/utils/adt/timestamp.c:6072"
   - "postgres/src/backend/utils/adt/timestamp.c:6309"
-reproduced: false
+reproduced: true
 ---
 
 # `unit "%s" not recognized for type %s`
@@ -38,16 +38,16 @@ Use a valid unit spelled correctly: `century`, `year`, `quarter`, `month`, `week
 
 ## Example
 
-*Illustrative* — a misspelled unit.
+*Reproduced* — captured from `reproducers/scenarios/16_datetime_extended.sql`.
 
 ```sql
-SELECT date_trunc('weekk', now());
+SELECT date_part('bogus', interval '1 day');
 ```
 
 Produces:
 
 ```text
-ERROR:  unit "weekk" not recognized for type timestamp with time zone
+ERROR:  unit "bogus" not recognized for type interval
 ```
 
 ## Related

@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/functioncmds.c:1116"
   - "postgres/src/backend/commands/functioncmds.c:2136"
   - "postgres/src/backend/commands/proclang.c:234"
-reproduced: false
+reproduced: true
 ---
 
 # `language "%s" does not exist`
@@ -30,10 +30,16 @@ Install the language before creating the function. Most languages ship as extens
 
 ## Example
 
-*Illustrative* — a function in an uninstalled language.
+*Reproduced* — captured from `reproducers/scenarios/26_roles_acl_plpgsql.sql`.
 
 ```sql
-CREATE FUNCTION f() RETURNS int LANGUAGE plperl AS $$ return 1; $$;  -- plperl not installed
+DO LANGUAGE nosuchlang $$ x $$;
+```
+
+Produces:
+
+```text
+ERROR:  language "nosuchlang" does not exist
 ```
 
 ## Related

@@ -11,7 +11,7 @@ call_sites:
   - "postgres/src/backend/commands/indexcmds.c:3290"
   - "postgres/src/backend/commands/indexcmds.c:3801"
   - "postgres/src/backend/commands/indexcmds.c:3931"
-reproduced: false
+reproduced: true
 ---
 
 # `cannot reindex system catalogs concurrently`
@@ -30,10 +30,16 @@ Reindex system catalogs without `CONCURRENTLY` — a plain `REINDEX SYSTEM` or `
 
 ## Example
 
-*Illustrative* — a concurrent reindex of catalogs.
+*Reproduced* — captured from `reproducers/scenarios/34_guc_vacuum_copy_xml.sql`.
 
 ```sql
-REINDEX (CONCURRENTLY) SYSTEM;  -- cannot reindex system catalogs concurrently
+REINDEX (CONCURRENTLY) SYSTEM postgres;
+```
+
+Produces:
+
+```text
+ERROR:  cannot reindex system catalogs concurrently
 ```
 
 ## Related

@@ -16,7 +16,7 @@ call_sites:
   - "postgres/src/bin/pg_rewind/file_ops.c:349"
   - "postgres/src/common/controldata_utils.c:92"
   - "postgres/src/common/controldata_utils.c:98"
-reproduced: false
+reproduced: true
 ---
 
 # `could not open file "%s" for reading: %m`
@@ -35,16 +35,16 @@ Read `%m`. `No such file or directory` — check the path (and remember server-s
 
 ## Example
 
-*Illustrative* — a server-side COPY from an unreadable file.
+*Reproduced* — captured from `reproducers/scenarios/22_system_admin_funcs.sql`.
 
 ```sql
-COPY t FROM '/root/secret.csv';
+SELECT pg_read_file('../../../etc/passwd');
 ```
 
 Produces:
 
 ```text
-ERROR:  could not open file "/root/secret.csv" for reading: Permission denied
+ERROR:  could not open file "../../../etc/passwd" for reading: No such file or directory
 ```
 
 ## Related

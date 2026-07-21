@@ -9,7 +9,7 @@ sqlstate:
     code: "42601"
 call_sites:
   - "postgres/src/backend/commands/collationcmds.c:113"
-reproduced: false
+reproduced: true
 ---
 
 # `collation attribute "%s" not recognized`
@@ -28,10 +28,16 @@ Correct the locale string to use recognized ICU attributes. Check the ICU locale
 
 ## Example
 
-*Illustrative* — an unknown collation attribute.
+*Reproduced* — captured from `reproducers/scenarios/21_ddl_objects.sql`.
+
+```sql
+CREATE COLLATION repro.c2 (nonexistent_param = 'x');
+```
+
+Produces:
 
 ```text
-ERROR:  collation attribute "kf" not recognized
+ERROR:  collation attribute "nonexistent_param" not recognized
 ```
 
 ## Related
