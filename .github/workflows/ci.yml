@@ -67,6 +67,10 @@ jobs:
       # Must match the wasm-bindgen crate version in Cargo.lock — the CLI
       # refuses to process a module built against a different version.
       WASM_BINDGEN_VERSION: 0.2.126
+      # binaryen release for the wasm-opt size pass in build-wasm-web.sh.
+      BINARYEN_VERSION: "131"
+      # Production must never silently ship the unoptimized module.
+      WASM_OPT_REQUIRED: "1"
     steps:
       - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
@@ -83,6 +87,13 @@ jobs:
             | tar -xz --strip-components=1 -C "$HOME/.cargo/bin" "wasm-bindgen-${V}-x86_64-unknown-linux-musl/wasm-bindgen" \
             || cargo install wasm-bindgen-cli --version "$V" --locked
           wasm-bindgen --version
+      - name: install binaryen (pinned)
+        run: |
+          V="$BINARYEN_VERSION"
+          { curl -sSfL "https://github.com/WebAssembly/binaryen/releases/download/version_${V}/binaryen-version_${V}-x86_64-linux.tar.gz" \
+              | tar -xz --strip-components=2 -C "$HOME/.cargo/bin" "binaryen-version_${V}/bin/wasm-opt" \
+              && wasm-opt --version ; } \
+            || { npm install -g "binaryen@${V}" && wasm-opt --version ; }
       - run: bash scripts/build-wasm-web.sh
       - run: bun install
         working-directory: site
