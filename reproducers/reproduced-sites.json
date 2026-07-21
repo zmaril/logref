@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 522,
-  "combined_total": 767,
+  "new_sites": 549,
+  "combined_total": 794,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -5647,7 +5647,11 @@
       "sqlstates": [],
       "message": "skipping restartpoint, already performed at %X/%08X",
       "scenarios": [
-        "tier4__pitr_beforeconsistent"
+        "tier4__pitr_beforeconsistent",
+        "tier4__58_repl_physical_cascade",
+        "tier4__58_repl_physical_standby",
+        "tier4__59_repl_slots_standby",
+        "tier4__61_pub_sub_pub_standby"
       ]
     },
     {
@@ -6204,7 +6208,10 @@
       ],
       "message": "terminating walreceiver process due to administrator command",
       "scenarios": [
-        "tier4__standby_conflict"
+        "tier4__standby_conflict",
+        "tier4__58_repl_physical_standby",
+        "tier4__59_repl_slots_standby",
+        "tier4__61_pub_sub_pub_standby"
       ]
     },
     {
@@ -6246,6 +6253,312 @@
         "tier4__standby_primary",
         "tier4__wal_control_states",
         "tier4__walctl_sql"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 3707,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "%s cannot run inside a transaction block",
+      "scenarios": [
+        "tier4__59_repl_slots_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 5896,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was shut down in recovery at %s",
+      "scenarios": [
+        "tier4__59_repl_slots_standby",
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 5919,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "database system was interrupted while in recovery at log time %s",
+      "scenarios": [
+        "tier4__58_repl_physical_cascade"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 7175,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "restartpoint starting:%s",
+      "scenarios": [
+        "tier4__58_repl_physical_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlog.c",
+      "line": 10032,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "WAL archiving is not enabled; you must ensure that all required WAL segments are copied through other means to complete the backup",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 2098,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "saw end-of-backup record for backup starting at %X/%08X, waiting for %X/%08X",
+      "scenarios": [
+        "tier4__59_repl_slots_standby",
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xlogrecovery.c",
+      "line": 3712,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "waiting for WAL to become available at %X/%08X",
+      "scenarios": [
+        "tier4__58_repl_physical_cascade"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/indexcmds.c",
+      "line": 1105,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s constraint on partitioned table must include all partitioning columns",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby",
+        "tier4__61_pub_sub_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 958,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CONNECTION_FAILURE"
+      ],
+      "message": "subscription \"%s\" could not connect to the publisher: %s",
+      "scenarios": [
+        "tier4__61_pub_sub_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 1062,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "subscription was created, but is not connected",
+      "scenarios": [
+        "tier4__61_pub_sub_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/subscriptioncmds.c",
+      "line": 2547,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "subscription \"%s\" does not exist, skipping",
+      "scenarios": [
+        "tier4__61_pub_sub_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/libpqwalreceiver/libpqwalreceiver.c",
+      "line": 645,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_PROTOCOL_VIOLATION"
+      ],
+      "message": "could not start WAL streaming: %s",
+      "scenarios": [
+        "tier4__58_repl_physical_cascade"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 512,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "cannot use physical replication slot for logical decoding",
+      "scenarios": [
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby",
+        "tier4__60_logical_decoding_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 1721,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "got new catalog xmin %u at %X/%08X",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby",
+        "tier4__61_pub_sub_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/logical.c",
+      "line": 1781,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "got new restart lsn %X/%08X at %X/%08X",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby",
+        "tier4__61_pub_sub_publisher"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/slotsync.c",
+      "line": 1180,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "replication slot synchronization requires \"%s\" to be specified in \"%s\"",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/slotsync.c",
+      "line": 1648,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "slot sync worker started",
+      "scenarios": [
+        "tier4__61_pub_sub_pub_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/logical/worker.c",
+      "line": 5103,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "logical replication worker for subscription \"%s\" will stop because the subscription was disabled",
+      "scenarios": [
+        "tier4__61_pub_sub_subscriber"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 447,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "replication slot \"%s\" already exists",
+      "scenarios": [
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby",
+        "tier4__60_logical_decoding_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slot.c",
+      "line": 715,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_IN_USE"
+      ],
+      "message": "replication slot \"%s\" is active for PID %d",
+      "scenarios": [
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/slotfuncs.c",
+      "line": 552,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid target WAL LSN",
+      "scenarios": [
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/syncrep.c",
+      "line": 330,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "canceling wait for synchronous replication due to user request",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/syncrep.c",
+      "line": 470,
+      "level": "DEBUG1",
+      "sqlstates": [],
+      "message": "standby \"%s\" now has synchronous standby priority %d",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/syncrep.c",
+      "line": 536,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "standby \"%s\" is now a synchronous standby with priority %d",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/replication/syncrep.c",
+      "line": 578,
+      "level": "DEBUG3",
+      "sqlstates": [],
+      "message": "released %d procs up to write %X/%08X, %d procs up to flush %X/%08X, %d procs up to apply %X/%08X",
+      "scenarios": [
+        "tier4__58_repl_physical_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 502,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "parameter \"%s\" removed from configuration file, reset to default",
+      "scenarios": [
+        "tier4__58_repl_physical_primary",
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby",
+        "tier4__60_logical_decoding_primary"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 567,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "parameter \"%s\" changed to \"%s\"",
+      "scenarios": [
+        "tier4__58_repl_physical_primary",
+        "tier4__59_repl_slots_primary",
+        "tier4__59_repl_slots_standby",
+        "tier4__60_logical_decoding_primary",
+        "tier4__61_pub_sub_publisher"
       ]
     }
   ]
