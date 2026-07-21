@@ -17,6 +17,7 @@ allow = [
     "reproducers/lib.sh",
     "reproducers/env-run.sh",
     "reproducers/sql-caps.sh",
+    "reproducers/frontend-run.sh",
     "reproducers/env/entrypoint.sh",
     "reproducers/scenarios/54_pitr_restore.sh",
     "reproducers/scenarios/55_checkpoint_bgwriter.sh",
