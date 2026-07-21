@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 776,
-  "combined_total": 1021,
+  "new_sites": 810,
+  "combined_total": 1055,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -7380,7 +7380,8 @@
       ],
       "message": "%s is not allowed with UNION/INTERSECT/EXCEPT",
       "scenarios": [
-        "tier2__52_locks_rowmarks_advisory"
+        "tier2__52_locks_rowmarks_advisory",
+        "tier2__38_planner_executor_runtime"
       ]
     },
     {
@@ -7392,7 +7393,8 @@
       ],
       "message": "%s is not allowed with DISTINCT clause",
       "scenarios": [
-        "tier2__52_locks_rowmarks_advisory"
+        "tier2__52_locks_rowmarks_advisory",
+        "tier2__38_planner_executor_runtime"
       ]
     },
     {
@@ -7416,7 +7418,8 @@
       ],
       "message": "%s is not allowed with window functions",
       "scenarios": [
-        "tier2__52_locks_rowmarks_advisory"
+        "tier2__52_locks_rowmarks_advisory",
+        "tier2__38_planner_executor_runtime"
       ]
     },
     {
@@ -9255,6 +9258,414 @@
       "message": "role name \"%s\" is reserved",
       "scenarios": [
         "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/lockcmds.c",
+      "line": 101,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot lock relation \"%s\"",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/prepare.c",
+      "line": 330,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "parameter $%d of type %s cannot be coerced to the expected type %s",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 68,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_CURSOR"
+      ],
+      "message": "cursor \"%s\" does not exist",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 83,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_CURSOR_STATE"
+      ],
+      "message": "cursor \"%s\" is held from a previous transaction",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 125,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_CURSOR_STATE"
+      ],
+      "message": "cursor \"%s\" does not have a FOR UPDATE/SHARE reference to table \"%s\"",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 167,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_CURSOR_STATE"
+      ],
+      "message": "cursor \"%s\" is not a simply updatable scan of table \"%s\"",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 180,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_CURSOR_STATE"
+      ],
+      "message": "cursor \"%s\" is not positioned on a row",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeLimit.c",
+      "line": 397,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ROW_COUNT_IN_LIMIT_CLAUSE"
+      ],
+      "message": "LIMIT must not be negative",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeModifyTable.c",
+      "line": 3073,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CARDINALITY_VIOLATION"
+      ],
+      "message": "%s command cannot affect row a second time",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeSamplescan.c",
+      "line": 255,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLESAMPLE_REPEAT"
+      ],
+      "message": "TABLESAMPLE REPEATABLE parameter cannot be null",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1351,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_RECURSION"
+      ],
+      "message": "aggregate functions are not allowed in a recursive query's recursive term",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 2998,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "window \"%s\" is already defined",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3060,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "cannot override PARTITION BY clause of window \"%s\"",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3072,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "cannot override ORDER BY clause of window \"%s\"",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3153,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "GROUPS mode requires an ORDER BY clause",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3992,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "RANGE with offset PRECEDING/FOLLOWING is not supported for column type %s",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 135,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_ALIAS"
+      ],
+      "message": "WITH query name \"%s\" specified more than once",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 334,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "WITH clause containing a data-modifying statement must be at the top level",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 419,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "WITH query is not recursive",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 470,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "search column \"%s\" not in WITH query column list",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 477,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_COLUMN"
+      ],
+      "message": "search column \"%s\" specified more than once",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 503,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "cycle column \"%s\" not in WITH query column list",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 510,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_COLUMN"
+      ],
+      "message": "cycle column \"%s\" specified more than once",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 534,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "cycle mark column name and cycle path column name are the same",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 544,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "search sequence column name and cycle mark column name are the same",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 551,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "search sequence column name and cycle path column name are the same",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 635,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_COLUMN_REFERENCE"
+      ],
+      "message": "WITH query \"%s\" has %d columns available but %d columns specified",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 880,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "mutual recursion between WITH items is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 975,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "ORDER BY in a recursive query is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 981,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "OFFSET in a recursive query is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 987,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "LIMIT in a recursive query is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 993,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "FOR UPDATE/SHARE in a recursive query is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 1064,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_RECURSION"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 1072,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_RECURSION"
+      ],
+      "message": "recursive reference to query \"%s\" must not appear more than once",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
       ]
     }
   ]

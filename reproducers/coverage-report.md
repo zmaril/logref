@@ -18,8 +18,8 @@ extracted catalog by `(basename, line)`.
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
 - Baseline (Tier 1, exact file:line): **245** (1.65%)
-- Tier 2-4 scenarios add **776** new distinct sites
-- **Combined: 1021 of 14806 (6.90%)**
+- Tier 2-4 scenarios add **810** new distinct sites
+- **Combined: 1055 of 14806 (7.13%)**
 
 ## New sites by tier
 
@@ -27,7 +27,7 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | tier | new sites |
 |---|--:|
-| Tier 2 — crafted-SQL error corpus + contrib | 583 |
+| Tier 2 — crafted-SQL error corpus + contrib | 617 |
 | Tier 3 — config / auth / SSL | 22 |
 | Tier 3-4 — multi-session concurrency | 7 |
 | Tier 4 — corruption / replication / resource / crash | 164 |
@@ -62,6 +62,8 @@ Attributed to the first scenario that fired each site (no double-counting).
 | `tier2__35_ddl_object_lifecycle` | 24 |
 | `tier2__36_constraints_partitioning` | 21 |
 | `tier2__37_alter_type_column_tablespace` | 25 |
+| `tier2__38_planner_executor_runtime` | 8 |
+| `tier2__39_cte_cursors_prepared_lock` | 26 |
 | `tier2__40_extensions_setup` | 6 |
 | `tier2__41_contrib_input_errors` | 5 |
 | `tier2__42_contrib_inspection` | 28 |
@@ -109,7 +111,7 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | level | new sites |
 |---|--:|
-| ERROR | 551 |
+| ERROR | 585 |
 | LOG | 49 |
 | DEBUG1 | 46 |
 | DEBUG2 | 32 |
@@ -138,6 +140,7 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/commands/tablecmds.c` | 64 |
 | `postgres/src/backend/access/transam/xlogrecovery.c` | 26 |
 | `postgres/src/backend/access/transam/xlog.c` | 20 |
+| `postgres/src/backend/parser/parse_cte.c` | 19 |
 | `postgres/src/backend/postmaster/postmaster.c` | 17 |
 | `postgres/src/backend/commands/typecmds.c` | 15 |
 | `postgres/src/backend/catalog/aclchk.c` | 13 |
@@ -157,9 +160,8 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/access/transam/xact.c` | 8 |
 | `postgres/src/backend/catalog/objectaddress.c` | 8 |
 | `postgres/src/backend/parser/analyze.c` | 8 |
+| `postgres/src/backend/parser/parse_clause.c` | 8 |
 | `postgres/src/backend/utils/adt/int8.c` | 8 |
-| `postgres/src/backend/commands/policy.c` | 7 |
-| `postgres/src/backend/commands/sequence.c` | 7 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 
