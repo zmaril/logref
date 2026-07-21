@@ -210,3 +210,89 @@ representative run. What this environment could **not** reach:
 - **Startup-time GUC/`postgresql.conf` fatals** — these print to stderr
   before the logging collector starts, so they are not in the jsonlog; only
   the SIGHUP reload path (captured here) logs structurally.
+
+## Frontend client-tool sites (message-text matched)
+
+The sites above are all *backend* sites: a running server prints them to
+`jsonlog`, which carries `file_name:file_line_num`, so the catalog join is an
+exact `file:line` match. Postgres' **frontend** client tools (`pg_dump`,
+`pgbench`, `initdb`, the `scripts/` wrappers, the `pg_basebackup` family, ...)
+are different. They call `pg_log_error` / `pg_fatal`, which write plain text to
+stderr — `progname: error: <message>` — with **no** source location. The
+`file:line` join can never reach them, so every one of these sites sat
+unreproduced.
+
+**Method.** We reproduce them the only honest way message text allows: run each
+tool straight into a real option-parsing, value-validation, or object-filter
+error (driver `frontend-run.sh`, scenarios 66–69), capture its stderr, and
+attribute each captured line to a **unique** catalog frontend site. The matcher
+(`frontend-coverage.py`) converts each candidate site's printf format string to
+an anchored regex, scopes candidates to the tool's own source file(s) ∪
+`fe_utils` ∪ `common`, and credits a line **only when exactly one** candidate
+matches. Zero or multiple matches are recorded as unmatched / ambiguous and not
+counted. Sites whose format string carries fewer than three literal
+alphanumeric characters (e.g. `pg_fatal("%s")`, `"%s: %s"`, `"%m"`) are
+excluded up front as unidentifiable-by-message: any output could have come from
+them, so keeping them would only poison every line into ambiguity. This is a
+by-message attribution, not a by-location one, and it is labelled as such: each
+merged entry carries `"kind": "frontend"` and `"match": "message-text"` (and
+`"sqlstates": null`, since frontend sites have no SQLSTATE).
+
+**Result: 73 new distinct sites**, across 21 tools, none previously reproduced.
+By scenario group:
+
+| scenario group | tools | new sites |
+|---|---|--:|
+| 66 — dump / restore / dumpall / upgrade | `pg_dump` `pg_restore` `pg_dumpall` `pg_upgrade` | 14 |
+| 67 — physical / backup tools | `pg_basebackup` `pg_receivewal` `pg_recvlogical` `pg_rewind` `pg_combinebackup` `pg_verifybackup` `pg_waldump` `pg_checksums` `pg_amcheck` | 29 |
+| 68 — pgbench + psql | `pgbench` `psql` | 8 |
+| 69 — scripts + initdb + pg_ctl | `initdb` `pg_ctl` `reindexdb` `vacuumdb` `clusterdb` `createdb` `dropdb` `createuser` `dropuser` | 22 |
+
+By tool:
+
+| tool | new | tool | new |
+|---|--:|---|--:|
+| `pg_dump` | 13 | `pg_receivewal` | 3 |
+| `pg_basebackup` | 7 | `pg_recvlogical` | 3 |
+| `pgbench` | 6 | `reindexdb` | 3 |
+| `initdb` | 5 | `createuser` | 2 |
+| `pg_waldump` | 5 | `pg_amcheck` | 2 |
+| `createdb` | 3 | `pg_checksums` | 2 |
+| `dropdb` | 3 | `pg_rewind` | 2 |
+| `dropuser` | 3 | `pg_verifybackup` | 2 |
+| `pg_combinebackup` | 3 | `psql` | 2 |
+| `clusterdb` | 1 | `vacuumdb` | 2 |
+| `pg_restore` | 1 | | |
+
+### Honest limits
+
+A message-based join reaches less than a location-based one, on purpose. What it
+cannot attribute, and why:
+
+- **psql meta-command errors** (`\pset: ...`, `\if`/`\elif` misuse) — psql prints
+  these **bare**, with no `progname: error:` prefix, so the line filter can't even
+  recognise them as emissions, let alone attribute them. Only psql's startup-time
+  errors (e.g. `psql -P format=nonsense`) carry the prefix and are covered.
+- **libpq `"%s"` connection passthroughs** — a failed connection surfaces the
+  server / libpq text through a bare `%s` site with no literal content of its own;
+  excluded as unidentifiable-by-message.
+- **Ambiguous in-file messages** — where two sites in one tool share a format
+  (the `Try "%s --help" for more information.` hint every tool emits; `vacuumdb`'s
+  duplicate mutually-exclusive option checks), no single candidate wins, so the
+  line is dropped as ambiguous rather than guessed.
+- **`pg_amcheck` `log_no_match` sites** — its pattern-not-found diagnostics route
+  through a helper the extractor doesn't flag as a frontend log site, so they are
+  not candidates.
+
+These exclusions are the price of honesty: every one of the 73 is a line the tool
+actually printed, matched to exactly one catalog site by its message.
+
+### Measurement provenance
+
+The frontend catalog and captures were produced from a Postgres **HEAD build at
+`54cd6fc` from source** (the campaign's canonical commit). That local extraction
+found **14,856** catalog sites — 50 more than the 14,806 this report uses as the
+join denominator. The difference is a Semgrep-version artifact in the extractor,
+not a change in Postgres: per-site line numbers are exact and stable, so the
+extra 50 affect only the total count. The denominator therefore stays **14,806**
+across the whole campaign, and these 73 are counted against it.
