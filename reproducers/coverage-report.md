@@ -18,8 +18,8 @@ extracted catalog by `(basename, line)`.
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
 - Baseline (Tier 1, exact file:line): **245** (1.65%)
-- Tier 2-4 scenarios add **744** new distinct sites
-- **Combined: 989 of 14806 (6.68%)**
+- Tier 2-4 scenarios add **776** new distinct sites
+- **Combined: 1021 of 14806 (6.90%)**
 
 ## New sites by tier
 
@@ -27,7 +27,7 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | tier | new sites |
 |---|--:|
-| Tier 2 — crafted-SQL error corpus + contrib | 551 |
+| Tier 2 — crafted-SQL error corpus + contrib | 583 |
 | Tier 3 — config / auth / SSL | 22 |
 | Tier 3-4 — multi-session concurrency | 7 |
 | Tier 4 — corruption / replication / resource / crash | 164 |
@@ -66,6 +66,10 @@ Attributed to the first scenario that fired each site (no double-counting).
 | `tier2__41_contrib_input_errors` | 5 |
 | `tier2__42_contrib_inspection` | 28 |
 | `tier2__43_contrib_fdw_indexam` | 9 |
+| `tier2__46_grant_revoke_privtypes` | 9 |
+| `tier2__47_permission_denied_objtypes` | 2 |
+| `tier2__48_roles_membership_reserved` | 8 |
+| `tier2__49_rls_policies_defaclr` | 13 |
 | `tier2__50_txn_control_savepoints` | 10 |
 | `tier2__51_twophase_prepare` | 5 |
 | `tier2__52_locks_rowmarks_advisory` | 7 |
@@ -105,14 +109,14 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | level | new sites |
 |---|--:|
-| ERROR | 520 |
+| ERROR | 551 |
 | LOG | 49 |
 | DEBUG1 | 46 |
 | DEBUG2 | 32 |
 | elevel | 23 |
 | DEBUG4 | 19 |
+| NOTICE | 12 |
 | WARNING | 12 |
-| NOTICE | 11 |
 | FATAL | 10 |
 | DEBUG3 | 9 |
 | log_replication_commands ? LOG : DEBUG1 | 3 |
@@ -136,6 +140,7 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/access/transam/xlog.c` | 20 |
 | `postgres/src/backend/postmaster/postmaster.c` | 17 |
 | `postgres/src/backend/commands/typecmds.c` | 15 |
+| `postgres/src/backend/catalog/aclchk.c` | 13 |
 | `postgres/src/backend/commands/copy.c` | 12 |
 | `postgres/src/backend/commands/indexcmds.c` | 12 |
 | `postgres/src/backend/utils/misc/guc.c` | 12 |
@@ -145,6 +150,7 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/contrib/postgres_fdw/option.c` | 9 |
 | `postgres/src/backend/catalog/namespace.c` | 9 |
 | `postgres/src/backend/commands/subscriptioncmds.c` | 9 |
+| `postgres/src/backend/commands/user.c` | 9 |
 | `postgres/src/backend/parser/parse_utilcmd.c` | 9 |
 | `postgres/src/backend/tcop/postgres.c` | 9 |
 | `postgres/src/backend/utils/adt/int.c` | 9 |
@@ -152,10 +158,8 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/catalog/objectaddress.c` | 8 |
 | `postgres/src/backend/parser/analyze.c` | 8 |
 | `postgres/src/backend/utils/adt/int8.c` | 8 |
-| `postgres/src/backend/commands/vacuum.c` | 7 |
-| `postgres/src/backend/replication/logical/logical.c` | 7 |
-| `postgres/src/backend/replication/logical/snapbuild.c` | 7 |
-| `postgres/src/backend/replication/logical/worker.c` | 7 |
+| `postgres/src/backend/commands/policy.c` | 7 |
+| `postgres/src/backend/commands/sequence.c` | 7 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 
