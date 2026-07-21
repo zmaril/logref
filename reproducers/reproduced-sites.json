@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 602,
-  "combined_total": 847,
+  "new_sites": 933,
+  "combined_total": 1178,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -6266,7 +6266,9 @@
       ],
       "message": "%s cannot run inside a transaction block",
       "scenarios": [
-        "tier4__59_repl_slots_primary"
+        "tier4__59_repl_slots_primary",
+        "tier2__51_twophase_prepare",
+        "tier2__53_vacuum_cluster_concurrency_ddl"
       ]
     },
     {
@@ -7177,6 +7179,3974 @@
       "message": "missing Rules parameter",
       "scenarios": [
         "tier2__63_contrib_dict_trigger"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/heap/heapam.c",
+      "line": 4993,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_LOCK_NOT_AVAILABLE"
+      ],
+      "message": "could not obtain lock on row in relation \"%s\"",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/twophase.c",
+      "line": 372,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "transaction identifier \"%s\" is too long",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/twophase.c",
+      "line": 399,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "transaction identifier \"%s\" is already in use",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 2658,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot PREPARE a transaction that has operated on temporary objects",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 2668,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot PREPARE a transaction that has exported snapshots",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4008,
+      "level": "WARNING",
+      "sqlstates": [
+        "ERRCODE_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "there is already a transaction in progress",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4200,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NO_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "%s can only be used in transaction blocks",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4323,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NO_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "%s can only be used in transaction blocks",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4536,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_S_E_INVALID_SPECIFICATION"
+      ],
+      "message": "savepoint \"%s\" does not exist",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/access/transam/xact.c",
+      "line": 4647,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_S_E_INVALID_SPECIFICATION"
+      ],
+      "message": "savepoint \"%s\" does not exist",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/repack.c",
+      "line": 783,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not an index for table \"%s\"",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/repack.c",
+      "line": 1431,
+      "level": "elevel",
+      "sqlstates": [],
+      "message": "repacking \"%s.%s\" using index scan on \"%s\"",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/vacuum.c",
+      "line": 335,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "BUFFER_USAGE_LIMIT cannot be specified for VACUUM FULL",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execMain.c",
+      "line": 1238,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot lock rows in sequence \"%s\"",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeModifyTable.c",
+      "line": 2890,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_T_R_SERIALIZATION_FAILURE"
+      ],
+      "message": "could not serialize access due to concurrent update",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/optimizer/plan/initsplan.c",
+      "line": 2189,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s cannot be applied to the nullable side of an outer join",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 2184,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with UNION/INTERSECT/EXCEPT",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory",
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 3754,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with DISTINCT clause",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory",
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 3775,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with aggregate functions",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/analyze.c",
+      "line": 3782,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "%s is not allowed with window functions",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory",
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/deadlock.c",
+      "line": 1133,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_T_R_DEADLOCK_DETECTED"
+      ],
+      "message": "deadlock detected",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/lock.c",
+      "line": 2189,
+      "level": "WARNING",
+      "sqlstates": [],
+      "message": "you don't own a lock of type %s",
+      "scenarios": [
+        "tier2__52_locks_rowmarks_advisory"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/predicate.c",
+      "line": 4652,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_T_R_SERIALIZATION_FAILURE"
+      ],
+      "message": "could not serialize access due to read/write dependencies among transactions",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/storage/lmgr/proc.c",
+      "line": 1687,
+      "level": "LOG",
+      "sqlstates": [],
+      "message": "process %d detected deadlock while waiting for %s on %s after %ld.%03d ms",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3602,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_LOCK_NOT_AVAILABLE"
+      ],
+      "message": "canceling statement due to lock timeout",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3609,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_QUERY_CANCELED"
+      ],
+      "message": "canceling statement due to statement timeout",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3650,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_IDLE_IN_TRANSACTION_SESSION_TIMEOUT"
+      ],
+      "message": "terminating connection due to idle-in-transaction timeout",
+      "scenarios": [
+        "tier34__50_txn_concurrency"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/tcop/postgres.c",
+      "line": 3663,
+      "level": "FATAL",
+      "sqlstates": [
+        "ERRCODE_TRANSACTION_TIMEOUT"
+      ],
+      "message": "terminating connection due to transaction timeout",
+      "scenarios": [
+        "tier2__53_vacuum_cluster_concurrency_ddl"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 6694,
+      "level": "elevel",
+      "sqlstates": [
+        "GUC_check_errcode_value"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/misc/guc.c",
+      "line": 6846,
+      "level": "elevel",
+      "sqlstates": [
+        "GUC_check_errcode_value"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/mmgr/portalmem.c",
+      "line": 737,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot PREPARE a transaction that has created a cursor WITH HOLD",
+      "scenarios": [
+        "tier2__51_twophase_prepare"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/time/snapmgr.c",
+      "line": 1411,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_ACTIVE_SQL_TRANSACTION"
+      ],
+      "message": "SET TRANSACTION SNAPSHOT must be called before any query",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/time/snapmgr.c",
+      "line": 1429,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid snapshot identifier: \"%s\"",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/time/snapmgr.c",
+      "line": 1444,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "snapshot \"%s\" does not exist",
+      "scenarios": [
+        "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/dependency.c",
+      "line": 1080,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DEPENDENT_OBJECTS_STILL_EXIST"
+      ],
+      "message": "cannot drop %s because %s requires it",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/heap.c",
+      "line": 3366,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "generation expression is not immutable",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 703,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_SCHEMA"
+      ],
+      "message": "no schema has been selected to create in",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 757,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cross-database references are not implemented: \"%s.%s.%s\"",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1453,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not an index",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1467,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a sequence",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1482,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a view",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1489,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a materialized view",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_collation.c",
+      "line": 108,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "collation \"%s\" already exists",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_enum.c",
+      "line": 416,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "\"%s\" is not an existing enum label",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 126,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "conflicting or redundant options",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 228,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "unrecognized collation provider: %s",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 315,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "nondeterministic collations not supported with this provider",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 320,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "ICU rules cannot be specified unless locale provider is ICU",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/foreigncmds.c",
+      "line": 643,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "foreign-data wrapper \"%s\" already exists",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/foreigncmds.c",
+      "line": 988,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "server \"%s\" already exists",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/publicationcmds.c",
+      "line": 876,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "publication \"%s\" already exists",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 945,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot specify default tablespace for partitioned relations",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 976,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "only shared relations can be placed in pg_global tablespace",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1585,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": null,
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1616,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "DROP INDEX CONCURRENTLY does not support dropping multiple objects",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1620,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "DROP INDEX CONCURRENTLY does not support CASCADE",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1728,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot drop partitioned index \"%s\" concurrently",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 2016,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot truncate only a partitioned table",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 2751,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot inherit from partitioned table \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3337,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "merging column \"%s\" with inherited definition",
+      "scenarios": [
+        "tier2__36_constraints_partitioning",
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3508,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "merging multiple inherited definitions of column \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3519,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "inherited column \"%s\" has a type conflict",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3797,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "only shared relations can be placed in pg_global tablespace",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3879,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot rename column of typed table",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 4038,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot rename system column \"%s\"",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 7339,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot add column to typed table",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 8292,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "column \"%s\" of relation \"%s\" is an identity column",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 8428,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "column \"%s\" of relation \"%s\" must be declared NOT NULL before identity can be added",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 8459,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "column \"%s\" of relation \"%s\" is already an identity column",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 9396,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot drop column from typed table",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 9483,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "cannot drop inherited column \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 10578,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "foreign key constraint \"%s\" cannot be implemented",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14934,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot alter column type of typed table",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14952,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot alter system column \"%s\"",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14962,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_COLUMN_DEFINITION"
+      ],
+      "message": "cannot specify USING when altering type of generated column",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14974,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "cannot alter inherited column \"%s\"",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 15679,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot alter type of a column used by a view or rule",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 15749,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot alter type of a column used by a generated column",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 18010,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot inherit from partitioned table \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 18039,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_TABLE"
+      ],
+      "message": "circular inheritance not allowed",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 18234,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "child table \"%s\" has different type for column \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 19684,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot move an owned sequence into another schema",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 19792,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_TABLE"
+      ],
+      "message": "relation \"%s\" already exists in schema \"%s\"",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20549,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot use system column \"%s\" in partition key",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20563,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot use generated column in partition key",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20696,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "functions in partition key expression must be marked IMMUTABLE",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20705,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot use constant expression as partition key",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 21068,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot attach a typed table as partition",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablespace.c",
+      "line": 261,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "tablespace location must be an absolute path",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 968,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "conflicting NULL/NOT NULL constraints",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 996,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unique constraints not possible for domains",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1003,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "primary key constraints not possible for domains",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1017,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "foreign key constraints not possible for domains",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1361,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not an enum",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1519,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "range subtype cannot be %s",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace",
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1538,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "range collation specified but subtype does not support collation",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 3212,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NOT_NULL_VIOLATION"
+      ],
+      "message": "column \"%s\" of table \"%s\" contains null values",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 3303,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CHECK_VIOLATION"
+      ],
+      "message": "column \"%s\" of table \"%s\" contains values that violate the new constraint",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 3532,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not a domain",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/view.c",
+      "line": 438,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "WITH CHECK OPTION is supported only on automatically updatable views",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 2835,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "collations are not supported by type %s",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 4883,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "modulus for hash partition must be an integer value greater than zero",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 4890,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "remainder for hash partition must be less than modulus",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 4956,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "invalid bound specification for a range partition",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 3405,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "improper qualified name (too many dotted names): %s",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc",
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/dropcmds.c",
+      "line": 522,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/arrayfuncs.c",
+      "line": 6145,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_PROGRAM_LIMIT_EXCEEDED"
+      ],
+      "message": "number of array dimensions (%d) exceeds the maximum allowed (%d)",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/cash.c",
+      "line": 160,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DIVISION_BY_ZERO"
+      ],
+      "message": "division by zero",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 1230,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "unit \"%s\" not supported for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 2331,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "unit \"%s\" not supported for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 2347,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unit \"%s\" not recognized for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/date.c",
+      "line": 3136,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "unit \"%s\" not supported for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/float.c",
+      "line": 1565,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ARGUMENT_FOR_POWER_FUNCTION"
+      ],
+      "message": "a negative number raised to a non-integer power yields a complex result",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/geo_ops.c",
+      "line": 1169,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid line specification: must be two distinct points",
+      "scenarios": [
+        "tier2__32_type_io_net_geo_bit"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 886,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "integer out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 920,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 956,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1002,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1194,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DIVISION_BY_ZERO"
+      ],
+      "message": "division by zero",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1241,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "smallint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1291,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "integer out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int.c",
+      "line": 1359,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "integer out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 453,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 490,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 504,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 560,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 579,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DIVISION_BY_ZERO"
+      ],
+      "message": "division by zero",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 643,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/int8.c",
+      "line": 711,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "bigint out of range",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonb.c",
+      "line": 655,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "key value must be scalar, not array, composite, or json",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonfuncs.c",
+      "line": 4981,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot delete path in scalar",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 968,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_SQL_JSON_SUBSCRIPT"
+      ],
+      "message": "jsonpath array subscript is out of bounds",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1020,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQL_JSON_ARRAY_NOT_FOUND"
+      ],
+      "message": "jsonpath array accessor can only be applied to an array",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1150,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQL_JSON_ARRAY_NOT_FOUND"
+      ],
+      "message": "jsonpath item method .%s() can only be applied to an array",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 1232,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NON_NUMERIC_SQL_JSON_ITEM"
+      ],
+      "message": "NaN or Infinity is not allowed for jsonpath item method .%s()",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 2412,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NON_NUMERIC_SQL_JSON_ITEM"
+      ],
+      "message": "jsonpath item method .%s() can only be applied to a numeric value",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/jsonpath_exec.c",
+      "line": 3111,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SQL_JSON_OBJECT_NOT_FOUND"
+      ],
+      "message": "jsonpath item method .%s() can only be applied to an object",
+      "scenarios": [
+        "tier2__33_type_io_json_range_misc"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/network.c",
+      "line": 353,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "invalid mask length: %d",
+      "scenarios": [
+        "tier2__32_type_io_net_geo_bit"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/network.c",
+      "line": 1958,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "cannot subtract inet values of different sizes",
+      "scenarios": [
+        "tier2__32_type_io_net_geo_bit"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/pseudorandomfuncs.c",
+      "line": 80,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "setseed parameter %g is out of allowed range [-1,1]",
+      "scenarios": [
+        "tier2__30_type_io_numeric_int"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 2974,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATETIME_VALUE_OUT_OF_RANGE"
+      ],
+      "message": "interval out of range",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/timestamp.c",
+      "line": 5759,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "unit \"%s\" not recognized for type %s",
+      "scenarios": [
+        "tier2__31_type_io_datetime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 209,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "grant options can only be granted to roles",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 565,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "column privileges are only valid for relations",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 577,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1067,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1094,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied to change default privileges",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1212,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "cannot use IN SCHEMA clause when using %s",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1580,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_COLUMN"
+      ],
+      "message": "column \"%s\" of relation \"%s\" does not exist",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1825,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is an index",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1832,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is a composite type",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1840,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a sequence",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 1904,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "invalid privilege type %s for table",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 2072,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_GRANT_OPERATION"
+      ],
+      "message": "invalid privilege type %s for column",
+      "scenarios": [
+        "tier2__46_grant_revoke_privtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/aclchk.c",
+      "line": 2954,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__47_permission_denied_objtypes",
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_shdepend.c",
+      "line": 701,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DEPENDENT_OBJECTS_STILL_EXIST"
+      ],
+      "message": "cannot drop %s because it is required by the database system",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/dropcmds.c",
+      "line": 524,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 96,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied: \"%s\" is a system catalog",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 103,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a table",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 613,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "WITH CHECK cannot be applied to SELECT or DELETE",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 622,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "only WITH CHECK expression allowed for INSERT",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 696,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "policy \"%s\" for table \"%s\" already exists",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/policy.c",
+      "line": 897,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "policy \"%s\" for table \"%s\" does not exist",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/sequence.c",
+      "line": 653,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied for sequence %s",
+      "scenarios": [
+        "tier2__47_permission_denied_objtypes"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 323,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied to create role",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 359,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_RESERVED_NAME"
+      ],
+      "message": "role name \"%s\" is reserved",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 786,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied to alter role",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 1105,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INSUFFICIENT_PRIVILEGE"
+      ],
+      "message": "permission denied to drop role",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 1745,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "role \"%s\" cannot be a member of any role",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/user.c",
+      "line": 2137,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "role \"%s\" cannot have explicit members",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 613,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_GROUPING_ERROR"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr",
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1058,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "%s",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr",
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/rewrite/rewriteHandler.c",
+      "line": 2295,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "infinite recursion detected in policy for relation \"%s\"",
+      "scenarios": [
+        "tier2__49_rls_policies_defaclr"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/utils/adt/acl.c",
+      "line": 5760,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_RESERVED_NAME"
+      ],
+      "message": "role name \"%s\" is reserved",
+      "scenarios": [
+        "tier2__48_roles_membership_reserved"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/lockcmds.c",
+      "line": 101,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot lock relation \"%s\"",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/prepare.c",
+      "line": 330,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "parameter $%d of type %s cannot be coerced to the expected type %s",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 68,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_CURSOR"
+      ],
+      "message": "cursor \"%s\" does not exist",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 83,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_CURSOR_STATE"
+      ],
+      "message": "cursor \"%s\" is held from a previous transaction",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 125,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_CURSOR_STATE"
+      ],
+      "message": "cursor \"%s\" does not have a FOR UPDATE/SHARE reference to table \"%s\"",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 167,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_CURSOR_STATE"
+      ],
+      "message": "cursor \"%s\" is not a simply updatable scan of table \"%s\"",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/execCurrent.c",
+      "line": 180,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_CURSOR_STATE"
+      ],
+      "message": "cursor \"%s\" is not positioned on a row",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeLimit.c",
+      "line": 397,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_ROW_COUNT_IN_LIMIT_CLAUSE"
+      ],
+      "message": "LIMIT must not be negative",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeModifyTable.c",
+      "line": 3073,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CARDINALITY_VIOLATION"
+      ],
+      "message": "%s command cannot affect row a second time",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/executor/nodeSamplescan.c",
+      "line": 255,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLESAMPLE_REPEAT"
+      ],
+      "message": "TABLESAMPLE REPEATABLE parameter cannot be null",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1351,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_RECURSION"
+      ],
+      "message": "aggregate functions are not allowed in a recursive query's recursive term",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock",
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 2998,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "window \"%s\" is already defined",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3060,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "cannot override PARTITION BY clause of window \"%s\"",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3072,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "cannot override ORDER BY clause of window \"%s\"",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3153,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "GROUPS mode requires an ORDER BY clause",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 3992,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "RANGE with offset PRECEDING/FOLLOWING is not supported for column type %s",
+      "scenarios": [
+        "tier2__38_planner_executor_runtime"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 135,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_ALIAS"
+      ],
+      "message": "WITH query name \"%s\" specified more than once",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 334,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "WITH clause containing a data-modifying statement must be at the top level",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 419,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "WITH query is not recursive",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 470,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "search column \"%s\" not in WITH query column list",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 477,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_COLUMN"
+      ],
+      "message": "search column \"%s\" specified more than once",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 503,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "cycle column \"%s\" not in WITH query column list",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 510,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_COLUMN"
+      ],
+      "message": "cycle column \"%s\" specified more than once",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 534,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "cycle mark column name and cycle path column name are the same",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 544,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "search sequence column name and cycle mark column name are the same",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 551,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "search sequence column name and cycle path column name are the same",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 635,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_COLUMN_REFERENCE"
+      ],
+      "message": "WITH query \"%s\" has %d columns available but %d columns specified",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 880,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "mutual recursion between WITH items is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 975,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "ORDER BY in a recursive query is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 981,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "OFFSET in a recursive query is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 987,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "LIMIT in a recursive query is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 993,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "FOR UPDATE/SHARE in a recursive query is not implemented",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 1064,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_RECURSION"
+      ],
+      "message": "",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_cte.c",
+      "line": 1072,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_RECURSION"
+      ],
+      "message": "recursive reference to query \"%s\" must not appear more than once",
+      "scenarios": [
+        "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 3399,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cross-database references are not implemented: %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_aggregate.c",
+      "line": 244,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "return type of transition function %s is not %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_aggregate.c",
+      "line": 425,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "return type of combine function %s is not %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 377,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_FUNCTION"
+      ],
+      "message": "operator %s already exists",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 443,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "operator cannot be its own negator",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 570,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only binary operators can have commutators",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 574,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only binary operators can have join selectivity",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 578,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only binary operators can merge join",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 582,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only binary operators can hash",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 591,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can have negators",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 595,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can have restriction selectivity",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 599,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can have join selectivity",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 603,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can merge join",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 607,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can hash",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_proc.c",
+      "line": 217,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "cannot determine result data type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_proc.c",
+      "line": 887,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "SQL functions cannot return type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_proc.c",
+      "line": 902,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "SQL functions cannot have arguments of type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 165,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only ordered-set aggregates can be hypothetical",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 190,
+      "level": "WARNING",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "aggregate attribute \"%s\" not recognized",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 200,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate stype must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 204,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate sfunc must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 216,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate msfunc must be specified when mstype is specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 231,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate minvfunc must not be specified without mstype",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 302,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "basetype is redundant with aggregate input type specification",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 345,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate transition data type cannot be %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 367,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "must specify both or neither of serialization and deserialization functions",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 432,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "parameter \"parallel\" must be SAFE, RESTRICTED, or UNSAFE",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 103,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "SQL function cannot return shell type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 245,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "SQL function cannot accept shell type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 252,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate cannot accept shell type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 284,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregates cannot accept set arguments",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 289,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "procedures cannot accept set arguments",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 294,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "functions cannot accept set arguments",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 305,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "VARIADIC parameter must be the last input parameter",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 326,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "VARIADIC parameter must be the last parameter",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 417,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only input parameters can have default values",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 469,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "procedure OUT parameters cannot appear after one with a default value",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 650,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "parameter \"parallel\" must be SAFE, RESTRICTED, or UNSAFE",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 702,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "function %s does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 848,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "ROWS must be positive",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 877,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "no function body specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 887,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "inline SQL function body only valid for language SQL",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1002,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only one AS item needed for language \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1108,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "no language specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1203,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "function result type must be %s because of OUT parameters",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1216,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "function result type must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1401,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is an aggregate function",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1446,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "COST must be positive",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1454,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "ROWS must be positive",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1458,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "ROWS is not applicable when function does not return a set",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1565,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "source data type %s is a pseudo-type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1571,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "target data type %s is a pseudo-type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1625,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cast function must take one to three arguments",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1631,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "argument of cast function must match or be binary-coercible from source data type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1647,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "return data type of cast function must match or be binary-coercible to target data type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1663,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cast function must be a normal function",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1667,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cast function must not return a set",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1708,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "source and target data types are not physically compatible",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 2169,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "language \"%s\" does not support inline code execution",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/operatorcmds.c",
+      "line": 163,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "operator function must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/operatorcmds.c",
+      "line": 185,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "operator right argument type must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 465,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "type input function must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 469,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "type output function must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 474,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "type modifier output function is useless without a type modifier input function",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1506,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "type attribute \"%s\" not recognized",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1514,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "type attribute \"subtype\" is required",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1548,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot specify a canonical function without a pre-created shell type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2053,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "function %s does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2061,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "type input function %s must return type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2367,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "operator class \"%s\" does not accept data type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2379,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "data type %s has no default operator class for access method \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2448,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "function %s does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2454,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "range subtype diff function %s must return type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 277,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_TOO_MANY_ARGUMENTS"
+      ],
+      "message": "GROUPING must have fewer than 32 arguments",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 749,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_GROUPING_ERROR"
+      ],
+      "message": "aggregate function calls cannot be nested",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 827,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "aggregate function calls cannot contain set-returning function calls",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 833,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_GROUPING_ERROR"
+      ],
+      "message": "aggregate function calls cannot contain window function calls",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 910,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "window function calls cannot be nested",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1063,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "window functions are not allowed in %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1098,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "window \"%s\" does not exist",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1580,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_GROUPING_ERROR"
+      ],
+      "message": "subquery uses ungrouped column \"%s.%s\" from outer query",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 599,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "set-returning functions must appear at top level of FROM",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 1783,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "set-returning functions are not allowed in %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 2282,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "set-returning functions are not allowed in %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 196,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "argument name \"%s\" used more than once",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 207,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "positional argument cannot follow named argument",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 318,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s(*) specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 325,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "DISTINCT specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 331,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "WITHIN GROUP specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 337,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "ORDER BY specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 343,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "FILTER specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 349,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "OVER specified, but %s is not a window function nor an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 355,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s specified, but %s is not a window function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 400,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "OVER is not supported for ordered-set aggregate %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 524,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not an ordered-set aggregate, so it cannot have WITHIN GROUP",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 532,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "aggregate functions do not accept RESPECT/IGNORE NULLS",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 550,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "window function %s cannot have WITHIN GROUP",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 579,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "procedure %s is not unique",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 588,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "function %s is not unique",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 754,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "VARIADIC argument must be an array",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 809,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s(*) must be used to call a parameterless aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 865,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "DISTINCT is not implemented for window functions",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 875,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s(*) must be used to call a parameterless aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 894,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "FILTER is not implemented for non-aggregate window functions",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 903,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "window function calls cannot contain set-returning function calls",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2488,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not a function",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2498,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not a procedure",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2508,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "function %s is not an aggregate",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2536,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "could not find a procedure named \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2541,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "procedure %s does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2555,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "aggregate %s(*) does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2570,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "could not find a function named \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2588,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "function name \"%s\" is not unique",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2596,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "procedure name \"%s\" is not unique",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2612,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "routine name \"%s\" is not unique",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2811,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "set-returning functions are not allowed in %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 216,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "could not identify an ordering operator for type %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 222,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "could not identify an equality operator for type %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 640,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "operator is not unique: %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 852,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "op ANY/ALL (array) requires array on right side",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 893,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "op ANY/ALL (array) requires operator to yield boolean",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_relation.c",
+      "line": 1892,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "a column definition list is required for functions returning \"record\"",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_relation.c",
+      "line": 3875,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_TABLE"
+      ],
+      "message": "missing FROM-clause entry for table \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
       ]
     }
   ]
