@@ -11,6 +11,12 @@ BENCH="$REPO/crates/logref-wasm/bench"
 cd "$REPO"
 
 # 1. wasm web target → bench/ (build the cdylib, then wasm-bindgen --target web).
+# SIMD=1 builds with wasm simd128 (memchr/aho-corasick have simd128 kernels), so
+# the benchmark can measure with and without it.
+if [ "${SIMD:-0}" = "1" ]; then
+  export RUSTFLAGS="${RUSTFLAGS:-} -C target-feature=+simd128"
+  echo "building wasm WITH simd128"
+fi
 cargo build -p logref-wasm --target wasm32-unknown-unknown --release
 wasm-bindgen --target web --out-dir "$BENCH" \
   target/wasm32-unknown-unknown/release/logref_wasm.wasm

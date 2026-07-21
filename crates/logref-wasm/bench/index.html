@@ -24,7 +24,9 @@
   .num.wasm { color: #56d364; }
   .num.packed { color: #d2a8ff; }
   .num.ts { color: #79c0ff; }
+  .num.trig { color: #e3b341; }
   .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .grid.four { grid-template-columns: 1fr 1fr 1fr 1fr; }
   .unit { font-size: 12px; color: #8b98a9; font-weight: 400; }
   .row { display: flex; justify-content: space-between; font-size: 12.5px;
          padding: 3px 0; border-top: 1px solid #21283680; color: #b9c2cf; margin-top: 2px; }
@@ -39,12 +41,14 @@
 </style>
 </head>
 <body>
-  <h1>logref scanner throughput — batched WASM vs hand-tuned TS</h1>
-  <p class="sub">Same catalog, same rendered log lines, same trigram algorithm, in the browser.
-     <span class="num packed" style="font-size:14px">Packed WASM</span> calls hand-written <code>scanBatchPacked(lines)</code> — the whole result as ONE flat
-     <code>Int32Array</code> (single bulk copy), reconstructed JS-side by slicing each line by the returned byte spans (that decode cost is charged here).
-     <span class="num wasm" style="font-size:14px">Nested WASM</span> is <code>scanBatch</code> (serde-marshalled <code>MatchHit[][]</code>).
-     <span class="num ts" style="font-size:14px">Hand-tuned TS</span> is the production <code>ScanIndex</code> (per-line <code>scanLine</code>).</p>
+  <h1>logref scanner throughput — specialized-matcher WASM vs hand-tuned TS</h1>
+  <p class="sub">Same catalog, same rendered log lines, in the browser.
+     <span class="num packed" style="font-size:14px">Specialized WASM</span> is the purpose-built printf matcher (anchored Aho-Corasick candidates + regex-free
+     byte-loop verification) via <code>scanBatchPacked(lines)</code> — the whole result as ONE flat <code>Int32Array</code>, reconstructed JS-side by slicing each
+     line by the returned byte spans (that decode cost is charged here).
+     <span class="num trig" style="font-size:14px">Trigram WASM</span> is the PREVIOUS wasm path (trigram prefilter + <code>regex</code>-crate verify), same packed marshalling.
+     <span class="num wasm" style="font-size:14px">Nested WASM</span> is the specialized matcher behind serde-marshalled <code>scanBatch</code>.
+     <span class="num ts" style="font-size:14px">Hand-tuned TS</span> is the production <code>ScanIndex</code> (trigram prefilter + V8-JIT <code>RegExp</code>, per-line <code>scanLine</code>).</p>
   <p id="status">booting…</p>
   <div id="results" style="display:none"></div>
   <div class="meta" id="meta"></div>
@@ -148,14 +152,20 @@ function benchmark(jsonl, N) {
   const ts = new ScanIndex(patterns);
   const tsBuildMs = performance.now() - t;
 
-  // ── correctness: packed (decoded) must equal nested, over ALL N lines ──
+  // ── correctness: packed (decoded) must equal nested, over ALL N lines —
+  // and the packed TRIGRAM path (the previous algorithm) must equal both,
+  // which cross-proves the specialized matcher against the regex-verify path
+  // in-browser. ──
   const nestedOnce = wasm.scanBatch(lines);
   const packedOnce = decodePacked(wasm.scanBatchPacked(lines), lines);
   const cc = crossCheck(nestedOnce, packedOnce);
+  const packedTriOnce = decodePacked(wasm.scanBatchPackedTrigram(lines), lines);
+  const ccTri = crossCheck(nestedOnce, packedTriOnce);
 
   // warm-up (not timed).
   wasm.scanBatch(lines.slice(0, 500));
   wasm.scanBatchPacked(lines.slice(0, 500));
+  wasm.scanBatchPackedTrigram(lines.slice(0, 500));
   wasm.marshalInProbe(lines.slice(0, 500));
   for (let i = 0; i < 500; i++) ts.scanLine(lines[i]);
 
@@ -185,6 +195,17 @@ function benchmark(jsonl, N) {
       packedHits = decoded.reduce((a, h) => a + h.length, 0);
     }
   }
+  // packed TRIGRAM WASM: the previous algorithm, same packed marshalling.
+  let packedTriBest = Infinity, packedTriHits = 0;
+  for (let r = 0; r < REP; r++) {
+    const t0 = performance.now();
+    const decoded = decodePacked(wasm.scanBatchPackedTrigram(lines), lines);
+    const dt = performance.now() - t0;
+    if (dt < packedTriBest) {
+      packedTriBest = dt;
+      packedTriHits = decoded.reduce((a, h) => a + h.length, 0);
+    }
+  }
   // marshal-IN probe: deserialize the string[] and return only the count.
   let marshalInBest = Infinity;
   for (let r = 0; r < REP; r++) {
@@ -205,30 +226,36 @@ function benchmark(jsonl, N) {
     N, patterns: patterns.length, distinct: base.length,
     wasmLps: N / (wasmBest / 1000), tsLps: N / (tsBest / 1000),
     packedLps: N / (packedBest / 1000),
+    packedTriLps: N / (packedTriBest / 1000),
     wasmBest, tsBest, packedBest, packedCallBest, packedDecodeBest, marshalInBest,
-    wasmBuildMs, tsBuildMs, wasmHits, tsHits, packedHits,
-    crossCheck: cc,
+    packedTriBest,
+    wasmBuildMs, tsBuildMs, wasmHits, tsHits, packedHits, packedTriHits,
+    crossCheck: cc, crossCheckTrigram: ccTri,
     reps: REP,
   };
 }
 
 function renderScale(title, desc, r) {
-  // The headline verdict is the EXPERIMENT: packed WASM vs hand-tuned TS.
+  // The headline verdict is the EXPERIMENT: the specialized matcher (packed
+  // WASM) vs the hand-tuned TS scanner.
   const ratio = r.packedLps / r.tsLps;
   const win = ratio >= 1
-    ? `<b>Packed WASM wins ${ratio.toFixed(2)}×</b> — ${fmt(r.packedLps)} vs ${fmt(r.tsLps)} lines/sec (incl. JS reconstruction). Nested scanBatch was ${fmt(r.wasmLps)}.`
-    : `<b>Hand-tuned TS still wins ${(1/ratio).toFixed(2)}×</b> — ${fmt(r.tsLps)} vs packed ${fmt(r.packedLps)} lines/sec. Nested scanBatch: ${fmt(r.wasmLps)}.`;
-  const cc = r.crossCheck.ok
-    ? `packed == nested over all ${fmt(r.crossCheck.checked)} lines ✓`
-    : `CROSS-CHECK FAILED after ${fmt(r.crossCheck.checked)} lines: ${r.crossCheck.firstDiff}`;
+    ? `<b>Specialized WASM wins ${ratio.toFixed(2)}×</b> — ${fmt(r.packedLps)} vs ${fmt(r.tsLps)} lines/sec (incl. JS reconstruction). Previous trigram WASM: ${fmt(r.packedTriLps)}; nested scanBatch: ${fmt(r.wasmLps)}.`
+    : `<b>Hand-tuned TS still wins ${(1/ratio).toFixed(2)}×</b> — ${fmt(r.tsLps)} vs specialized ${fmt(r.packedLps)} lines/sec. Trigram WASM: ${fmt(r.packedTriLps)}; nested scanBatch: ${fmt(r.wasmLps)}.`;
+  const ccOk = r.crossCheck.ok && r.crossCheckTrigram.ok;
+  const cc = ccOk
+    ? `specialized == trigram == nested over all ${fmt(r.crossCheck.checked)} lines ✓`
+    : r.crossCheck.ok
+      ? `TRIGRAM CROSS-CHECK FAILED after ${fmt(r.crossCheckTrigram.checked)} lines: ${r.crossCheckTrigram.firstDiff}`
+      : `CROSS-CHECK FAILED after ${fmt(r.crossCheck.checked)} lines: ${r.crossCheck.firstDiff}`;
   const el = document.createElement("div");
   el.className = "scale";
   el.innerHTML = `
     <h2>${title}</h2>
-    <p class="desc">${desc} · ${fmt(r.patterns)} patterns · N = ${fmt(r.N)} lines · best of ${r.reps} · <span style="color:${r.crossCheck.ok ? '#56d364' : '#f85149'}">${cc}</span></p>
-    <div class="grid three">
+    <p class="desc">${desc} · ${fmt(r.patterns)} patterns · N = ${fmt(r.N)} lines · best of ${r.reps} · <span style="color:${ccOk ? '#56d364' : '#f85149'}">${cc}</span></p>
+    <div class="grid four">
       <div class="card">
-        <h3>Packed WASM · scanBatchPacked + JS decode</h3>
+        <h3>Specialized WASM · scanBatchPacked + JS decode</h3>
         <div class="num packed">${fmt(r.packedLps)} <span class="unit">lines/sec</span></div>
         <div class="row"><span>total scan time</span><span>${r.packedBest.toFixed(1)} ms</span></div>
         <div class="row"><span>· wasm call (in+compute+copy)</span><span>${r.packedCallBest.toFixed(1)} ms</span></div>
@@ -237,7 +264,13 @@ function renderScale(title, desc, r) {
         <div class="row"><span>matches</span><span>${fmt(r.packedHits)}</span></div>
       </div>
       <div class="card">
-        <h3>Nested WASM · scanBatch</h3>
+        <h3>Trigram WASM (previous) · scanBatchPackedTrigram</h3>
+        <div class="num trig">${fmt(r.packedTriLps)} <span class="unit">lines/sec</span></div>
+        <div class="row"><span>scan time (incl. decode)</span><span>${r.packedTriBest.toFixed(1)} ms</span></div>
+        <div class="row"><span>matches</span><span>${fmt(r.packedTriHits)}</span></div>
+      </div>
+      <div class="card">
+        <h3>Nested WASM · scanBatch (specialized)</h3>
         <div class="num wasm">${fmt(r.wasmLps)} <span class="unit">lines/sec</span></div>
         <div class="row"><span>scan time</span><span>${r.wasmBest.toFixed(1)} ms</span></div>
         <div class="row"><span>build (once)</span><span>${r.wasmBuildMs.toFixed(1)} ms</span></div>

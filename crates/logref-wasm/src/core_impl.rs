@@ -103,10 +103,24 @@ impl ScannerImpl {
     /// so byte offsets coincide with the JS UTF-16 indices the caller slices with
     /// — see `packed.rs` for the productionization caveat.
     pub fn scan_batch_packed_buf(&self, lines: &[String]) -> Vec<i32> {
+        Self::pack(lines, |line| self.scanner.scan_line_spans(line))
+    }
+
+    /// The trigram + `Regex` twin of [`Self::scan_batch_packed_buf`]: identical
+    /// packed layout, but each line is resolved via the PREVIOUS fast path
+    /// (`scan_line_spans_trigram`) instead of the specialized matcher. Kept so
+    /// the browser benchmark can time old vs new inside the same wasm build.
+    pub fn scan_batch_packed_trigram_buf(&self, lines: &[String]) -> Vec<i32> {
+        Self::pack(lines, |line| self.scanner.scan_line_spans_trigram(line))
+    }
+
+    /// Encode one batch's span-valued hits into the packed layout documented on
+    /// [`Self::scan_batch_packed_buf`], with `scan` supplying each line's hits.
+    fn pack(lines: &[String], scan: impl Fn(&str) -> Vec<logref_core::MatchHitSpans>) -> Vec<i32> {
         // Rough prealloc: most lines resolve to a hit or two with a capture each.
         let mut buf: Vec<i32> = Vec::with_capacity(lines.len() * 6);
         for line in lines {
-            let hits = self.scanner.scan_line_spans(line);
+            let hits = scan(line);
             buf.push(hits.len() as i32);
             for h in &hits {
                 buf.push(h.site as i32);

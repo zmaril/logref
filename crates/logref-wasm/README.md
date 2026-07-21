@@ -27,17 +27,23 @@ root workspace `default-members`) so host CI never compiles wasm-bindgen.
 
 See `scan.parity.test.ts` and `smoke.test.ts`.
 
-## Benchmark — TS wins (headless Chromium, N=20k lines)
+## Benchmark — specialized-matcher WASM wins ~10× (headless Chromium, N=20k lines)
 
-At production catalog scale (~4k patterns):
+At production catalog scale (~4k patterns), after `logref-core` gained the specialized
+printf matcher (anchored Aho-Corasick candidates + regex-free byte-loop verification —
+see `scan.rs`), the picture inverted:
 
-| path                              | scan throughput   | notes                         |
-| --------------------------------- | ----------------- | ----------------------------- |
-| batched WASM (`scanBatch`)        | ~59k lines/sec    | ~30× slower to build the index |
-| hand-tuned TS trigram scanner     | ~121k lines/sec   | current site runtime          |
+| path                                             | scan throughput  | notes                          |
+| ------------------------------------------------ | ---------------- | ------------------------------ |
+| specialized WASM (`scanBatchPacked` + JS decode) | ~1.1M lines/sec  | simd128 build; ~1.03M without  |
+| specialized WASM (`scanBatch`, nested serde)     | ~600k lines/sec  | marshalling-bound              |
+| previous trigram+`regex` WASM (packed)           | ~95k lines/sec   | the path it replaced           |
+| hand-tuned TS trigram scanner                    | ~110k lines/sec  | current site runtime           |
 
-**TS wins ~2× on scan and ~30× on build** at production scale. WASM only edges ahead on
-a tiny 48-pattern sample.
+**Specialized WASM wins ~10× on scan** (4.9× on the tiny 48-pattern sample). Index build
+is still slower than TS (~1.3s vs ~45ms at 4k patterns — dominated by the retained
+`RegexSet`/`Regex` compilation for the oracle paths). Run it yourself:
+`bench/build.sh` (`SIMD=1` for the simd128 build) then `bun bench/drive.ts`.
 
 The gap is **algorithmic + marshalling, not the boundary crossing**: the Rust path runs a
 `RegexSet` over *all* patterns, while the TS path uses a trigram prefilter that skips the

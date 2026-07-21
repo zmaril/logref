@@ -52,6 +52,21 @@ impl Scanner {
         Ok(js_sys::Int32Array::from(&buf[..]))
     }
 
+    /// The packed batch scan over the PREVIOUS fast path (trigram prefilter +
+    /// per-candidate `Regex`), identical layout to `scanBatchPacked` — so the
+    /// benchmark can compare the specialized matcher against the path it
+    /// replaced inside the same wasm build, same marshalling both sides.
+    #[wasm_bindgen(js_name = "scanBatchPackedTrigram")]
+    pub fn scan_batch_packed_trigram(
+        &self,
+        #[wasm_bindgen(unchecked_param_type = "string[]")] lines: JsValue,
+    ) -> Result<js_sys::Int32Array, JsValue> {
+        let lines: Vec<String> =
+            serde_wasm_bindgen::from_value(lines).map_err(|e| JsValue::from_str(&e.to_string()))?;
+        let buf = self.inner.scan_batch_packed_trigram_buf(&lines);
+        Ok(js_sys::Int32Array::from(&buf[..]))
+    }
+
     /// Marshal-IN probe: deserialize the `string[]` exactly as `scanBatchPacked`
     /// does, then return only the line count — no scan, no result buffer. Timing
     /// this against `scanBatchPacked` isolates the input-marshalling cost from the
