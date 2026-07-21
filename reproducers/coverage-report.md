@@ -18,8 +18,8 @@ extracted catalog by `(basename, line)`.
 - Postgres HEAD commit: `54cd6fc83176d7c03abf95554aef26b0b24acc7d`
 - Catalog sites: **14806**
 - Baseline (Tier 1, exact file:line): **245** (1.65%)
-- Tier 2-4 scenarios add **549** new distinct sites
-- **Combined: 794 of 14806 (5.36%)**
+- Tier 2-4 scenarios add **602** new distinct sites
+- **Combined: 847 of 14806 (5.72%)**
 
 ## New sites by tier
 
@@ -27,7 +27,7 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | tier | new sites |
 |---|--:|
-| Tier 2 — crafted-SQL error corpus + contrib | 363 |
+| Tier 2 — crafted-SQL error corpus + contrib | 416 |
 | Tier 3 — config / auth / SSL | 22 |
 | Tier 4 — corruption / replication / resource / crash | 164 |
 
@@ -58,6 +58,10 @@ Attributed to the first scenario that fired each site (no double-counting).
 | `tier2__41_contrib_input_errors` | 5 |
 | `tier2__42_contrib_inspection` | 28 |
 | `tier2__43_contrib_fdw_indexam` | 9 |
+| `tier2__62_contrib_type_input_deep` | 13 |
+| `tier2__63_contrib_dict_trigger` | 11 |
+| `tier2__64_contrib_inspect_deep` | 14 |
+| `tier2__65_contrib_fdw_dblink_crypto` | 15 |
 | `tier3__auth_ssl` | 13 |
 | `tier3__bad_config` | 2 |
 | `tier3__bad_hba` | 7 |
@@ -88,21 +92,22 @@ Attributed to the first scenario that fired each site (no double-counting).
 
 | level | new sites |
 |---|--:|
-| ERROR | 346 |
+| ERROR | 389 |
 | LOG | 48 |
-| DEBUG1 | 40 |
-| DEBUG2 | 31 |
+| DEBUG1 | 46 |
+| DEBUG2 | 32 |
 | elevel | 20 |
 | DEBUG4 | 19 |
+| WARNING | 10 |
 | DEBUG3 | 9 |
-| WARNING | 9 |
 | FATAL | 8 |
-| NOTICE | 7 |
+| NOTICE | 8 |
 | log_replication_commands ? LOG : DEBUG1 | 3 |
 | IsPostmasterEnvironment ? LOG : NOTICE | 2 |
 | LogicalDecodingLogLevel() | 2 |
 | emode_for_corrupt_record(emode, xlogreader->EndRecPtr) | 1 |
 | flags & PIV_LOG_WARNING ? WARNING : LOG | 1 |
+| level | 1 |
 | stmt->elog_level | 1 |
 | trace_level | 1 |
 | wait_result_is_any_signal(rc, true) ? FATAL : DEBUG2 | 1 |
@@ -121,11 +126,15 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/commands/indexcmds.c` | 12 |
 | `postgres/src/backend/commands/functioncmds.c` | 10 |
 | `postgres/src/backend/utils/misc/guc.c` | 10 |
+| `postgres/contrib/postgres_fdw/option.c` | 9 |
 | `postgres/src/backend/commands/subscriptioncmds.c` | 9 |
 | `postgres/src/backend/utils/adt/timestamp.c` | 9 |
 | `postgres/src/backend/replication/logical/logical.c` | 7 |
 | `postgres/src/backend/replication/logical/snapbuild.c` | 7 |
 | `postgres/src/backend/replication/logical/worker.c` | 7 |
+| `postgres/contrib/amcheck/verify_nbtree.c` | 6 |
+| `postgres/contrib/hstore/hstore_io.c` | 6 |
+| `postgres/contrib/pgcrypto/pgcrypto.c` | 6 |
 | `postgres/src/backend/catalog/namespace.c` | 6 |
 | `postgres/src/backend/commands/extension.c` | 6 |
 | `postgres/src/backend/commands/sequence.c` | 6 |
@@ -134,10 +143,6 @@ Ranked by new sites reproduced. Per-file catalog denominators are not recomputed
 | `postgres/src/backend/parser/parse_func.c` | 6 |
 | `postgres/src/backend/parser/parse_utilcmd.c` | 6 |
 | `postgres/src/backend/replication/slot.c` | 6 |
-| `postgres/src/backend/storage/ipc/procarray.c` | 6 |
-| `postgres/src/backend/commands/typecmds.c` | 5 |
-| `postgres/src/backend/libpq/be-secure-openssl.c` | 5 |
-| `postgres/src/backend/libpq/hba.c` | 5 |
 
 ## Sample new matches (captured jsonlog line -> catalog site)
 
