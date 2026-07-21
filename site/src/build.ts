@@ -5,12 +5,13 @@
 // stylesheet. Globs the directory, so it scales from the 33 pilot pages to the
 // full ~9,000-message catalog with no code change.
 
-import { mkdir, rm } from "node:fs/promises";
+import { copyFile, mkdir, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { type MessageDoc, parseFrontmatter } from "./frontmatter.ts";
-import { buildPatternIndex } from "./patterns.ts";
+import { buildScanIndex } from "./patterns.ts";
 import { indexPage, messagePage, scanPage } from "./render.ts";
 import type { MessageEntry } from "./search.ts";
+import { loadWasm, WASM_FILE } from "./wasmHost.ts";
 
 const here = dirname(new URL(import.meta.url).pathname);
 const root = join(here, "..");
@@ -51,12 +52,15 @@ async function main(): Promise<void> {
   // Stable ordering: alphabetical by message text.
   entries.sort((a, b) => a.message.localeCompare(b.message));
 
-  // The Scan surface: lower every page's format string to a regex and emit the
-  // pattern index the scan page fetches. Fully static — matching runs in the
-  // browser, the user's log never leaves it.
-  const { patterns, report } = buildPatternIndex(docs);
-  await write(join(dist, "patterns.json"), JSON.stringify(patterns));
-  await write(join(dist, "scan.html"), scanPage(patterns.length));
+  // The Scan surface: lower every page's format string through the REAL Rust
+  // lowering (the wasm module, loaded under Bun) and emit the site index the
+  // scan page fetches, plus the wasm scanner itself. Fully static — matching
+  // runs in the browser, the user's log never leaves it.
+  const { lowerFormat } = await loadWasm();
+  const { index, report } = buildScanIndex(docs, lowerFormat);
+  await write(join(dist, "scan-index.json"), JSON.stringify(index));
+  await write(join(dist, "scan.html"), scanPage(index.sites.length));
+  await copyFile(WASM_FILE, join(dist, "logref_wasm_bg.wasm"));
 
   // The client search index is inlined into the bundle (via this JSON import in
   // index.ts) so search works from pure static files, no fetch required.
@@ -70,8 +74,8 @@ async function main(): Promise<void> {
   const ms = (performance.now() - started).toFixed(0);
   console.log(`built ${pages} message pages + index in ${ms}ms → dist/`);
   console.log(
-    `scan index: ${report.compiled}/${report.total} lowered ` +
-      `(${report.catchAlls} catch-alls, ${report.lowerFailed} unlowerable) → patterns.json`,
+    `scan index: ${report.compiled}/${report.total} scannable ` +
+      `(${report.catchAlls} catch-alls held back, ${report.lowerFailed} unlowerable) → scan-index.json`,
   );
 }
 

@@ -1,17 +1,21 @@
-// Browser entry point for the Scan page. Fetches the build-time pattern index
-// (patterns.json), compiles it into a trigram-prefiltered ScanIndex, and wires
-// the textarea + file input so a user can resolve their own log lines to catalog
-// message pages — with the variable bits pulled out. Everything runs client-side:
-// the pasted text and any uploaded file are read with the File API and matched
-// locally; nothing is ever sent to a server.
+// Browser entry point for the Scan page. Loads the wasm build of the REAL Rust
+// scanner (logref_wasm_bg.wasm, built from crates/logref-core), fetches the
+// build-time site index (scan-index.json), constructs the wasm `Scanner` over
+// it, and wires the textarea + file input so a user can resolve their own log
+// lines to catalog message pages — with the variable bits pulled out.
+// Everything runs client-side: the pasted text and any uploaded file are read
+// with the File API and matched locally; nothing is ever sent to a server.
 
+import { severityTier } from "./severity.ts";
+import init, { Scanner } from "./wasm/logref_wasm.js";
 import {
   type LineResult,
-  type MatchHit,
-  type PatternEntry,
-  ScanIndex,
-} from "./scanner.ts";
-import { severityTier } from "./severity.ts";
+  type ScanIndexFile,
+  type ScanSite,
+  type SiteHit,
+  scanLines,
+  sitesToJsonl,
+} from "./wasmScanner.ts";
 
 /** Cap on line-cards rendered, so a huge paste can't lock up the DOM. */
 const MAX_RENDERED = 500;
@@ -58,16 +62,16 @@ function renderLine(result: LineResult): HTMLElement {
   return card;
 }
 
-function renderHit(hit: MatchHit, hitCount: number): HTMLElement {
+function renderHit(hit: SiteHit, hitCount: number): HTMLElement {
   const wrap = el("div", "scan-verdict");
 
   const line = el("div", "scan-match-line");
   const link = document.createElement("a");
   link.className = "scan-match-msg";
-  link.href = `messages/${encodeURIComponent(hit.pattern.slug)}.html`;
-  link.textContent = hit.pattern.message;
+  link.href = `messages/${encodeURIComponent(hit.site.slug)}.html`;
+  link.textContent = hit.site.message;
   line.appendChild(link);
-  for (const lvl of hit.pattern.level) line.appendChild(badge(lvl));
+  for (const lvl of hit.site.level) line.appendChild(badge(lvl));
   if (hitCount > 1) {
     line.appendChild(
       el("span", "flag flag-ambiguous", `+${hitCount - 1} more · ambiguous`),
@@ -106,20 +110,32 @@ function mount(): void {
   const out = document.querySelector<HTMLElement>("#scan-results");
   if (!input || !runBtn || !status || !out) return;
 
-  let index: ScanIndex | null = null;
-  const ready = fetch("patterns.json")
-    .then((r) => r.json() as Promise<PatternEntry[]>)
-    .then((patterns) => {
-      index = new ScanIndex(patterns);
-      status.textContent = `Ready — matching against ${patterns.length} lowered patterns (${index.catchAllCount} held-back catch-alls).`;
+  let scanner: Scanner | null = null;
+  let sites: ScanSite[] = [];
+  let readyText = "";
+  // Both fetches are relative to the page URL — scan.html sits at the dist
+  // root, next to scan-index.json and logref_wasm_bg.wasm.
+  const ready = Promise.all([
+    init({ module_or_path: "logref_wasm_bg.wasm" }),
+    fetch("scan-index.json").then((r) => r.json() as Promise<ScanIndexFile>),
+  ])
+    .then(([, index]) => {
+      const t0 = performance.now();
+      scanner = new Scanner(sitesToJsonl(index.sites));
+      const buildMs = performance.now() - t0;
+      sites = index.sites;
+      readyText =
+        `Ready — matching against ${scanner.report().compiled} lowered patterns ` +
+        `(${index.catchAlls} held-back catch-alls, scanner built in ${buildMs.toFixed(0)}ms).`;
+      status.textContent = readyText;
     })
     .catch(() => {
-      status.textContent = "Failed to load the pattern index.";
+      status.textContent = "Failed to load the scanner.";
     });
 
   const run = async () => {
     await ready;
-    if (!index) return;
+    if (!scanner) return;
     let lines = splitLines(input.value);
     const truncatedInput = lines.length > MAX_LINES;
     if (truncatedInput) lines = lines.slice(0, MAX_LINES);
@@ -131,7 +147,7 @@ function mount(): void {
     }
 
     const t0 = performance.now();
-    const results = lines.map((l) => index!.scanLine(l));
+    const results = scanLines(scanner, sites, lines);
     const ms = performance.now() - t0;
 
     let matched = 0;
@@ -164,9 +180,7 @@ function mount(): void {
   clearBtn?.addEventListener("click", () => {
     input.value = "";
     out.replaceChildren();
-    if (index) {
-      status.textContent = `Ready — matching against ${index.patternCount} lowered patterns.`;
-    }
+    if (scanner) status.textContent = readyText;
   });
 
   file?.addEventListener("change", async () => {
