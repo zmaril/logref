@@ -22,5 +22,10 @@ allow = [
     "reproducers/scenarios/55_checkpoint_bgwriter.sh",
     "reproducers/scenarios/56_standby_conflict.sh",
     "reproducers/scenarios/57_wal_control_states.sh",
+    "reproducers/repl-run.sh",
+    "reproducers/scenarios/58_repl_physical.sh",
+    "reproducers/scenarios/59_repl_slots.sh",
+    "reproducers/scenarios/60_logical_decoding.sh",
+    "reproducers/scenarios/61_pub_sub.sh",
     "crates/logref-wasm/bench/build.sh",
 ]
