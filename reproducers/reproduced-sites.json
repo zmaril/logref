@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 636,
-  "combined_total": 881,
+  "new_sites": 706,
+  "combined_total": 951,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -7581,6 +7581,843 @@
       "message": "snapshot \"%s\" does not exist",
       "scenarios": [
         "tier2__50_txn_control_savepoints"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/dependency.c",
+      "line": 1080,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DEPENDENT_OBJECTS_STILL_EXIST"
+      ],
+      "message": "cannot drop %s because %s requires it",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/heap.c",
+      "line": 3366,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "generation expression is not immutable",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 703,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_SCHEMA"
+      ],
+      "message": "no schema has been selected to create in",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 757,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cross-database references are not implemented: \"%s.%s.%s\"",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1453,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not an index",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1467,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a sequence",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1482,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a view",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/objectaddress.c",
+      "line": 1489,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is not a materialized view",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_collation.c",
+      "line": 108,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "collation \"%s\" already exists",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_enum.c",
+      "line": 416,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "\"%s\" is not an existing enum label",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 126,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "conflicting or redundant options",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 228,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "unrecognized collation provider: %s",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 315,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "nondeterministic collations not supported with this provider",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/collationcmds.c",
+      "line": 320,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "ICU rules cannot be specified unless locale provider is ICU",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/foreigncmds.c",
+      "line": 643,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "foreign-data wrapper \"%s\" already exists",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/foreigncmds.c",
+      "line": 988,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "server \"%s\" already exists",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/publicationcmds.c",
+      "line": 876,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_OBJECT"
+      ],
+      "message": "publication \"%s\" already exists",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 945,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot specify default tablespace for partitioned relations",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 976,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "only shared relations can be placed in pg_global tablespace",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1585,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": null,
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1616,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "DROP INDEX CONCURRENTLY does not support dropping multiple objects",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1620,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "DROP INDEX CONCURRENTLY does not support CASCADE",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 1728,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot drop partitioned index \"%s\" concurrently",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 2016,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot truncate only a partitioned table",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 2751,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot inherit from partitioned table \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3337,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "merging column \"%s\" with inherited definition",
+      "scenarios": [
+        "tier2__36_constraints_partitioning",
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3508,
+      "level": "NOTICE",
+      "sqlstates": [],
+      "message": "merging multiple inherited definitions of column \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3519,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "inherited column \"%s\" has a type conflict",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3797,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "only shared relations can be placed in pg_global tablespace",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 3879,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot rename column of typed table",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 4038,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot rename system column \"%s\"",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 7339,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot add column to typed table",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 8292,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "column \"%s\" of relation \"%s\" is an identity column",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 8428,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "column \"%s\" of relation \"%s\" must be declared NOT NULL before identity can be added",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 8459,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_OBJECT_NOT_IN_PREREQUISITE_STATE"
+      ],
+      "message": "column \"%s\" of relation \"%s\" is already an identity column",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 9396,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot drop column from typed table",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 9483,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "cannot drop inherited column \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 10578,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "foreign key constraint \"%s\" cannot be implemented",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14934,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot alter column type of typed table",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14952,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot alter system column \"%s\"",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14962,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_COLUMN_DEFINITION"
+      ],
+      "message": "cannot specify USING when altering type of generated column",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 14974,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "cannot alter inherited column \"%s\"",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 15679,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot alter type of a column used by a view or rule",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 15749,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot alter type of a column used by a generated column",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 18010,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot inherit from partitioned table \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 18039,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_TABLE"
+      ],
+      "message": "circular inheritance not allowed",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 18234,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "child table \"%s\" has different type for column \"%s\"",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 19684,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cannot move an owned sequence into another schema",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 19792,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_TABLE"
+      ],
+      "message": "relation \"%s\" already exists in schema \"%s\"",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20549,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot use system column \"%s\" in partition key",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20563,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot use generated column in partition key",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20696,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "functions in partition key expression must be marked IMMUTABLE",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 20705,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot use constant expression as partition key",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablecmds.c",
+      "line": 21068,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "cannot attach a typed table as partition",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/tablespace.c",
+      "line": 261,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "tablespace location must be an absolute path",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 968,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "conflicting NULL/NOT NULL constraints",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 996,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "unique constraints not possible for domains",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1003,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "primary key constraints not possible for domains",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1017,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "foreign key constraints not possible for domains",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1361,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not an enum",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1519,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "range subtype cannot be %s",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1538,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "range collation specified but subtype does not support collation",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 3212,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_NOT_NULL_VIOLATION"
+      ],
+      "message": "column \"%s\" of table \"%s\" contains null values",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 3303,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_CHECK_VIOLATION"
+      ],
+      "message": "column \"%s\" of table \"%s\" contains values that violate the new constraint",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 3532,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not a domain",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/view.c",
+      "line": 438,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "WITH CHECK OPTION is supported only on automatically updatable views",
+      "scenarios": [
+        "tier2__35_ddl_object_lifecycle"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 2835,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "collations are not supported by type %s",
+      "scenarios": [
+        "tier2__37_alter_type_column_tablespace"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 4883,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "modulus for hash partition must be an integer value greater than zero",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 4890,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "remainder for hash partition must be less than modulus",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_utilcmd.c",
+      "line": 4956,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_TABLE_DEFINITION"
+      ],
+      "message": "invalid bound specification for a range partition",
+      "scenarios": [
+        "tier2__36_constraints_partitioning"
       ]
     }
   ]
