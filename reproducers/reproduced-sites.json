@@ -2,8 +2,8 @@
   "commit": "54cd6fc83176d7c03abf95554aef26b0b24acc7d",
   "catalog_total": 14806,
   "baseline_sites": 245,
-  "new_sites": 810,
-  "combined_total": 1055,
+  "new_sites": 933,
+  "combined_total": 1178,
   "sites": [
     {
       "path": "postgres/contrib/amcheck/verify_heapam.c",
@@ -8312,7 +8312,8 @@
       ],
       "message": "range subtype cannot be %s",
       "scenarios": [
-        "tier2__37_alter_type_column_tablespace"
+        "tier2__37_alter_type_column_tablespace",
+        "tier2__45_create_routines"
       ]
     },
     {
@@ -8432,7 +8433,8 @@
       ],
       "message": "improper qualified name (too many dotted names): %s",
       "scenarios": [
-        "tier2__33_type_io_json_range_misc"
+        "tier2__33_type_io_json_range_misc",
+        "tier2__45_create_routines"
       ]
     },
     {
@@ -9221,7 +9223,8 @@
       ],
       "message": "%s",
       "scenarios": [
-        "tier2__49_rls_policies_defaclr"
+        "tier2__49_rls_policies_defaclr",
+        "tier2__44_functions_operators_aggregates"
       ]
     },
     {
@@ -9233,7 +9236,8 @@
       ],
       "message": "%s",
       "scenarios": [
-        "tier2__49_rls_policies_defaclr"
+        "tier2__49_rls_policies_defaclr",
+        "tier2__44_functions_operators_aggregates"
       ]
     },
     {
@@ -9389,7 +9393,8 @@
       ],
       "message": "aggregate functions are not allowed in a recursive query's recursive term",
       "scenarios": [
-        "tier2__39_cte_cursors_prepared_lock"
+        "tier2__39_cte_cursors_prepared_lock",
+        "tier2__44_functions_operators_aggregates"
       ]
     },
     {
@@ -9666,6 +9671,1482 @@
       "message": "recursive reference to query \"%s\" must not appear more than once",
       "scenarios": [
         "tier2__39_cte_cursors_prepared_lock"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/namespace.c",
+      "line": 3399,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "cross-database references are not implemented: %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_aggregate.c",
+      "line": 244,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "return type of transition function %s is not %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_aggregate.c",
+      "line": 425,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "return type of combine function %s is not %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 377,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DUPLICATE_FUNCTION"
+      ],
+      "message": "operator %s already exists",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 443,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "operator cannot be its own negator",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 570,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only binary operators can have commutators",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 574,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only binary operators can have join selectivity",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 578,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only binary operators can merge join",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 582,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only binary operators can hash",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 591,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can have negators",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 595,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can have restriction selectivity",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 599,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can have join selectivity",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 603,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can merge join",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_operator.c",
+      "line": 607,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only boolean operators can hash",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_proc.c",
+      "line": 217,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "cannot determine result data type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_proc.c",
+      "line": 887,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "SQL functions cannot return type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/catalog/pg_proc.c",
+      "line": 902,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "SQL functions cannot have arguments of type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 165,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only ordered-set aggregates can be hypothetical",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 190,
+      "level": "WARNING",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "aggregate attribute \"%s\" not recognized",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 200,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate stype must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 204,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate sfunc must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 216,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate msfunc must be specified when mstype is specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 231,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate minvfunc must not be specified without mstype",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 302,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "basetype is redundant with aggregate input type specification",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 345,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate transition data type cannot be %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 367,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "must specify both or neither of serialization and deserialization functions",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/aggregatecmds.c",
+      "line": 432,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "parameter \"parallel\" must be SAFE, RESTRICTED, or UNSAFE",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 103,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "SQL function cannot return shell type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 245,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "SQL function cannot accept shell type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 252,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregate cannot accept shell type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 284,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "aggregates cannot accept set arguments",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 289,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "procedures cannot accept set arguments",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 294,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "functions cannot accept set arguments",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 305,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "VARIADIC parameter must be the last input parameter",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 326,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "VARIADIC parameter must be the last parameter",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 417,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only input parameters can have default values",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 469,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "procedure OUT parameters cannot appear after one with a default value",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 650,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "parameter \"parallel\" must be SAFE, RESTRICTED, or UNSAFE",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 702,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "function %s does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 848,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "ROWS must be positive",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 877,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "no function body specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 887,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "inline SQL function body only valid for language SQL",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1002,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "only one AS item needed for language \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1108,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "no language specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1203,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "function result type must be %s because of OUT parameters",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1216,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "function result type must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1401,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "\"%s\" is an aggregate function",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1446,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "COST must be positive",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1454,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "ROWS must be positive",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1458,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_PARAMETER_VALUE"
+      ],
+      "message": "ROWS is not applicable when function does not return a set",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1565,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "source data type %s is a pseudo-type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1571,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "target data type %s is a pseudo-type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1625,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cast function must take one to three arguments",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1631,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "argument of cast function must match or be binary-coercible from source data type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1647,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "return data type of cast function must match or be binary-coercible to target data type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1663,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cast function must be a normal function",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1667,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cast function must not return a set",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 1708,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "source and target data types are not physically compatible",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/functioncmds.c",
+      "line": 2169,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "language \"%s\" does not support inline code execution",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/operatorcmds.c",
+      "line": 163,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "operator function must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/operatorcmds.c",
+      "line": 185,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_FUNCTION_DEFINITION"
+      ],
+      "message": "operator right argument type must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 465,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "type input function must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 469,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "type output function must be specified",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 474,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "type modifier output function is useless without a type modifier input function",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1506,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "type attribute \"%s\" not recognized",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1514,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "type attribute \"subtype\" is required",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 1548,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "cannot specify a canonical function without a pre-created shell type",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2053,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "function %s does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2061,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "type input function %s must return type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2367,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "operator class \"%s\" does not accept data type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2379,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "data type %s has no default operator class for access method \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2448,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "function %s does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/commands/typecmds.c",
+      "line": 2454,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_INVALID_OBJECT_DEFINITION"
+      ],
+      "message": "range subtype diff function %s must return type %s",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 277,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_TOO_MANY_ARGUMENTS"
+      ],
+      "message": "GROUPING must have fewer than 32 arguments",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 749,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_GROUPING_ERROR"
+      ],
+      "message": "aggregate function calls cannot be nested",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 827,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "aggregate function calls cannot contain set-returning function calls",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 833,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_GROUPING_ERROR"
+      ],
+      "message": "aggregate function calls cannot contain window function calls",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 910,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "window function calls cannot be nested",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1063,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WINDOWING_ERROR"
+      ],
+      "message": "window functions are not allowed in %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1098,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_OBJECT"
+      ],
+      "message": "window \"%s\" does not exist",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_agg.c",
+      "line": 1580,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_GROUPING_ERROR"
+      ],
+      "message": "subquery uses ungrouped column \"%s.%s\" from outer query",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_clause.c",
+      "line": 599,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "set-returning functions must appear at top level of FROM",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 1783,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "set-returning functions are not allowed in %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_expr.c",
+      "line": 2282,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "set-returning functions are not allowed in %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 196,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "argument name \"%s\" used more than once",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 207,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "positional argument cannot follow named argument",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 318,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s(*) specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 325,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "DISTINCT specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 331,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "WITHIN GROUP specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 337,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "ORDER BY specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 343,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "FILTER specified, but %s is not an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 349,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "OVER specified, but %s is not a window function nor an aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 355,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s specified, but %s is not a window function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 400,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "OVER is not supported for ordered-set aggregate %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 524,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not an ordered-set aggregate, so it cannot have WITHIN GROUP",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 532,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "aggregate functions do not accept RESPECT/IGNORE NULLS",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 550,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "window function %s cannot have WITHIN GROUP",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 579,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "procedure %s is not unique",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 588,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "function %s is not unique",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 754,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_DATATYPE_MISMATCH"
+      ],
+      "message": "VARIADIC argument must be an array",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 809,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s(*) must be used to call a parameterless aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 865,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "DISTINCT is not implemented for window functions",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 875,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s(*) must be used to call a parameterless aggregate function",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 894,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "FILTER is not implemented for non-aggregate window functions",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 903,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "window function calls cannot contain set-returning function calls",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2488,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not a function",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2498,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "%s is not a procedure",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2508,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "function %s is not an aggregate",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2536,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "could not find a procedure named \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2541,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "procedure %s does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2555,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "aggregate %s(*) does not exist",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2570,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "could not find a function named \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2588,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "function name \"%s\" is not unique",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2596,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "procedure name \"%s\" is not unique",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2612,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "routine name \"%s\" is not unique",
+      "scenarios": [
+        "tier2__45_create_routines"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_func.c",
+      "line": 2811,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_FEATURE_NOT_SUPPORTED"
+      ],
+      "message": "set-returning functions are not allowed in %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 216,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "could not identify an ordering operator for type %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 222,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_FUNCTION"
+      ],
+      "message": "could not identify an equality operator for type %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 640,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_AMBIGUOUS_FUNCTION"
+      ],
+      "message": "operator is not unique: %s",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 852,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "op ANY/ALL (array) requires array on right side",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_oper.c",
+      "line": 893,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_WRONG_OBJECT_TYPE"
+      ],
+      "message": "op ANY/ALL (array) requires operator to yield boolean",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_relation.c",
+      "line": 1892,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_SYNTAX_ERROR"
+      ],
+      "message": "a column definition list is required for functions returning \"record\"",
+      "scenarios": [
+        "tier2__44_functions_operators_aggregates"
+      ]
+    },
+    {
+      "path": "postgres/src/backend/parser/parse_relation.c",
+      "line": 3875,
+      "level": "ERROR",
+      "sqlstates": [
+        "ERRCODE_UNDEFINED_TABLE"
+      ],
+      "message": "missing FROM-clause entry for table \"%s\"",
+      "scenarios": [
+        "tier2__45_create_routines"
       ]
     }
   ]
